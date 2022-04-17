@@ -1,5 +1,6 @@
+import 'package:app_learn_english/resources/login_service.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 class loginPage extends StatefulWidget {
   const loginPage({Key? key}) : super(key: key);
 
@@ -21,15 +22,36 @@ class _loginPageState extends State<loginPage> {
     super.dispose();
   }
 
-  void validate() {
+  void validate() async{
+
     if (formKey.currentState!.validate()) {
-      if(usernameController.text == 'admin' && passwordController.text == 'admin123456'){
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(duration: const Duration(seconds: 10), content: Text('Chuyển sang trang admin')),
-        );
-      } else {
-        Navigator.pushNamed(context, 'home');
-      }
+
+      String username= usernameController.text.toString().trim();
+      String pass = passwordController.text.toString().trim();
+
+
+   String role = await   LoginUser(username, pass);
+     if(role!=null){
+       if(role == "Admin"){
+         Navigator.pushNamed(context, 'admin', arguments: role);
+       }
+       else
+       {
+         Navigator.pushNamed(context, 'home', arguments: role);
+       }
+     }
+     else {
+       Navigator.pushNamed(context, 'login', arguments: role);
+     }
+
+
+      // if(usernameController.text == 'admin' && passwordController.text == 'admin123456'){
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(duration: const Duration(seconds: 10), content: Text('Chuyển sang trang admin')),
+      //   );
+      // } else {
+      //   Navigator.pushNamed(context, 'home');
+      // }
     }
   }
 

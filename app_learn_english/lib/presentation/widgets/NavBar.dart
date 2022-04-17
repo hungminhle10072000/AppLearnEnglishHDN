@@ -10,8 +10,8 @@
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text('Hoàng Dương Hùng'),
-              accountEmail: Text('hungduong.mess32@gmail.com'),
+              accountName: Text('Hoàng '),
+              accountEmail: Text('hung123456.com'),
               currentAccountPicture: CircleAvatar(
                 child: ClipOval(
                   child: Image.network(
@@ -91,7 +91,10 @@
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text('Thoát'),
-              onTap: () => null,
+              onTap: (){
+                Navigator.pop(context);
+                Navigator.pushNamed(context, 'login');
+              },
             )
           ],
         ),

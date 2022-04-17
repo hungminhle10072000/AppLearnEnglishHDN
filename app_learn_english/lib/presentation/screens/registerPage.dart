@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:app_learn_english/resources/login_service.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:file_picker/file_picker.dart';
+import 'package:intl/intl.dart';
 
 class registerPage extends StatefulWidget {
   const registerPage({Key? key}) : super(key: key);
@@ -17,6 +22,12 @@ class _registerPageState extends State<registerPage> {
   final passwordController = TextEditingController();
   final repeatpasswordController = TextEditingController();
   final nameController = TextEditingController();
+  final genderController = TextEditingController();
+  final addressController = TextEditingController();
+  final birthdayController = TextEditingController();
+  File ? f;
+
+  final format=DateFormat('yyyy-MM-dd') ;
 
   @override
   void dispose() {
@@ -31,12 +42,7 @@ class _registerPageState extends State<registerPage> {
   }
 
   void validate() {
-    if (formRegisterKey.currentState!.validate()) {
-      Navigator.pushNamed(context, 'login');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(duration: const Duration(seconds: 10), content: Text('Đăng ký thành công !!!')),
-        );
-    }
+    RegistUser("", "");
   }
 
   String? checkRepeatPassWord(value){
@@ -53,6 +59,8 @@ class _registerPageState extends State<registerPage> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return SafeArea(
         child: Container(
       decoration: BoxDecoration(
@@ -99,6 +107,12 @@ class _registerPageState extends State<registerPage> {
                   key: formRegisterKey,
                   child: Column(
                     children: [
+                      InkWell(
+                        onTap: (){
+                          Pickfile();
+                        },
+                        child: f!=null ? Image.file(f!,width: 240,height: 240,fit: BoxFit.fill,) :  Icon(Icons.camera)
+                      ),
                       TextFormField(
                         controller: nameController,
                         validator: (value) {
@@ -204,6 +218,66 @@ class _registerPageState extends State<registerPage> {
                         ),
                       ),
                       SizedBox(height: 20.0),
+                      TextFormField(
+                        controller: genderController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Yêu cầu nhập giới tính';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Giới tính',
+                          fillColor: Colors.grey.shade100,
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      TextFormField(
+                        controller: addressController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Yêu cầu nhập địa chỉ';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Địa chỉ',
+                          fillColor: Colors.grey.shade100,
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      DateTimeField(
+                        format: format,
+                        onShowPicker: (context, currentValue) async {
+                                      final date = await showDatePicker(
+                                      context: context,
+                                      firstDate: DateTime(1900),
+                                      initialDate: currentValue ?? DateTime.now(),
+                                      lastDate: DateTime(2100));
+                                      return date;},
+                        controller: birthdayController,
+                        validator:
+                            (value) {
+                          if (value == null ) {
+                            return 'Yêu cầu nhập ngày sinh';
+                          }
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Ngày sinh',
+                          fillColor: Colors.grey.shade100,
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -241,5 +315,23 @@ class _registerPageState extends State<registerPage> {
         ]),
       ),
     ));
+  }
+
+  void Pickfile() async {
+    FilePickerResult? restule = await FilePicker.platform.pickFiles(
+      allowedExtensions: ['jpg','png','jpeg'],
+      allowMultiple: true,
+      type: FileType.custom,
+      allowCompression: true
+
+
+    );
+    if(restule!=null){
+      File f_ = File(restule.files.single.path.toString());
+      setState(() {
+        f = f_;
+      });
+
+    }
   }
 }
