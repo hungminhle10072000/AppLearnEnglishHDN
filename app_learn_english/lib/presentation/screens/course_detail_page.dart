@@ -32,7 +32,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           child: YoutubePlayer(
             controller: YoutubePlayerController(
                 initialVideoId: YoutubePlayer.convertUrlToId(
-                    widget.courseDetail.introduce),
+                    widget.courseDetail.introduce) ?? 'default',
                 flags: YoutubePlayerFlags(
                   autoPlay: false,
                 )),
