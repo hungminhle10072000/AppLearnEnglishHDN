@@ -13,7 +13,6 @@ class VocabularyDetailTopicPage extends StatefulWidget {
 }
 
 class _VocabularyDetailTopicPageState extends State<VocabularyDetailTopicPage> {
-
   final searchController = TextEditingController();
 
   bool isSearching = false;
@@ -42,13 +41,14 @@ class _VocabularyDetailTopicPageState extends State<VocabularyDetailTopicPage> {
                     fontWeight: FontWeight.w800),
               )
             : TextField(
-                controller: null,
+                controller: searchController,
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                     icon: GestureDetector(
                       onTap: () {
-                        // topicVocabularyBloc.topicEventSink.add(SearchTopicVocabularyEvent(searchController.text.toString()));
-                        context.read<ListVocabularyBloc>().add(ListVocabularyEventSearch(""));
+                        context.read<ListVocabularyBloc>().add(
+                            ListVocabularyEventSearch(
+                                searchController.text.toString()));
                       },
                       child: Icon(
                         Icons.search,
@@ -65,6 +65,8 @@ class _VocabularyDetailTopicPageState extends State<VocabularyDetailTopicPage> {
                     setState(() {
                       this.isSearching = !this.isSearching;
                     });
+                    context.read<ListVocabularyBloc>().add(
+                        ListVocabularyEventSearch(''));
                   },
                   icon: Icon(Icons.cancel))
               : IconButton(
