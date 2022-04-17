@@ -1,3 +1,4 @@
+import 'package:app_learn_english/models/chapter_model.dart';
 import 'package:app_learn_english/models/course_model.dart';
 import 'package:app_learn_english/presentation/screens/forgetPasswordPage.dart';
 import 'package:chewie/chewie.dart';
@@ -15,13 +16,14 @@ class CourseDetailPage extends StatefulWidget {
 }
 
 class _CourseDetailPageState extends State<CourseDetailPage> {
-  final List<Item> _data = generateItems(10);
+  late List<Item> _data = [];
   late ChewieController _chewieController;
   final utube = RegExp(r"^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$");
   late String dataSource;
+  final Map<String,String> linkk = {"dataSource": ""};
 
   Widget _renderVideo() {
-    return utube.hasMatch(dataSource.trim()) ? _buildVideoYoutubeContainer() : _buildVideoPlayContainer();
+    return utube.hasMatch(linkk['dataSource'] ?? '') ? _buildVideoYoutubeContainer() : _buildVideoPlayContainer();
   }
 
   Widget _buildVideoYoutubeContainer() {
@@ -31,8 +33,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           margin: EdgeInsets.all(8),
           child: YoutubePlayer(
             controller: YoutubePlayerController(
-                initialVideoId: YoutubePlayer.convertUrlToId(
-                    widget.courseDetail.introduce) ?? 'default',
+                initialVideoId: YoutubePlayer.convertUrlToId(linkk['dataSource'] ?? '') ?? '',
                 flags: YoutubePlayerFlags(
                   autoPlay: false,
                 )),
@@ -47,7 +48,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
 
   Widget _buildVideoPlayContainer() {
     _chewieController = ChewieController(
-        videoPlayerController: VideoPlayerController.network(dataSource),
+        videoPlayerController: VideoPlayerController.network(linkk['dataSource'] ?? ""),
         aspectRatio: 16 / 9,
         autoInitialize: true,
         looping: true,
@@ -82,37 +83,28 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       children: _data.map<ExpansionPanel>((e) {
         return ExpansionPanel(
             headerBuilder: (BuildContext context, bool isExpanded) {
-              print(isExpanded);
               return ListTile(
                 title: Text(e.headerValue),
               );
             },
             body: Container(
               child: Column(
-                children: [
-                  ListTile(
-                    title: Text('f'),
-                    subtitle:
-                        Text('to delele this panel, tap the trash can icon'),
-                    trailing: Icon(Icons.delete),
-                    onTap: () {
-                      setState(() {
-                        _data.removeWhere((element) => e == element);
-                      });
-                    },
-                  ),
-                  ListTile(
-                    title: Text('f'),
-                    subtitle:
-                        Text('to delele this panel, tap the trash can icon'),
-                    trailing: Icon(Icons.delete),
-                    onTap: () {
-                      setState(() {
-                        _data.removeWhere((element) => e == element);
-                      });
-                    },
-                  )
-                ],
+                children:
+                  e.chapterModel.lessons.map((e) =>
+                      ListTile(
+                        title: Text('${e.name}'),
+                        // subtitle:
+                        // Text('to delele this panel, tap the trash can icon'),
+                        trailing: Icon(Icons.delete),
+                        onTap: () {
+                          setState(() {
+                            // _data.removeWhere((element) => e == element);
+                            linkk['dataSource'] = e.video;
+                            print('re-render${linkk['dataSource']}');
+                          });
+                        },
+                      )
+                  ).toList(),
               ),
             ),
             isExpanded: e.isExpanded);
@@ -124,7 +116,9 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    dataSource = widget.courseDetail.introduce;
+    dataSource = widget.courseDetail.chapters.first.lessons.first.video;
+    _data = createChapterItems(widget.courseDetail);
+    linkk['dataSource'] = widget.courseDetail.chapters.first.lessons.first.video;
   }
 
   @override
@@ -160,11 +154,24 @@ class Item {
   String expandedValue;
   String headerValue;
   bool isExpanded;
+  ChapterModel chapterModel;
   Item(
       {required this.expandedValue,
       required this.headerValue,
+      required this.chapterModel,
       this.isExpanded = false});
 }
+
+List<Item> createChapterItems(CourseModel courseModel) {
+  return
+    courseModel.chapters.map((e) => Item(
+      headerValue: '${e.name}',
+      expandedValue: '${e.courseName}',
+        chapterModel: e
+    )).toList();
+}
+
+/*
 
 List<Item> generateItems(int numberOfItems) {
   return List.generate(numberOfItems, (index) {
@@ -173,6 +180,15 @@ List<Item> generateItems(int numberOfItems) {
         expandedValue: 'This is item number $index');
   });
 }
+*/
+
+
+
+
+
+
+
+
 
 // Chewie Player
 

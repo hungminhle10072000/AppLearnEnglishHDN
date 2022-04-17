@@ -39,7 +39,13 @@ void main() {
               },
               child: CourseListPage(),
           ),
-          '/courseDetail': (context) => CourseDetailPage(courseDetail: CourseModel(id: 1, name: 'Name',image: 'image', introduce: 'intro'))
+          '/courseDetail': (context) => CourseDetailPage(courseDetail: CourseModel(
+              id: -1,
+              name: 'Course Name',
+              introduce: 'Introduction',
+              numOfChapter:  0,
+              chapters: [],
+              image: 'This is image'))
         },
       )));
 }
