@@ -17,41 +17,55 @@ class CourseDetailPage extends StatefulWidget {
 
 class _CourseDetailPageState extends State<CourseDetailPage> {
   late List<Item> _data = [];
-  late ChewieController _chewieController;
-  final utube = RegExp(r"^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$");
+  late ChewieController _chewieController = ChewieController(
+    videoPlayerController: VideoPlayerController.network(dataSource),
+  );
+  final utube =
+      RegExp(r"^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$");
   late String dataSource;
-  final Map<String,String> linkk = {"dataSource": ""};
+  late YoutubePlayerController controller;
 
   Widget _renderVideo() {
-    return utube.hasMatch(linkk['dataSource'] ?? '') ? _buildVideoYoutubeContainer() : _buildVideoPlayContainer();
+    return utube.hasMatch(dataSource)
+        ? _buildVideoYoutubeContainer()
+        : _buildVideoPlayContainer();
   }
 
   Widget _buildVideoYoutubeContainer() {
-    return Container(
-        margin: EdgeInsets.symmetric(horizontal: 4),
-        child: Container(
-          margin: EdgeInsets.all(8),
-          child: YoutubePlayer(
-            controller: YoutubePlayerController(
-                initialVideoId: YoutubePlayer.convertUrlToId(linkk['dataSource'] ?? '') ?? '',
-                flags: YoutubePlayerFlags(
-                  autoPlay: false,
-                )),
-            showVideoProgressIndicator: true,
-            progressIndicatorColor: Colors.blue,
-            progressColors: ProgressBarColors(
-                playedColor: Colors.blue,
-                handleColor: Colors.blueAccent),
-          ),
-        ));
+    return YoutubePlayerBuilder(
+        player: YoutubePlayer(
+          controller: controller,
+        ),
+        builder: (context, player) => Scaffold(
+              appBar: AppBar(
+                title: const Text("Youtube Player"),
+              ),
+              body: ListView(
+                children: [
+                  player,
+                  SizedBox(
+                    height: 16,
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        String url =
+                            'https://www.youtube.com/watch?v=PlVlWl8kKmg';
+                        controller.load(YoutubePlayer.convertUrlToId(url)!);
+                      },
+                      child: Text('Next Video')),
+                  _buildListPanel()
+                ],
+              ),
+            ));
   }
 
   Widget _buildVideoPlayContainer() {
     _chewieController = ChewieController(
-        videoPlayerController: VideoPlayerController.network(linkk['dataSource'] ?? ""),
+        videoPlayerController: VideoPlayerController.network(dataSource),
         aspectRatio: 16 / 9,
         autoInitialize: true,
-        looping: true,
+        looping: false,
+        autoPlay: true,
         errorBuilder: (context, errorMessage) {
           return Center(
             child: Text(
@@ -60,20 +74,30 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             ),
           );
         });
-    double width = MediaQuery.of(context).size.width - 2*4;
+    double width = MediaQuery.of(context).size.width;
     double height = width * 9 / 16;
 
-
-    return Container(
-        margin: EdgeInsets.symmetric(horizontal: 4),
-        height: height,
-        child: Chewie(
-          controller: _chewieController,
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text("Video"),
+        ),
+        body: ListView(
+          children: [
+            Container(
+              // margin: EdgeInsets.symmetric(horizontal: 4),
+              height: height,
+              child: Chewie(
+                controller: _chewieController,
+              ),
+            ),
+            _buildListPanel()
+          ],
         ));
   }
 
-
   Widget _buildListPanel() {
+    print('Re-render');
     return ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
@@ -89,22 +113,30 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             },
             body: Container(
               child: Column(
-                children:
-                  e.chapterModel.lessons.map((e) =>
-                      ListTile(
-                        title: Text('${e.name}'),
-                        // subtitle:
-                        // Text('to delele this panel, tap the trash can icon'),
-                        trailing: Icon(Icons.delete),
-                        onTap: () {
-                          setState(() {
-                            // _data.removeWhere((element) => e == element);
-                            linkk['dataSource'] = e.video;
-                            print('re-render${linkk['dataSource']}');
-                          });
-                        },
-                      )
-                  ).toList(),
+                children: e.chapterModel.lessons
+                    .map((e) => ListTile(
+                          title: Text('${e.name}'),
+                          trailing: Icon(Icons.delete),
+                          onTap: () {
+                            if (!utube.hasMatch(dataSource)) {
+                              _chewieController.pause();
+                            }
+
+                            if (utube.hasMatch(e.video) &&
+                                utube.hasMatch(dataSource)) {
+                              controller.load(
+                                  YoutubePlayer.convertUrlToId(e.video) ?? '');
+                            } else if (!utube.hasMatch(e.video) &&
+                                !utube.hasMatch(dataSource)) {
+                              _buildVideoPlayContainer();
+                            } else {
+                              setState(() {
+                                dataSource = e.video;
+                              });
+                            }
+                          },
+                        ))
+                    .toList(),
               ),
             ),
             isExpanded: e.isExpanded);
@@ -118,35 +150,27 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     super.initState();
     dataSource = widget.courseDetail.chapters.first.lessons.first.video;
     _data = createChapterItems(widget.courseDetail);
-    linkk['dataSource'] = widget.courseDetail.chapters.first.lessons.first.video;
+    controller = YoutubePlayerController(
+        initialVideoId: YoutubePlayer.convertUrlToId(dataSource)!,
+        flags: const YoutubePlayerFlags(
+          mute: false,
+          loop: false,
+          autoPlay: true,
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: Text("Video"),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              _renderVideo(),
-              Container(
-                child: Column(
-                  children: [_buildListPanel()],
-                ),
-              )
-            ],
-          ),
-        ));
+    return _renderVideo();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _chewieController.pause();
     _chewieController.dispose();
+    controller.dispose();
   }
 }
 
@@ -163,126 +187,10 @@ class Item {
 }
 
 List<Item> createChapterItems(CourseModel courseModel) {
-  return
-    courseModel.chapters.map((e) => Item(
-      headerValue: '${e.name}',
-      expandedValue: '${e.courseName}',
-        chapterModel: e
-    )).toList();
+  return courseModel.chapters
+      .map((e) => Item(
+          headerValue: '${e.name}',
+          expandedValue: '${e.courseName}',
+          chapterModel: e))
+      .toList();
 }
-
-/*
-
-List<Item> generateItems(int numberOfItems) {
-  return List.generate(numberOfItems, (index) {
-    return Item(
-        headerValue: 'Panel $index',
-        expandedValue: 'This is item number $index');
-  });
-}
-*/
-
-
-
-
-
-
-
-
-
-// Chewie Player
-
-/*
-
-
-class CourseDetailPage extends StatelessWidget {
-  final CourseModel courseDetail;
-
-  const CourseDetailPage({Key? key,required this.courseDetail}) : super(key: key);
-
-
-
-  Widget _buildListPanel() {
-    return ExpansionPanelList(
-      expansionCallback: (int index, bool isExpanded) {
-        setState(() {
-          _data[index].isExpanded = !isExpanded;
-        });
-      },
-      children: _data.map<ExpansionPanel>((e) {
-        return ExpansionPanel(
-            headerBuilder: (BuildContext context,bool isExpanded) {
-              print(isExpanded);
-              return ListTile(
-                title: Text(e.headerValue),
-              );
-            },
-            body: Container(
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text('f'),
-                    subtitle: Text('to delele this panel, tap the trash can icon'),
-                    trailing: Icon(Icons.delete),
-                    onTap: () {
-                      setState(() {
-                        _data.removeWhere((element) => e == element);
-                      });
-                    },
-                  ),
-                  ListTile(
-                    title: Text('f'),
-                    subtitle: Text('to delele this panel, tap the trash can icon'),
-                    trailing: Icon(Icons.delete),
-                    onTap: () {
-                      setState(() {
-                        _data.removeWhere((element) => e == element);
-                      });
-                    },
-                  )
-                ],
-              ),
-            ),
-            isExpanded: e.isExpanded
-        );
-      }).toList(),
-    );
-  }
-
-  // final utube = RegExp(r"^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$");
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(
-          children: [
-            Container(
-                margin: EdgeInsets.symmetric(horizontal: 4),
-                child: Container(
-                  margin: EdgeInsets.all(8),
-                  child: YoutubePlayer(
-                    controller: YoutubePlayerController(
-                        initialVideoId: YoutubePlayer.convertUrlToId(
-                            courseDetail.introduce),
-                        flags: YoutubePlayerFlags(
-                          autoPlay: false,
-                        )),
-                    showVideoProgressIndicator: true,
-                    progressIndicatorColor: Colors.blue,
-                    progressColors: ProgressBarColors(
-                        playedColor: Colors.blue,
-                        handleColor: Colors.blueAccent),
-                  ),
-                )
-            ),
-            Container(
-
-            )
-          ],
-        )
-    );
-  }
-}
-
-
-*/
