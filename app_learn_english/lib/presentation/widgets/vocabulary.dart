@@ -1,4 +1,5 @@
 import 'package:app_learn_english/models/vocabulary_model.dart';
+import 'package:app_learn_english/utils/StringRenderUtil.dart';
 import 'package:flutter/material.dart';
 
 class VocabularyWidget extends StatelessWidget {
@@ -35,13 +36,7 @@ class VocabularyWidget extends StatelessWidget {
                   const SizedBox(
                     height: 15,
                   ),
-                  (vocabularyModel.mean.length > 40)
-                      ? Text(
-                          vocabularyModel.mean.substring(0, 40) + " .....",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      : Text(vocabularyModel.mean,
-                          style: TextStyle(fontWeight: FontWeight.bold))
+                  StringRenderUtil.rednerStringCustom(vocabularyModel.mean, 40)
                 ],
               ),
               Icon(
