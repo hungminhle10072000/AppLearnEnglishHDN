@@ -18,7 +18,11 @@ class topic_vocabulary extends StatelessWidget {
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             SizedBox(width: 10,),
-            Expanded(child:  Image.network(topic.image, width: 100, height: 100,),),
+            Expanded(child:  FadeInImage.assetNetwork(
+                placeholder: 'assets/images/loading.gif',
+                image: topic.image,
+                width: 100,
+                height: 100,),),
             Expanded(child: Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

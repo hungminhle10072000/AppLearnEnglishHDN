@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:app_learn_english/utils/constants/Cons.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:app_learn_english/models/vocabulary_model.dart';
@@ -7,7 +8,7 @@ class VocabularyService {
 
   // static const String _baseUrlVocabuary = 'http://10.0.2.2:8080/api/user-vocabulary/';
 
-  static const String _baseUrlVocabuary = 'https://be-app-learn-english.herokuapp.com/api/user-vocabulary/';
+  static const String _baseUrlVocabuary = baseUrl+'/api/user-vocabulary/';
 
   static List<VocabularyModel> parseVocabularyList(String responseBody) {
     final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();

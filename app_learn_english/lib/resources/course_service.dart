@@ -3,51 +3,54 @@ import 'package:app_learn_english/models/course_model.dart';
 import 'package:app_learn_english/models/lesson_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-final String baseUrl = "https://be-app-learn-english.herokuapp.com/api/course/";
+import 'package:app_learn_english/utils/constants/Cons.dart';
 
 Future<List<CourseModel>> getAllCourses() async {
-  final String url = baseUrl + 'getAll';
+  const String url = baseUrl + '/api/course/getAll';
   final http.Client httpClient = http.Client();
   try {
-    final response = await httpClient.get(Uri.parse(url) );
-    final responseData = json.decode(response.body) as List;
-    final List<CourseModel> courses =
-    responseData.map((course) {
-      List<dynamic> chaptersDynamic = course['chapters'] ?? [];
-      List<ChapterModel> chaptersModel = chaptersDynamic.map((chapter){
+    final response = await httpClient.get(Uri.parse(url), headers: {'Content-Type': 'application/json'} );
+    if (response.statusCode == 200) {
+      final responseData = json.decode(utf8.decode(response.bodyBytes)) as List;
+      final List<CourseModel> courses =
+      responseData.map((course) {
+        List<dynamic> chaptersDynamic = course['chapters'] ?? [];
+        List<ChapterModel> chaptersModel = chaptersDynamic.map((chapter){
 
-        List<dynamic> lessonsDynamic = chapter['lessons'] ?? [];
-        List<LessonModel> lessonsModel = lessonsDynamic.map((lesson){
-          return LessonModel(
-              id: lesson['id'],
-              name: lesson['name'],
-              numPriority: lesson['numPriority'],
-              video: lesson['video'],
-              chapterId: lesson['chapterId'],
-              chapterName: lesson['chapterName'],
-              numLessonOfChapter: lesson['numLessonOfChapter'],
-              courseName: lesson['courseName'],
-              courseId: lesson['courseId']);
+          List<dynamic> lessonsDynamic = chapter['lessons'] ?? [];
+          List<LessonModel> lessonsModel = lessonsDynamic.map((lesson){
+            return LessonModel(
+                id: lesson['id'],
+                name: lesson['name'],
+                numPriority: lesson['numPriority'],
+                video: lesson['video'],
+                chapterId: lesson['chapterId'],
+                chapterName: lesson['chapterName'],
+                numLessonOfChapter: lesson['numLessonOfChapter'],
+                courseName: lesson['courseName'],
+                courseId: lesson['courseId']);
+          }).toList();
+          return ChapterModel(
+              id: chapter['id'],
+              name: chapter['name'],
+              numPriority: chapter['numPriority'],
+              courseId: chapter['courseId'],
+              courseName: chapter['courseName'],
+              numOfLesson:chapter['numOfLesson'],// chapter['numOfLesson']
+              lessons: lessonsModel);
         }).toList();
-        return ChapterModel(
-            id: chapter['id'],
-            name: chapter['name'],
-            numPriority: chapter['numPriority'],
-            courseId: chapter['courseId'],
-            courseName: chapter['courseName'],
-            numOfLesson:chapter['numOfLesson'],// chapter['numOfLesson']
-            lessons: lessonsModel);
+        return CourseModel(
+            id: course['id'] ?? -1,
+            name: course['name'] ?? '',
+            introduce: course['introduce'] ?? '',
+            numOfChapter: course['numOfChapter'] ?? 0,
+            chapters: chaptersModel,
+            image: course['image'] ?? '');
       }).toList();
-      return CourseModel(
-          id: course['id'] ?? -1,
-          name: course['name'] ?? '',
-          introduce: course['introduce'] ?? '',
-          numOfChapter: course['numOfChapter'] ?? 0,
-          chapters: chaptersModel,
-          image: course['image'] ?? '');
-    }).toList();
-    return courses;
+      return courses;
+    } else {
+      throw Exception('Cannot load data');
+    }
   } catch(exception) {
     throw Exception('Cannot load data');
   }
