@@ -24,6 +24,15 @@ class _CourseListPage extends State<CourseListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Khoá học",
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w800),
+        ),
+      ),
       body: SafeArea(
         child: BlocBuilder<CourseBloc,CourseState>(
           builder: (context,state) {
@@ -42,9 +51,9 @@ class _CourseListPage extends State<CourseListPage> {
                   return Container(
                     margin: EdgeInsets.all(10),
                     child:  ListTile(
+                      dense: true,
+                      visualDensity: VisualDensity(vertical: 3),
                       onTap: () {
-                        print(index);
-                        print(state.courses[index].name);
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => CourseDetailPage(courseDetail:state.courses[index]))
                         );
@@ -52,15 +61,19 @@ class _CourseListPage extends State<CourseListPage> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                       tileColor: Color.fromRGBO(
                           173, 173, 173, 0.30196078431372547),
+
                       leading:  Container(
                         width: 100,
                         height: 100,
                         child: FadeInImage.assetNetwork(
-                            placeholder: 'assets/loading.gif',
-                            image: state.courses[index].image),),
-                      title: Text("${state.courses[index].name}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                            placeholder: 'assets/images/loading.gif',
+                            image: state.courses[index].image,
+                            fit: BoxFit.fitHeight,
+                            width: 100,
+                            height: 100,),),
+                      title: Text(state.courses[index].name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                       isThreeLine: true,
-                      subtitle: Text('This is firs message for testing'),
+                      subtitle: Text(state.courses[index].introduce),
                     ),
                   );
                 },

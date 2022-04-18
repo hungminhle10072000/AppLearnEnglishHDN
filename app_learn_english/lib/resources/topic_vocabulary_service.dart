@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:app_learn_english/utils/constants/Cons.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/topic_vocabulary_model.dart';
@@ -7,7 +8,7 @@ class TopicVocabularyService {
 
   // static const String _baseUrl = 'http://10.0.2.2:8080/api/user-topic-vocas';
 
-  static const String _baseUrl = 'https://be-app-learn-english.herokuapp.com/api/user-topic-vocas';
+  static const String _baseUrl = baseUrl+ '/api/user-topic-vocas';
 
 
   static List<TopicVocabulary> parseTopicList(String responseBody) {

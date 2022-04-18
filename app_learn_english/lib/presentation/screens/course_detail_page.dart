@@ -1,6 +1,5 @@
 import 'package:app_learn_english/models/chapter_model.dart';
 import 'package:app_learn_english/models/course_model.dart';
-import 'package:app_learn_english/presentation/screens/forgetPasswordPage.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -43,16 +42,9 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               body: ListView(
                 children: [
                   player,
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        String url =
-                            'https://www.youtube.com/watch?v=PlVlWl8kKmg';
-                        controller.load(YoutubePlayer.convertUrlToId(url)!);
-                      },
-                      child: Text('Next Video')),
                   _buildListPanel()
                 ],
               ),
@@ -97,7 +89,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
   }
 
   Widget _buildListPanel() {
-    print('Re-render');
     return ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
@@ -115,8 +106,8 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               child: Column(
                 children: e.chapterModel.lessons
                     .map((e) => ListTile(
-                          title: Text('${e.name}'),
-                          trailing: Icon(Icons.delete),
+                          title: Text(e.name),
+                          trailing: const Icon(Icons.delete),
                           onTap: () {
                             if (!utube.hasMatch(dataSource)) {
                               _chewieController.pause();
@@ -189,8 +180,8 @@ class Item {
 List<Item> createChapterItems(CourseModel courseModel) {
   return courseModel.chapters
       .map((e) => Item(
-          headerValue: '${e.name}',
-          expandedValue: '${e.courseName}',
+          headerValue: e.name,
+          expandedValue: e.courseName,
           chapterModel: e))
       .toList();
 }
