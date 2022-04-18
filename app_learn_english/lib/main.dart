@@ -17,7 +17,7 @@ void main() {
           'login' : (context) => loginPage(),
           'register': (context) => registerPage(),
           'forget': (context) => forgetPasswordPage(),
-          'admin': (context) => AdminPage(),
+          'admin': (context) => adminPage(),
         },
       )
   );

@@ -47,7 +47,7 @@ class _loginPageState extends State<loginPage> {
 
       // if(usernameController.text == 'admin' && passwordController.text == 'admin123456'){
       //   ScaffoldMessenger.of(context).showSnackBar(
-      //     const SnackBar(duration: const Duration(seconds: 10), content: Text('Chuyển sang trang admin')),
+      //     const loginPage()(duration: const Duration(seconds: 10), content: Text('Chuyển sang trang admin')),
       //   );
       // } else {
       //   Navigator.pushNamed(context, 'home');

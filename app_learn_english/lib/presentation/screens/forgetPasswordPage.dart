@@ -1,4 +1,11 @@
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+
+import '../../resources/forgetpass_service.dart';
+import '../../resources/login_service.dart';
+import 'loginPage.dart';
 
 class forgetPasswordPage extends StatefulWidget {
   const forgetPasswordPage({Key? key}) : super(key: key);
@@ -13,15 +20,6 @@ class _forgetPasswordPageState extends State<forgetPasswordPage> {
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
 
-  void validate() {
-    if (formFogetKey.currentState!.validate()) {
-      Navigator.pushNamed(context, 'login');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(duration: const Duration(seconds: 10), content: Text('Kiểm tra email để lấy mật khẩu mới !!!')),
-      );
-    }
-  }
-
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -29,6 +27,53 @@ class _forgetPasswordPageState extends State<forgetPasswordPage> {
     emailController.dispose();
     super.dispose();
   }
+
+  void validate() async{
+    if (formFogetKey.currentState!.validate()) {
+
+      String username= usernameController.text.toString().trim();
+      String email = emailController.text.toString().trim();
+
+      String status = await  ForgetPassUser(username, email);
+      if(status ==  200){
+          // final snackBar = SnackBar(
+          //   content: const Text('Yay! A SnackBar!'),
+          // );
+          // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   const SnackBar(duration: const Duration(seconds: 10), content: Text('Kiểm tra email để lấy mật khẩu mới !!!')),
+          // );
+          // Navigator.of(context).pushReplacement(
+          //     MaterialPageRoute(
+          //         builder: (context) => loginPage()));
+          Navigator.pushNamed(context, 'login');
+      }
+      else if (status ==  404)
+      {
+          final snackBar = SnackBar(
+            content: const Text('kiểm tra '),
+          );
+      }
+      else
+      {
+          Scaffold.of(context).showSnackBar(
+              SnackBar(content: Text('TextFormField is empty!'))
+          );
+          //Navigator.pop(context);
+          Navigator.pushNamed(context, 'forget');
+      }
+
+
+
+      // Navigator.pushNamed(context, 'login');
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(duration: const Duration(seconds: 10), content: Text('Kiểm tra email để lấy mật khẩu mới !!!')),
+      // );
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

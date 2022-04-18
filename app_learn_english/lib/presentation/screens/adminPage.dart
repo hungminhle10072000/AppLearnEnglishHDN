@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-class AdminPage extends StatelessWidget {
-  const AdminPage({Key? key}) : super(key: key);
+class adminPage extends StatelessWidget {
+  const adminPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

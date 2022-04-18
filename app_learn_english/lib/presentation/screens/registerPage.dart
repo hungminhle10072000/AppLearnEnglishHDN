@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 
+import '../../resources/register_service.dart';
+
 class registerPage extends StatefulWidget {
   const registerPage({Key? key}) : super(key: key);
 
@@ -38,11 +40,20 @@ class _registerPageState extends State<registerPage> {
     passwordController.dispose();
     repeatpasswordController.dispose();
     nameController.dispose();
+    genderController.dispose();
+    addressController.dispose();
+    birthdayController.dispose();
     super.dispose();
   }
 
   void validate() {
-    RegistUser("", "");
+
+    if (formRegisterKey.currentState!.validate()) {
+      if (f != null) {
+        RegistUser("", "", f!);
+      }
+    }
+
   }
 
   String? checkRepeatPassWord(value){
@@ -107,12 +118,15 @@ class _registerPageState extends State<registerPage> {
                   key: formRegisterKey,
                   child: Column(
                     children: [
+                      Text("AVATAR"),
                       InkWell(
                         onTap: (){
                           Pickfile();
                         },
-                        child: f!=null ? Image.file(f!,width: 240,height: 240,fit: BoxFit.fill,) :  Icon(Icons.camera)
+                        child: f!=null ? Image.file(f!,width: 240,height: 240,fit: BoxFit.fill,) :  Icon(Icons.camera_alt_rounded,size: 60),
+
                       ),
+                      SizedBox(height: 20.0),
                       TextFormField(
                         controller: nameController,
                         validator: (value) {
