@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../blocs/login_bloc.dart';
+import '../../events/login_event.dart';
+import '../../states/login_state.dart';
 
 class loginPage extends StatefulWidget {
   const loginPage({Key? key}) : super(key: key);
@@ -13,6 +18,16 @@ class _loginPageState extends State<loginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
+  late LoginBloc authBloc;
+
+
+
+  @override
+  void initState() {
+    authBloc = BlocProvider.of<LoginBloc>(context);
+    super.initState();
+  }
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -21,15 +36,15 @@ class _loginPageState extends State<loginPage> {
     super.dispose();
   }
 
-  void validate() {
+  void validate(context) {
     if (formKey.currentState!.validate()) {
-      if(usernameController.text == 'admin' && passwordController.text == 'admin123456'){
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(duration: const Duration(seconds: 10), content: Text('Chuyển sang trang admin')),
-        );
-      } else {
-        Navigator.pushNamed(context, 'home');
-      }
+
+      // If email is valid adding new Event [SignInRequested].
+      BlocProvider.of<LoginBloc>(context).add(
+          LoginButtonPressed(username: usernameController.text, password: passwordController.text));
+      // authBloc.add(LoginButtonPressed(
+      //     username: usernameController.text,
+      //     password: passwordController.text));
     }
   }
 
@@ -46,6 +61,22 @@ class _loginPageState extends State<loginPage> {
             fit: BoxFit.cover,
           ),
         ),
+        child: BlocListener<LoginBloc, LoginState>(
+        listener: (context, state) {
+          //state = LoginInitState;
+          if (state is UserLoginSuccessState){
+            Navigator.pushNamed(context, 'home');
+          }else if (state is AdminLoginSuccessState){
+              Navigator.pushNamed(context, 'admin');
+        }
+          else  if (state is LoginErrorState){
+            final snackBar = SnackBar(
+                  content: const Text('Yay! A SnackBar!'),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            Navigator.pushNamed(context, 'login');
+          }
+    },
         child: Scaffold(
           // appBar: AppBar(
           //   title: Text('Cùng nhau học tiếng anh')
@@ -124,7 +155,9 @@ class _loginPageState extends State<loginPage> {
                                   primary: Colors.orange,
                                   shape: StadiumBorder(),
                                 ),
-                                onPressed: validate,
+                                onPressed: () {
+                                  validate(context);
+                                },
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -187,6 +220,7 @@ class _loginPageState extends State<loginPage> {
             ],
           ),
         ),
+      ),
       ),
     );
   }
