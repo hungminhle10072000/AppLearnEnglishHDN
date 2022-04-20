@@ -1,3 +1,4 @@
+import 'package:app_learn_english/presentation/screens/forgetPasswordPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -188,7 +189,12 @@ class _loginPageState extends State<loginPage> {
                           children: [
                             TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, 'forget');
+                                // Navigator.pushReplacement(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) =>  forgetPasswordPage()),
+                                // );
+                                Navigator.of(context).pushNamed('forget');
                               },
                               child: Text(
                                 'Quên mật khẩu ?',

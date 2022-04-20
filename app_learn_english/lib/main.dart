@@ -1,4 +1,5 @@
 import 'package:app_learn_english/blocs/course_bloc.dart';
+import 'package:app_learn_english/blocs/forgetpass_bloc.dart';
 import 'package:app_learn_english/blocs/list_vocabulary_bloc.dart';
 import 'package:app_learn_english/events/course_event.dart';
 import 'package:app_learn_english/models/course_model.dart';
@@ -11,18 +12,30 @@ import 'package:app_learn_english/presentation/screens/loginPage.dart';
 import 'package:app_learn_english/presentation/screens/registerPage.dart';
 import 'package:app_learn_english/presentation/screens/topic_vocabulary_Page.dart';
 import 'package:app_learn_english/presentation/screens/vocabulary_detail_topic_page.dart';
+import 'package:app_learn_english/resources/forgetpass_service.dart';
 import 'package:app_learn_english/resources/login_service.dart';
+import 'package:app_learn_english/states/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'blocs/login_bloc.dart';
 
 void main() {
-  runApp(RepositoryProvider(
-      create: (context) => LoginRepository(),
-      child: BlocProvider(
-      create: (context) => LoginBloc( repo: RepositoryProvider.of<LoginRepository>(context),
-      ),
+  runApp(
+    // RepositoryProvider(
+    //   create: (context) => LoginRepository(),
+    //   child: BlocProvider(
+    //   create: (context) => LoginBloc( repo: RepositoryProvider.of<LoginRepository>(context),),
+    MultiBlocProvider(
+    providers: [
+      BlocProvider(
+          create: (BuildContext context) => LoginBloc(repo: RepositoryProvider.of<LoginRepository>(context)),),
+          //create: (context) => LoginBloc(LoginInitState(), LoginRepository(), repo: ))
+      BlocProvider(
+        create: (BuildContext context) => ForgetPassBloc(repo: RepositoryProvider.of<ForgetPassRepository>(context)),)
+    ],
+
+
         child: MaterialApp(
           title: 'Cùng nhau học tiếng anh',
             debugShowCheckedModeBanner: false,
@@ -53,7 +66,6 @@ void main() {
                   image: 'This is image'))
             },
           ))
-        ),
 
   );
 }

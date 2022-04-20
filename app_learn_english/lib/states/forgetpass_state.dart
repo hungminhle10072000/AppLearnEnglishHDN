@@ -1,17 +1,16 @@
 import 'package:equatable/equatable.dart';
 
-class LoginState extends Equatable{
+class ForgetPassState extends Equatable{
   List<Object> get props =>[];
 
 }
 
-class LoginInitState extends LoginState{} // trang thai ban dau
-class LoginLoadingState extends LoginState{} // trang thai load khi nhan nut dang nhap
-class UserLoginSuccessState extends LoginState{}// DN thanh cong voi user
-class AdminLoginSuccessState extends LoginState{}// DN thanh cong voi admin
-class LoginErrorState extends LoginState{ // DN loi
+class ForgetPassInitState extends ForgetPassState{} // trang thai ban dau
+class ForgetPassLoadingState extends ForgetPassState{} // trang thai load khi nhan nut quen mat khau
+class ForgetPassSuccessState extends ForgetPassState{}// gui ma thanh cong
+class ForgetPassErrorState extends ForgetPassState{ // quen mat khau loi
   final String message;
-  LoginErrorState({required this.message});
+  ForgetPassErrorState({required this.message});
 }
 
 

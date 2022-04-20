@@ -1,4 +1,9 @@
+import 'package:app_learn_english/blocs/forgetpass_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../events/forgetpass_event.dart';
+import '../../states/forgetpass_state.dart';
 
 class forgetPasswordPage extends StatefulWidget {
   const forgetPasswordPage({Key? key}) : super(key: key);
@@ -13,13 +18,12 @@ class _forgetPasswordPageState extends State<forgetPasswordPage> {
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
 
-  void validate() {
-    if (formFogetKey.currentState!.validate()) {
-      Navigator.pushNamed(context, 'login');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(duration: const Duration(seconds: 10), content: Text('Kiểm tra email để lấy mật khẩu mới !!!')),
-      );
-    }
+  late ForgetPassBloc forgetPassBloc;
+
+  @override
+  void initState() {
+    forgetPassBloc = BlocProvider.of<ForgetPassBloc>(context);
+    super.initState();
   }
 
   @override
@@ -29,6 +33,15 @@ class _forgetPasswordPageState extends State<forgetPasswordPage> {
     emailController.dispose();
     super.dispose();
   }
+
+  void validate() {
+    if (formFogetKey.currentState!.validate()) {
+      BlocProvider.of<ForgetPassBloc>(context).add(
+          ForgetPassButtonPressed(username: usernameController.text, email: emailController.text));
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +56,19 @@ class _forgetPasswordPageState extends State<forgetPasswordPage> {
           fit: BoxFit.cover,
         ),
       ),
+      child: BlocListener<ForgetPassBloc, ForgetPassState>(
+      listener: (context, state) {
+
+          if (state is ForgetPassSuccessState){
+            final snackBar = SnackBar(content: const Text('Kiểm tra mail để có mật khẩu mới!'),);
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            Navigator.pushNamed(context, 'login');}
+          else {
+            final snackBar = SnackBar(content: const Text('Tên đăng nhập hoặc email không đúng!'),);
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            Navigator.pushNamed(context, 'forget');
+        }
+    },
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -146,6 +172,8 @@ class _forgetPasswordPageState extends State<forgetPasswordPage> {
           ],
         ),
       ),
-    ));
+    )
+    )
+    );
   }
 }
