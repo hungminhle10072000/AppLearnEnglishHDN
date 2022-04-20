@@ -1,4 +1,11 @@
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+
+import '../../resources/forgetpass1_service.dart';
+import '../../resources/login_service.dart';
+import 'loginPage.dart';
 
 class forgetPasswordPage extends StatefulWidget {
   const forgetPasswordPage({Key? key}) : super(key: key);
@@ -13,15 +20,6 @@ class _forgetPasswordPageState extends State<forgetPasswordPage> {
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
 
-  void validate() {
-    if (formFogetKey.currentState!.validate()) {
-      Navigator.pushNamed(context, 'login');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(duration: const Duration(seconds: 10), content: Text('Kiểm tra email để lấy mật khẩu mới !!!')),
-      );
-    }
-  }
-
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -30,122 +28,173 @@ class _forgetPasswordPageState extends State<forgetPasswordPage> {
     super.dispose();
   }
 
+  void validate() async{
+    if (formFogetKey.currentState!.validate()) {
+
+      String username= usernameController.text.toString().trim();
+      String email = emailController.text.toString().trim();
+
+      final status = await  ForgetPassUser(username, email);
+      if(status.statusCode ==  200){
+        final snackBar = SnackBar(
+          content: const Text('Gửi mật khẩu về email thành công!'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(duration: const Duration(seconds: 10), content: Text('Kiểm tra email để lấy mật khẩu mới !!!')),
+        // );
+        // Navigator.of(context).pushReplacement(
+        //     MaterialPageRoute(
+        //         builder: (context) => loginPage()));
+        print('ok ban nhe');
+        Navigator.pushNamed(context, 'login');
+      }
+      else if (status.statusCode ==  404)
+      {
+        print('ok ban nhe 1');
+        final snackBar = SnackBar(
+          content: const Text('Tên đăng nhập hoặc gmail không đúng'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+      else
+      {
+        print('ok ban nhe 2');
+        Scaffold.of(context).showSnackBar(
+            SnackBar(content: Text('TextFormField is empty!'))
+        );
+        //Navigator.pop(context);
+        Navigator.pushNamed(context, 'forget');
+      }
+
+
+
+      // Navigator.pushNamed(context, 'login');
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(duration: const Duration(seconds: 10), content: Text('Kiểm tra email để lấy mật khẩu mới !!!')),
+      // );
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        image: DecorationImage(
-          image: AssetImage(
-            'assets/images/background.jpg',
+          decoration: BoxDecoration(
+            color: Colors.white,
+            image: DecorationImage(
+              image: AssetImage(
+                'assets/images/background.jpg',
+              ),
+              fit: BoxFit.cover,
+            ),
           ),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-            elevation: null,
+          child: Scaffold(
             backgroundColor: Colors.transparent,
-            leading: TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, 'login');
-              },
-              child: Icon(
-                Icons.arrow_back_ios_rounded,
-                color: Colors.white,
-              ),
-            )
-        ),
-        body: ListView(
-          children: [
-            SizedBox(height: 50,),
-            Center(
-              child: Text('Quên mật khẩu', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700)),
-            ),
-            SizedBox(height: 40,),
-            Container(
-              padding: EdgeInsets.only(
-                top: 20,
-                left: 35,
-                right: 35,
-              ),
-              child: Form(
-                key: formFogetKey,
-                child: Column(
-                children: [
-                  TextFormField(
-                    controller: usernameController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Yêu cầu nhập tên đăng nhập';
-                      }
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Tên đăng nhập',
-                      fillColor: Colors.grey.shade100,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
+            appBar: AppBar(
+                elevation: null,
+                backgroundColor: Colors.transparent,
+                leading: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'login');
+                  },
+                  child: Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: Colors.white,
                   ),
-                  SizedBox(height: 20.0),
-                  TextFormField(
-                    controller: emailController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Yêu cầu nhập email';
-                      }
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      fillColor: Colors.grey.shade100,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20.0),
-                ],
-              ),
+                )
             ),
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            body: ListView(
               children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      maximumSize: Size(230.0, 90.0),
-                      minimumSize: Size(200.0, 60.0),
-                      primary: Colors.orange,
-                      shape: StadiumBorder(),
-                    ),
-                    onPressed: validate,
-                    child: Row(
-                      mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween,
+                SizedBox(height: 50,),
+                Center(
+                  child: Text('Quên mật khẩu', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700)),
+                ),
+                SizedBox(height: 40,),
+                Container(
+                  padding: EdgeInsets.only(
+                    top: 20,
+                    left: 35,
+                    right: 35,
+                  ),
+                  child: Form(
+                    key: formFogetKey,
+                    child: Column(
                       children: [
-                        Text(
-                          'Đặt lại mật khẩu',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700),
+                        TextFormField(
+                          controller: usernameController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Yêu cầu nhập tên đăng nhập';
+                            }
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Tên đăng nhập',
+                            fillColor: Colors.grey.shade100,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
                         ),
-                        Icon(
-                          Icons.refresh_sharp,
-                          color: Colors.white,
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: emailController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Yêu cầu nhập email';
+                            }
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            fillColor: Colors.grey.shade100,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
                         ),
+                        SizedBox(height: 20.0),
                       ],
-                    ))
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          maximumSize: Size(230.0, 90.0),
+                          minimumSize: Size(200.0, 60.0),
+                          primary: Colors.orange,
+                          shape: StadiumBorder(),
+                        ),
+                        onPressed: validate,
+                        child: Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Đặt lại mật khẩu',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            Icon(
+                              Icons.refresh_sharp,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ))
+                  ],
+                )
               ],
-            )
-          ],
-        ),
-      ),
-    ));
+            ),
+          ),
+        ));
   }
 }
