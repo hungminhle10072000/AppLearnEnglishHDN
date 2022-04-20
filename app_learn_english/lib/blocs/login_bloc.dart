@@ -1,5 +1,7 @@
 
 
+import 'dart:convert';
+
 import 'package:app_learn_english/events/login_event.dart';
 import 'package:app_learn_english/resources/login_service.dart';
 import 'package:app_learn_english/states/login_state.dart';
@@ -26,32 +28,45 @@ class LoginBloc extends Bloc<LoginEvent,LoginState> {
       var ref = await SharedPreferences.getInstance();
       print("Chay o day");
 
-      var data = await repo.login(event.username, event.password);
-      emit(LoginLoadingState());
-      try {
-        if (data['user']['role'] == "User") {
-          ref.setString("token", data['token']['token']);
-          ref.setString("role", data['user']['role']);
-          ref.setString("username", data['user']['username']);
-          ref.setString("fullname", data['user']['fullname']);
-          print("Chay o day 11223323");
-          emit(UserLoginSuccessState());
-        }
-        else if (data['user']['role'] == "Admin") {
-          ref.setString("token", data['token']['token']);
-          ref.setString("role", data['user']['role']);
-          ref.setString("username", data['user']['username']);
-          ref.setString("fullname", data['user']['fullname']);
-          emit(AdminLoginSuccessState());
-        }
-        else
-        {
-          emit(LoginErrorState(message: "Auth error"));
-        }
-      } catch (e) {
+      var status = await repo.login(event.username, event.password);
+      if(status.statusCode ==  200)
+      {
+          final data = json.decode(status.body);
+          emit(LoginLoadingState());
+          try {
+            if (data['user']['role'] == "User") {
+              ref.setString("token", data['token']['token']);
+              ref.setString("role", data['user']['role']);
+              ref.setString("username", data['user']['username']);
+              ref.setString("fullname", data['user']['fullname']);
+              print("Chay o day 11223323");
+              emit(UserLoginSuccessState());
+            }
+            else if (data['user']['role'] == "Admin") {
+              ref.setString("token", data['token']['token']);
+              ref.setString("role", data['user']['role']);
+              ref.setString("username", data['user']['username']);
+              ref.setString("fullname", data['user']['fullname']);
+              emit(AdminLoginSuccessState());
+            }
+            else if (data['user']['role'] ==null)
+            {
+              print("Chay o day 11224455");
+              emit(LoginErrorState(message: "Auth error"));
+            }
+          } catch (e) {
+            print("Chay o day 11224455");
+            emit(LoginErrorState(message: "Auth error"));
+            emit(LoginInitState());
+          }
+      }
+      else
+      {
+        print("Chay o day 11224455gwedgrdf");
         emit(LoginErrorState(message: "Auth error"));
         emit(LoginInitState());
       }
+
     });
   }
 }

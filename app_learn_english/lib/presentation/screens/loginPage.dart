@@ -64,17 +64,24 @@ class _loginPageState extends State<loginPage> {
         child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           //state = LoginInitState;
-          if (state is UserLoginSuccessState){
-            Navigator.pushNamed(context, 'home');
-          }else if (state is AdminLoginSuccessState){
+          try{
+            if (state is UserLoginSuccessState){
+              Navigator.pushNamed(context, 'home');
+            }else if (state is AdminLoginSuccessState){
               Navigator.pushNamed(context, 'admin');
-        }
-          else  if (state is LoginErrorState){
-            final snackBar = SnackBar(
-                  content: const Text('Yay! A SnackBar!'),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            Navigator.pushNamed(context, 'login');
+            }
+            else  if (state is LoginErrorState){
+              final snackBar = SnackBar(
+                content: const Text('Tên đăng nhập hoặc mật khẩu không đúng!'),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              Navigator.pushNamed(context, 'login');
+            }
+          }
+          catch(e)
+          {
+            var snackbar = SnackBar(content: Text(e.toString()));
+            ScaffoldMessenger.of(context).showSnackBar(snackbar);
           }
     },
         child: Scaffold(

@@ -15,11 +15,12 @@ class LoginRepository {
       headers: headers,
       body: msg,
     );
-    final data = json.decode(response.body);
-    if (data['user']['role'] == "Admin" || data['user']['role'] == "User") {
-      return data;
-    } else {
-      return "Auth problem";
-    }
+    //final data = json.decode(response.body);
+    // if (data['user']['role'] == "Admin" || data['user']['role'] == "User") {
+    //   return data;
+    // } else {
+    //   return response;
+    // }
+    return response;
   }
 }
