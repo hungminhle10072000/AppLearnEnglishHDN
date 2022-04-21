@@ -1,4 +1,5 @@
 import 'package:app_learn_english/blocs/course_bloc.dart';
+import 'package:app_learn_english/blocs/list_grammar_bloc.dart';
 import 'package:app_learn_english/blocs/list_vocabulary_bloc.dart';
 import 'package:app_learn_english/events/course_event.dart';
 import 'package:app_learn_english/models/course_model.dart';
@@ -7,6 +8,7 @@ import 'package:app_learn_english/presentation/screens/course_detail_page.dart';
 import 'package:app_learn_english/presentation/screens/course_list_page.dart';
 import 'package:app_learn_english/presentation/screens/forgetPasswordPage.dart';
 import 'package:app_learn_english/presentation/screens/homePage.dart';
+import 'package:app_learn_english/presentation/screens/list_grammar_page.dart';
 import 'package:app_learn_english/presentation/screens/loginPage.dart';
 import 'package:app_learn_english/presentation/screens/registerPage.dart';
 import 'package:app_learn_english/presentation/screens/topic_vocabulary_Page.dart';
@@ -23,7 +25,8 @@ void main() {
       providers: [
         BlocProvider(create: (context) => LoginBloc( initialStatem: LoginState(),repo: LoginRepository())),
         BlocProvider(create: (context) => ListVocabularyBloc())],
-
+        BlocProvider(create: (context) => ListGrammarBloc())
+      ],
       child: MaterialApp(
         title: 'Cùng nhau học tiếng anh',
         debugShowCheckedModeBanner: false,
@@ -36,6 +39,7 @@ void main() {
           'forget': (context) => forgetPasswordPage(),
           'topicVocabulary': (context) => topic_vocabulary_page(),
           'listVocaTopic': (context) => VocabularyDetailTopicPage(),
+          'listGrammar': (context) => GrammarListPage(),
           'listCourses': (context) => BlocProvider(
                 create: (context) {
                   final _courseBloc = CourseBloc();

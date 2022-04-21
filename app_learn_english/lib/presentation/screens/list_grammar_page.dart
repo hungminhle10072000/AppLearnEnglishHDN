@@ -1,18 +1,15 @@
-import 'package:app_learn_english/presentation/widgets/vocabulary_list.dart';
+import 'package:app_learn_english/blocs/list_grammar_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../blocs/list_vocabulary_bloc.dart';
-
-class VocabularyDetailTopicPage extends StatefulWidget {
-  const VocabularyDetailTopicPage({Key? key}) : super(key: key);
+class GrammarListPage extends StatefulWidget {
+  const GrammarListPage({Key? key}) : super(key: key);
 
   @override
-  State<VocabularyDetailTopicPage> createState() =>
-      _VocabularyDetailTopicPageState();
+  State<GrammarListPage> createState() => _GrammarListPageState();
 }
 
-class _VocabularyDetailTopicPageState extends State<VocabularyDetailTopicPage> {
+class _GrammarListPageState extends State<GrammarListPage> {
   final searchController = TextEditingController();
 
   bool isSearching = false;
@@ -25,7 +22,7 @@ class _VocabularyDetailTopicPageState extends State<VocabularyDetailTopicPage> {
         leading: !isSearching
             ? TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushNamed(context, 'home');
                 },
                 child: Icon(
                   Icons.arrow_back_ios_rounded,
@@ -34,7 +31,7 @@ class _VocabularyDetailTopicPageState extends State<VocabularyDetailTopicPage> {
             : null,
         title: !isSearching
             ? Text(
-                "Danh sách từ vựng",
+                "Danh sách ngữ pháp",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -46,9 +43,9 @@ class _VocabularyDetailTopicPageState extends State<VocabularyDetailTopicPage> {
                 decoration: InputDecoration(
                     icon: GestureDetector(
                       onTap: () {
-                        context.read<ListVocabularyBloc>().add(
-                            ListVocabularyEventSearch(
-                                searchController.text.toString()));
+                        // topicVocabularyBloc.topicEventSink.add(
+                        //     SearchTopicVocabularyEvent(
+                        //         searchController.text.toString()));
                       },
                       child: Icon(
                         Icons.search,
@@ -64,9 +61,9 @@ class _VocabularyDetailTopicPageState extends State<VocabularyDetailTopicPage> {
                   onPressed: () {
                     setState(() {
                       this.isSearching = !this.isSearching;
+                      // topicVocabularyBloc.topicEventSink.add(
+                      //     SearchTopicVocabularyEvent(''));
                     });
-                    context.read<ListVocabularyBloc>().add(
-                        ListVocabularyEventSearch(''));
                   },
                   icon: Icon(Icons.cancel))
               : IconButton(
@@ -78,17 +75,18 @@ class _VocabularyDetailTopicPageState extends State<VocabularyDetailTopicPage> {
                   icon: Icon(Icons.search))
         ],
       ),
-      body: BlocBuilder<ListVocabularyBloc, ListVocabularyState>(
+      body: BlocBuilder<ListGrammarBloc, ListGrammarState>(
         builder: (context, state) {
-          if (state is ListVocabularyLoadingState) {
+          if (state is ListGrammarLoadingState) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
-          if (state is ListVocabularyLoadedState) {
-            return VocabularyListWidget(state.listVocabularies);
+          if (state is ListGrammarLoadedState) {
+            return Text("Lấy thành công !!");
+            // return VocabularyListWidget(state.listVocabularies);
           }
-          if (state is ListVocabularyErrorState) {
+          if (state is ListGrammarErrorState) {
             return Center(
               child: Text(state.error.toString()),
             );

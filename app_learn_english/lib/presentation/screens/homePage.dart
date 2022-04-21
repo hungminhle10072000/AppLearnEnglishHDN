@@ -114,32 +114,37 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  elevation: 4,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new Expanded(
-                        child: Image(
-                          image: AssetImage('assets/images/grammar.jpg'),
-                          fit: BoxFit.fill,
-                          width: MediaQuery.of(context).size.width,
-                          height: 128,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'listGrammar');
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    elevation: 4,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Expanded(
+                          child: Image(
+                            image: AssetImage('assets/images/grammar.jpg'),
+                            fit: BoxFit.fill,
+                            width: MediaQuery.of(context).size.width,
+                            height: 128,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Ngữ pháp',
-                        style: cardTextStyle,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Ngữ pháp',
+                          style: cardTextStyle,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 
