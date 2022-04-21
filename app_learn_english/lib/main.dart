@@ -18,79 +18,37 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'blocs/login_bloc.dart';
 
 void main() {
-  runApp(RepositoryProvider(
-      create: (context) => LoginRepository(),
-      child: BlocProvider(
-      create: (context) => LoginBloc( repo: RepositoryProvider.of<LoginRepository>(context),
-      ),
-        child: MaterialApp(
-          title: 'Cùng nhau học tiếng anh',
-            debugShowCheckedModeBanner: false,
-            initialRoute: 'login',
-            routes: <String, WidgetBuilder>{
-              'home': (context) => HomePage(),
-              'admin': (context) => adminPage(),
-              'login': (context) => loginPage(),
-              'register': (context) => registerPage(),
-              'forget': (context) => forgetPasswordPage(),
-              'topicVocabulary': (context) => topic_vocabulary_page(),
-              'listVocaTopic': (context) => VocabularyDetailTopicPage(),
-              'listCourses': (context) => BlocProvider(
-                  create: (context) {
-                    final _courseBloc = CourseBloc();
-                    final _courseEvent =CourseFetchedEvent();
-                    _courseBloc.add(_courseEvent);
-                    return _courseBloc;
-                  },
-                  child: CourseListPage(),
+  runApp(MultiBlocProvider(
+      providers: [BlocProvider(create: (context) => ListVocabularyBloc())],
+      child: MaterialApp(
+        title: 'Cùng nhau học tiếng anh',
+        debugShowCheckedModeBanner: false,
+        initialRoute: 'login',
+        routes: <String, WidgetBuilder>{
+          'home': (context) => HomePage(),
+          'admin': (context) => adminPage(),
+          'login': (context) => loginPage(),
+          'register': (context) => registerPage(),
+          'forget': (context) => forgetPasswordPage(),
+          'topicVocabulary': (context) => topic_vocabulary_page(),
+          'listVocaTopic': (context) => VocabularyDetailTopicPage(),
+          'listCourses': (context) => BlocProvider(
+                create: (context) {
+                  final _courseBloc = CourseBloc();
+                  final _courseEvent = CourseFetchedEvent();
+                  _courseBloc.add(_courseEvent);
+                  return _courseBloc;
+                },
+                child: CourseListPage(),
               ),
-              '/courseDetail': (context) => CourseDetailPage(courseDetail: CourseModel(
+          '/courseDetail': (context) => CourseDetailPage(
+              courseDetail: CourseModel(
                   id: -1,
                   name: 'Course Name',
                   introduce: 'Introduction',
-                  numOfChapter:  0,
+                  numOfChapter: 0,
                   chapters: [],
                   image: 'This is image'))
-            },
-          ))
-        ),
-
-  );
+        },
+      )));
 }
-
-
-      // MultiBlocProvider(
-      // providers: [
-      //   BlocProvider(
-      //       create: (context) => LoginBloc(LoginInitState(), LoginRepository()))
-      // ],
-      // child: MaterialApp(
-      //   title: 'Cùng nhau học tiếng anh',
-      //   debugShowCheckedModeBanner: false,
-      //   initialRoute: 'login',
-      //   routes: <String, WidgetBuilder>{
-      //     'home': (context) => HomePage(),
-      //     'login': (context) => loginPage(),
-      //     'register': (context) => registerPage(),
-      //     'forget': (context) => forgetPasswordPage(),
-      //     'topicVocabulary': (context) => topic_vocabulary_page(),
-      //     'listVocaTopic': (context) => VocabularyDetailTopicPage(),
-      //     'listCourses': (context) => BlocProvider(
-      //         create: (context) {
-      //           final _courseBloc = CourseBloc();
-      //           final _courseEvent =CourseFetchedEvent();
-      //           _courseBloc.add(_courseEvent);
-      //           return _courseBloc;
-      //         },
-      //         child: CourseListPage(),
-      //     ),
-      //     '/courseDetail': (context) => CourseDetailPage(courseDetail: CourseModel(
-      //         id: -1,
-      //         name: 'Course Name',
-      //         introduce: 'Introduction',
-      //         numOfChapter:  0,
-      //         chapters: [],
-      //         image: 'This is image'))
-      //   },
-      // )));
-//}
