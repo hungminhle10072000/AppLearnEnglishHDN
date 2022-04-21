@@ -35,7 +35,7 @@ class _topic_vocabulary_pageState extends State<topic_vocabulary_page> {
               : null,
           title: !isSearching
               ? Text(
-                  "English 2022",
+                  "Danh sách chủ đề",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
