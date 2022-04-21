@@ -91,7 +91,10 @@
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text('Thoát'),
-              onTap: () => null,
+              onTap: (){
+                Navigator.pop(context);
+                Navigator.pushNamed(context, 'login');
+              },
             )
           ],
         ),

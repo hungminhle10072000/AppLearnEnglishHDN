@@ -10,9 +10,9 @@ import '../states/forgetpass_state.dart';
 
 class ForgetPassBloc extends Bloc<ForgetPassEvent,ForgetPassState> {
 
-  final ForgetPassRepository repo;
+  ForgetPassRepository repo;
 
-  ForgetPassBloc({required this.repo}) : super(ForgetPassInitState()) {
+  ForgetPassBloc({required ForgetPassState initialStatem, required this.repo}) : super(initialStatem) {
 
 
     on<StartEvent>(
@@ -37,4 +37,7 @@ class ForgetPassBloc extends Bloc<ForgetPassEvent,ForgetPassState> {
 
     });
   }
+  @override
+  // TODO: implement initialState
+  ForgetPassState get initialState => throw UnimplementedError();
 }

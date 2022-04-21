@@ -11,4 +11,11 @@ class StringRenderUtil {
       return Text(content, style: TextStyle(fontWeight: FontWeight.bold));
     }
   }
+  static String reduceSentence(String content, int maxLength) {
+    if (content.length > maxLength) {
+      return content.substring(0,maxLength) + "...";
+    } else {
+      return content;
+    }
+  }
 }

@@ -36,7 +36,7 @@ class _forgetPasswordPageState extends State<forgetPasswordPage> {
 
   void validate() {
     if (formFogetKey.currentState!.validate()) {
-      BlocProvider.of<ForgetPassBloc>(context).add(
+      forgetPassBloc.add(
           ForgetPassButtonPressed(username: usernameController.text, email: emailController.text));
     }
   }
