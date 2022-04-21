@@ -23,8 +23,10 @@ import 'blocs/login_bloc.dart';
 void main() {
   runApp(MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => LoginBloc( initialStatem: LoginState(),repo: LoginRepository())),
-        BlocProvider(create: (context) => ListVocabularyBloc())],
+        BlocProvider(
+            create: (context) => LoginBloc(
+                initialStatem: LoginState(), repo: LoginRepository())),
+        BlocProvider(create: (context) => ListVocabularyBloc()),
         BlocProvider(create: (context) => ListGrammarBloc())
       ],
       child: MaterialApp(
