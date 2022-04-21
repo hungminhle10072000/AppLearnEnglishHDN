@@ -1,16 +1,20 @@
 import 'dart:io';
 
+import 'package:app_learn_english/models/user_model.dart';
 import 'package:app_learn_english/resources/login_service.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 //import '../../resources/register_service.dart';
 
 class registerPage extends StatefulWidget {
   const registerPage({Key? key}) : super(key: key);
+  //final UserModel? userModel;
+
 
   @override
   _registerPageState createState() => _registerPageState();
@@ -27,9 +31,17 @@ class _registerPageState extends State<registerPage> {
   final genderController = TextEditingController();
   final addressController = TextEditingController();
   final birthdayController = TextEditingController();
-  File ? f;
 
   final format=DateFormat('yyyy-MM-dd') ;
+
+  bool isApiCallProcess = false;
+  List<Object> images = [];
+  bool isEditMode = false;
+  bool isImageSelected = false;
+  late final UserModel? userModel;
+
+  //_registerPageState(this.userModel);
+
 
   @override
   void dispose() {
@@ -46,12 +58,27 @@ class _registerPageState extends State<registerPage> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    userModel = UserModel();
+
+    Future.delayed(Duration.zero, () {
+      if (ModalRoute.of(context)?.settings.arguments != null) {
+        final Map arguments = ModalRoute.of(context)?.settings.arguments as Map;
+        userModel = arguments['model'];
+        isEditMode = true;
+        setState(() {});
+      }
+    });
+  }
+
   void validate() {
 
     if (formRegisterKey.currentState!.validate()) {
-      if (f != null) {
-        //RegistUser("", "", f!);
-      }
+      // if (f != null) {
+      //   //RegistUser("", "", f!);
+      // }
     }
 
   }
@@ -119,12 +146,25 @@ class _registerPageState extends State<registerPage> {
                       child: Column(
                         children: [
                           Text("AVATAR"),
-                          InkWell(
-                            onTap: (){
-                              Pickfile();
+                          // InkWell(
+                          //   onTap: (){
+                          //     //Pickfile();
+                          //   },
+                          //   //child: f!=null ? Image.file(f!,width: 240,height: 240,fit: BoxFit.fill,) :  Icon(Icons.camera_alt_rounded,size: 60),
+                          //
+                          // ),
+                          picPicker(
+                            isImageSelected,
+                            userModel!.avatar ?? "",
+                                (file) => {
+                              setState(
+                                    () {
+                                  //model.productPic = file.path;
+                                      userModel!.avatar = file.path;
+                                  isImageSelected = true;
+                                },
+                              )
                             },
-                            child: f!=null ? Image.file(f!,width: 240,height: 240,fit: BoxFit.fill,) :  Icon(Icons.camera_alt_rounded,size: 60),
-
                           ),
                           SizedBox(height: 20.0),
                           TextFormField(
@@ -331,21 +371,89 @@ class _registerPageState extends State<registerPage> {
         ));
   }
 
-  void Pickfile() async {
-    FilePickerResult? restule = await FilePicker.platform.pickFiles(
-        allowedExtensions: ['jpg','png','jpeg'],
-        allowMultiple: true,
-        type: FileType.custom,
-        allowCompression: true
+  // void Pickfile() async {
+  //   FilePickerResult? restule = await FilePicker.platform.pickFiles(
+  //       allowedExtensions: ['jpg','png','jpeg'],
+  //       allowMultiple: true,
+  //       type: FileType.custom,
+  //       allowCompression: true
+  //   );
+    // if(restule!=null){
+    //   File f_ = File(restule.files.single.path.toString());
+    //   setState(() {
+    //     f = f_;
+    //   });
 
+    //}
+ // }
+  static Widget picPicker(
+      bool isImageSelected,
+      String fileName,
+      Function onFilePicked,
+      ) {
+    Future<XFile?> _imageFile;
+    ImagePicker _picker = ImagePicker();
 
+    return Column(
+      children: [
+        fileName.isNotEmpty
+            ? isImageSelected
+            ? Image.file(
+          File(fileName),
+          width: 300,
+          height: 300,
+        )
+            : SizedBox(
+          child: Image.network(
+            fileName,
+            width: 200,
+            height: 200,
+            fit: BoxFit.scaleDown,
+          ),
+        )
+            : SizedBox(
+          child: Image.network(
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png",
+            width: 200,
+            height: 200,
+            fit: BoxFit.scaleDown,
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 35.0,
+              width: 35.0,
+              child: IconButton(
+                padding: const EdgeInsets.all(0),
+                icon: const Icon(Icons.image, size: 35.0),
+                onPressed: () {
+                  _imageFile = _picker.pickImage(source: ImageSource.gallery);
+                  _imageFile.then((file) async {
+                    onFilePicked(file);
+                  });
+                },
+              ),
+            ),
+            SizedBox(
+              height: 35.0,
+              width: 35.0,
+              child: IconButton(
+                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                icon: const Icon(Icons.camera, size: 35.0),
+                onPressed: () {
+                  _imageFile = _picker.pickImage(source: ImageSource.camera);
+                  _imageFile.then((file) async {
+                    onFilePicked(file);
+                 });
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
     );
-    if(restule!=null){
-      File f_ = File(restule.files.single.path.toString());
-      setState(() {
-        f = f_;
-      });
-
-    }
   }
+
 }
