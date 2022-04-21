@@ -12,12 +12,18 @@ import 'package:app_learn_english/presentation/screens/registerPage.dart';
 import 'package:app_learn_english/presentation/screens/topic_vocabulary_Page.dart';
 import 'package:app_learn_english/presentation/screens/vocabulary_detail_topic_page.dart';
 import 'package:app_learn_english/resources/login_service.dart';
+import 'package:app_learn_english/states/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'blocs/login_bloc.dart';
+
 void main() {
   runApp(MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => ListVocabularyBloc())],
+      providers: [
+        BlocProvider(create: (context) => LoginBloc( initialStatem: LoginState(),repo: LoginRepository())),
+        BlocProvider(create: (context) => ListVocabularyBloc())],
+
       child: MaterialApp(
         title: 'Cùng nhau học tiếng anh',
         debugShowCheckedModeBanner: false,
