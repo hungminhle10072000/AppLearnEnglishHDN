@@ -28,28 +28,24 @@ class _loginPageState extends State<loginPage> {
     super.dispose();
   }
 
-  void validate() {
-    if (formKey.currentState!.validate()) {
-      if (usernameController.text == 'admin' &&
-          passwordController.text == 'admin123456') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              duration: const Duration(seconds: 10),
-              content: Text('Chuyển sang trang admin')),
-        );
-      } else {
-        Navigator.pushNamed(context, 'home');
-      }
-    }
-  }
-
-  late LoginBloc loginBloc;
-
   @override
   void initState() {
     loginBloc = BlocProvider.of<LoginBloc>(context);
     super.initState();
   }
+
+  void validate() {
+    if (formKey.currentState!.validate()) {
+      print(usernameController.text);
+      loginBloc.add(LoginButtonPressed(
+          username: usernameController.text,
+          password: passwordController.text));
+    }
+  }
+
+  late LoginBloc loginBloc;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -177,13 +173,14 @@ class _loginPageState extends State<loginPage> {
                                     primary: Colors.orange,
                                     shape: StadiumBorder(),
                                   ),
-                                  onPressed: () {
-                                    // validate;
-                                    print(usernameController.text);
-                                    loginBloc.add(LoginButtonPressed(
-                                        username: usernameController.text,
-                                        password: passwordController.text));
-                                  },
+                                  onPressed: validate,
+                                  //     () {
+                                  //
+                                  //   // print(usernameController.text);
+                                  //   // loginBloc.add(LoginButtonPressed(
+                                  //   //     username: usernameController.text,
+                                  //   //     password: passwordController.text));
+                                  // },
                                   child: Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
