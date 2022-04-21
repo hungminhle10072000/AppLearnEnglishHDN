@@ -1,5 +1,7 @@
 import 'package:app_learn_english/models/chapter_model.dart';
 import 'package:app_learn_english/models/course_model.dart';
+import 'package:app_learn_english/models/lesson_model.dart';
+import 'package:app_learn_english/utils/constants/Cons.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -15,16 +17,29 @@ class CourseDetailPage extends StatefulWidget {
 }
 
 class _CourseDetailPageState extends State<CourseDetailPage> {
+  late String lessonName="Initial";
   late List<Item> _data = [];
   late ChewieController _chewieController = ChewieController(
     videoPlayerController: VideoPlayerController.network(dataSource),
   );
   final utube =
       RegExp(r"^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$");
-  late String dataSource;
+  late String dataSource="Initial";
   late YoutubePlayerController controller;
 
   Widget _renderVideo() {
+    if (dataSource == "Initial") {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text("Bài học"),
+        ),
+        body: SafeArea(
+          child: Center(
+            child: Text("Khoá học chưa được phát hành", style: TextStyle(fontSize: fontSize.large, fontWeight:  FontWeight.bold),),
+          ),
+        ),
+      );
+    }
     return utube.hasMatch(dataSource)
         ? _buildVideoYoutubeContainer()
         : _buildVideoPlayContainer();
@@ -37,13 +52,20 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         ),
         builder: (context, player) => Scaffold(
               appBar: AppBar(
-                title: const Text("Youtube Player"),
+                title: const Text("Bài học"),
               ),
               body: ListView(
                 children: [
                   player,
                   const SizedBox(
-                    height: 16,
+                    height: 10,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child:Text(lessonName,style: const TextStyle(fontSize: fontSize.large, fontWeight:FontWeight.bold, color: Colors.blue),),
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   _buildListPanel()
                 ],
@@ -62,7 +84,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           return Center(
             child: Text(
               errorMessage,
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
           );
         });
@@ -72,7 +94,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text("Video"),
+          title: Text("Bài học"),
         ),
         body: ListView(
           children: [
@@ -99,30 +121,36 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         return ExpansionPanel(
             headerBuilder: (BuildContext context, bool isExpanded) {
               return ListTile(
-                title: Text(e.headerValue),
+                title: Text(e.headerValue, style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black),),
               );
             },
             body: Container(
               child: Column(
                 children: e.chapterModel.lessons
                     .map((e) => ListTile(
-                          title: Text(e.name),
-                          trailing: const Icon(Icons.delete),
+                          contentPadding: const EdgeInsets.only(left: 25),
+                          title: Text(e.name, style: TextStyle(color: Colors.black87),),
                           onTap: () {
                             if (!utube.hasMatch(dataSource)) {
                               _chewieController.pause();
                             }
-
                             if (utube.hasMatch(e.video) &&
                                 utube.hasMatch(dataSource)) {
                               controller.load(
                                   YoutubePlayer.convertUrlToId(e.video) ?? '');
+                              setState(() {
+                                lessonName = e.name;
+                              });
                             } else if (!utube.hasMatch(e.video) &&
                                 !utube.hasMatch(dataSource)) {
                               _buildVideoPlayContainer();
+                              setState(() {
+                                lessonName = e.name;
+                              });
                             } else {
                               setState(() {
                                 dataSource = e.video;
+                                lessonName = e.name;
                               });
                             }
                           },
@@ -139,15 +167,32 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    dataSource = widget.courseDetail.chapters.first.lessons.first.video;
-    _data = createChapterItems(widget.courseDetail);
-    controller = YoutubePlayerController(
-        initialVideoId: YoutubePlayer.convertUrlToId(dataSource)!,
-        flags: const YoutubePlayerFlags(
-          mute: false,
-          loop: false,
-          autoPlay: true,
-        ));
+    // dataSource = widget.courseDetail.chapters.first.lessons.first.video ?? "";
+    // lessonName = widget.courseDetail.chapters.first.lessons.first.name ?? "";
+
+    List<ChapterModel> chapters = widget.courseDetail.chapters;
+    if (chapters.isEmpty) {
+      dataSource = "Initial";
+    } else {
+      List<LessonModel> lessons = chapters.first.lessons;
+      if (lessons.isEmpty) {
+        dataSource = "Initial";
+      }
+      else {
+        dataSource = lessons.first.video;
+        lessonName = lessons.first.name;
+        _data = createChapterItems(widget.courseDetail);
+        controller = YoutubePlayerController(
+            initialVideoId: YoutubePlayer.convertUrlToId(dataSource)!,
+            flags: const YoutubePlayerFlags(
+              mute: false,
+              loop: false,
+              autoPlay: true,
+            ));
+      }
+    }
+
+
   }
 
   @override
