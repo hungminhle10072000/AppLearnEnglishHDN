@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import '../../utils/StringRenderUtil.dart';
+
 class CourseDetailPage extends StatefulWidget {
   final CourseModel courseDetail;
   const CourseDetailPage({Key? key, required this.courseDetail})
@@ -62,7 +64,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                   ),
                   Container(
                     margin: EdgeInsets.only(left: 10),
-                    child:Text(lessonName,style: const TextStyle(fontSize: fontSize.large, fontWeight:FontWeight.bold, color: Colors.blue),),
+                    child:Text(StringRenderUtil.reduceSentence(lessonName, 45),style: const TextStyle(fontSize: fontSize.large, fontWeight:FontWeight.bold, color: Colors.blue),),
                   ),
                   const SizedBox(
                     height: 10,
@@ -94,7 +96,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text("Bài học"),
+          title: Text("Bài học 2"),
         ),
         body: ListView(
           children: [
@@ -104,6 +106,10 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               child: Chewie(
                 controller: _chewieController,
               ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child:Text(StringRenderUtil.reduceSentence(lessonName, 45),style: const TextStyle(fontSize: fontSize.large, fontWeight:FontWeight.bold, color: Colors.blue),),
             ),
             _buildListPanel()
           ],
@@ -121,7 +127,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         return ExpansionPanel(
             headerBuilder: (BuildContext context, bool isExpanded) {
               return ListTile(
-                title: Text(e.headerValue, style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black),),
+                title: Text(StringRenderUtil.reduceSentence(e.headerValue,60) , style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black),),
               );
             },
             body: Container(
@@ -129,7 +135,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                 children: e.chapterModel.lessons
                     .map((e) => ListTile(
                           contentPadding: const EdgeInsets.only(left: 25),
-                          title: Text(e.name, style: TextStyle(color: Colors.black87),),
+                          title: Text(StringRenderUtil.reduceSentence(e.name, 80), style: const TextStyle(color: Colors.black87),),
                           onTap: () {
                             if (!utube.hasMatch(dataSource)) {
                               _chewieController.pause();
