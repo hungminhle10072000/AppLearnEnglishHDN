@@ -1,4 +1,5 @@
 
+import 'package:app_learn_english/presentation/screens/forgetPasswordPage.dart';
 import 'package:app_learn_english/blocs/login_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,18 +50,6 @@ class _loginPageState extends State<loginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final msg = BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-    //   if (state is LoginErrorState) {
-    //     return Text(state.message);
-    //   } else if (state is LoginLoadingState) {
-    //     return Center(
-    //       child: CircularProgressIndicator(),
-    //     );
-    //   } else {
-    //     return Container();
-    //   }
-    // });
-
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(

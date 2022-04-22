@@ -1,5 +1,7 @@
 import 'package:app_learn_english/blocs/course_bloc.dart';
+
 import 'package:app_learn_english/blocs/list_grammar_bloc.dart';
+import 'package:app_learn_english/blocs/forgetpass_bloc.dart';
 import 'package:app_learn_english/blocs/list_vocabulary_bloc.dart';
 import 'package:app_learn_english/events/course_event.dart';
 import 'package:app_learn_english/models/course_model.dart';
@@ -13,7 +15,9 @@ import 'package:app_learn_english/presentation/screens/loginPage.dart';
 import 'package:app_learn_english/presentation/screens/registerPage.dart';
 import 'package:app_learn_english/presentation/screens/topic_vocabulary_Page.dart';
 import 'package:app_learn_english/presentation/screens/vocabulary_detail_topic_page.dart';
+import 'package:app_learn_english/resources/forgetpass_service.dart';
 import 'package:app_learn_english/resources/login_service.dart';
+import 'package:app_learn_english/states/forgetpass_state.dart';
 import 'package:app_learn_english/states/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +30,7 @@ void main() {
         BlocProvider(
             create: (context) => LoginBloc(
                 initialStatem: LoginState(), repo: LoginRepository())),
+        BlocProvider(create: (context) => ForgetPassBloc( initialStatem: ForgetPassState(),repo: ForgetPassRepository())),
         BlocProvider(create: (context) => ListVocabularyBloc()),
         BlocProvider(create: (context) => ListGrammarBloc())
       ],
@@ -43,14 +48,14 @@ void main() {
           'listVocaTopic': (context) => VocabularyDetailTopicPage(),
           'listGrammar': (context) => GrammarListPage(),
           'listCourses': (context) => BlocProvider(
-                create: (context) {
-                  final _courseBloc = CourseBloc();
-                  final _courseEvent = CourseFetchedEvent();
-                  _courseBloc.add(_courseEvent);
-                  return _courseBloc;
-                },
-                child: CourseListPage(),
-              ),
+            create: (context) {
+              final _courseBloc = CourseBloc();
+              final _courseEvent = CourseFetchedEvent();
+              _courseBloc.add(_courseEvent);
+              return _courseBloc;
+            },
+            child: CourseListPage(),
+          ),
           '/courseDetail': (context) => CourseDetailPage(
               courseDetail: CourseModel(
                   id: -1,

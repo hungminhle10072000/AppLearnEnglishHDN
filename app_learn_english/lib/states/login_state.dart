@@ -5,11 +5,11 @@ class LoginState extends Equatable{
 
 }
 
-class LoginInitState extends LoginState{}
-class LoginLoadingState extends LoginState{}
-class UserLoginSuccessState extends LoginState{}
-class AdminLoginSuccessState extends LoginState{}
-class LoginErrorState extends LoginState{
+class LoginInitState extends LoginState{} // trang thai ban dau
+class LoginLoadingState extends LoginState{} // trang thai load khi nhan nut dang nhap
+class UserLoginSuccessState extends LoginState{}// DN thanh cong voi user
+class AdminLoginSuccessState extends LoginState{}// DN thanh cong voi admin
+class LoginErrorState extends LoginState{ // DN loi
   final String message;
   LoginErrorState({required this.message});
 }
