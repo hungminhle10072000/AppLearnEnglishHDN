@@ -45,6 +45,8 @@ dependencies:
   shared_preferences: ^2.0.13
   file_picker: ^4.5.1
   datetime_picker_formfield: ^2.0.0
+  snippet_coder_utils: ^1.0.9
+  image_picker: ^0.8.4+4
 
 
   # The following adds the Cupertino Icons font to your application.

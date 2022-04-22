@@ -3,6 +3,7 @@ import 'package:app_learn_english/blocs/course_bloc.dart';
 import 'package:app_learn_english/blocs/list_grammar_bloc.dart';
 import 'package:app_learn_english/blocs/forgetpass_bloc.dart';
 import 'package:app_learn_english/blocs/list_vocabulary_bloc.dart';
+import 'package:app_learn_english/blocs/register_bloc.dart';
 import 'package:app_learn_english/events/course_event.dart';
 import 'package:app_learn_english/models/course_model.dart';
 import 'package:app_learn_english/presentation/screens/admin_page.dart';
@@ -31,6 +32,7 @@ void main() {
             create: (context) => LoginBloc(
                 initialStatem: LoginState(), repo: LoginRepository())),
         BlocProvider(create: (context) => ForgetPassBloc( initialStatem: ForgetPassState(),repo: ForgetPassRepository())),
+        BlocProvider(create: (context) => RegisterBloc()),
         BlocProvider(create: (context) => ListVocabularyBloc()),
         BlocProvider(create: (context) => ListGrammarBloc())
       ],
