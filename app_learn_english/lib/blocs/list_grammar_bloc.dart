@@ -17,7 +17,8 @@ class ListGrammarBloc extends Bloc<ListGrammarEvent, ListGrammarState> {
       try {
         final listGrammarLoad = await GrammarService.getAllGrammar();
         listGrammar = listGrammarLoad;
-        emit(ListGrammarLoadedState(listGrammar));
+        print(listGrammarLoad);
+        emit(ListGrammarLoadedState(listGrammarLoad));
       } catch (e) {
         emit(ListGrammarErrorState(e.toString()));
       }

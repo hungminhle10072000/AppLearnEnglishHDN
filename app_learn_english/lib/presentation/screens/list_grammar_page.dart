@@ -1,4 +1,5 @@
 import 'package:app_learn_english/blocs/list_grammar_bloc.dart';
+import 'package:app_learn_english/presentation/widgets/grammar_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,6 +11,11 @@ class GrammarListPage extends StatefulWidget {
 }
 
 class _GrammarListPageState extends State<GrammarListPage> {
+  @override
+  void initState() {
+    context.read<ListGrammarBloc>().add(ListGrammarEventLoad());
+  }
+
   final searchController = TextEditingController();
 
   bool isSearching = false;
@@ -83,8 +89,7 @@ class _GrammarListPageState extends State<GrammarListPage> {
             );
           }
           if (state is ListGrammarLoadedState) {
-            return Text("Lấy thành công !!");
-            // return VocabularyListWidget(state.listVocabularies);
+            return GrammarListWidget(state.listGrammar);
           }
           if (state is ListGrammarErrorState) {
             return Center(
