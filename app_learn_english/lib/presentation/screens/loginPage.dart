@@ -66,6 +66,10 @@ class _loginPageState extends State<loginPage> {
             //state = LoginInitState;
             try{
               if (state is UserLoginSuccessState){
+                final snackBar = SnackBar(
+                  content: const Text('Đăng nhập thành công!'),
+                );
+                ScaffoldMessenger.of(context)..removeCurrentSnackBar()..showSnackBar(snackBar);
                 Navigator.pushNamed(context, 'home');
               }else if (state is AdminLoginSuccessState){
                 Navigator.pushNamed(context, 'admin');
@@ -74,7 +78,7 @@ class _loginPageState extends State<loginPage> {
                 final snackBar = SnackBar(
                   content: const Text('Tên đăng nhập hoặc mật khẩu không đúng!'),
                 );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                ScaffoldMessenger.of(context)..removeCurrentSnackBar()..showSnackBar(snackBar);
                 Navigator.pushNamed(context, 'login');
               }
             }

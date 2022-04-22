@@ -58,15 +58,33 @@ class _forgetPasswordPageState extends State<forgetPasswordPage> {
       ),
       child: BlocListener<ForgetPassBloc, ForgetPassState>(
       listener: (context, state) {
-
+        try{
           if (state is ForgetPassSuccessState){
-            final snackBar = SnackBar(content: const Text('Kiểm tra mail để có mật khẩu mới!'),);
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            final snackBar = SnackBar(content: const Text('Kiểm tra mail để có mật khẩu mới!'),
+              //duration: const Duration(seconds: 5),
+              action: SnackBarAction(
+                label: 'Tắt',
+                onPressed: () {},
+              ),
+            );
+            ScaffoldMessenger.of(context)..removeCurrentSnackBar()..showSnackBar(snackBar);
+
             Navigator.pushNamed(context, 'login');}
-          else {
-            final snackBar = SnackBar(content: const Text('Tên đăng nhập hoặc email không đúng!'),);
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          else if(state is ForgetPassErrorState){
+            final snackBar = SnackBar(content: const Text('Tên đăng nhập hoặc email không đúng!'),
+              //duration: const Duration(seconds: 5),
+              action: SnackBarAction(
+                label: 'Tắt',
+                onPressed: () {},
+              ),);
+            ScaffoldMessenger.of(context)..removeCurrentSnackBar()..showSnackBar(snackBar);
             Navigator.pushNamed(context, 'forget');
+          }
+        }
+        catch(e)
+        {
+          var snackbar = SnackBar(content: Text(e.toString()));
+          ScaffoldMessenger.of(context).showSnackBar(snackbar);
         }
     },
       child: Scaffold(
