@@ -1,4 +1,5 @@
 import 'package:app_learn_english/blocs/course_bloc.dart';
+import 'package:app_learn_english/models/course_model.dart';
 import 'package:app_learn_english/presentation/screens/course_detail_page.dart';
 import 'package:app_learn_english/states/course_state.dart';
 import 'package:app_learn_english/utils/constants/Cons.dart';
@@ -19,6 +20,9 @@ class CourseListPage extends StatefulWidget {
 
 class _CourseListPage extends State<CourseListPage> {
   // late CourseBloc _courseBloc;
+  bool isSearching = false;
+  final searchController = TextEditingController();
+  late String keyword='';
 
   @override
   void initState() {
@@ -30,13 +34,68 @@ class _CourseListPage extends State<CourseListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        automaticallyImplyLeading: false,
+        leading: !isSearching
+            ? TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, 'home');
+            },
+            child: Icon(
+              Icons.arrow_back_ios_rounded,
+              color: Colors.white,
+            ))
+            : null,
+        title: !isSearching
+            ? const Text(
           "Khoá học",
           style: TextStyle(
               color: Colors.white,
-              fontSize: fontSize.medium,
+              fontSize: 20,
               fontWeight: FontWeight.w800),
+        )
+            : TextField(
+          controller: searchController,
+          onChanged: (text) {
+            print("keyword: $text");
+            setState(() {
+              keyword = text;
+            });
+          },
+          style: TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+              icon: GestureDetector(
+                onTap: () {
+                  print('OnTap 1');
+                },
+                child: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
+              ),
+              hintStyle: TextStyle(color: Colors.white),
+              hintText: "Tìm kiếm..."),
         ),
+        actions: [
+          isSearching
+              ? IconButton(
+              onPressed: () {
+                setState(() {
+                  this.isSearching = !this.isSearching;
+                  setState(() {
+                    keyword = '';
+                  });
+                  searchController.clear();
+                });
+              },
+              icon: Icon(Icons.cancel))
+              : IconButton(
+              onPressed: () {
+                setState(() {
+                  this.isSearching = !this.isSearching;
+                });
+              },
+              icon: Icon(Icons.search))
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -58,6 +117,18 @@ class _CourseListPage extends State<CourseListPage> {
                 }
                 if (state is CourseStateSuccess) {
                   if (state.courses.length > 0) {
+                    List<CourseModel> currentCourses = [];
+                    if (keyword.isEmpty) {
+                      currentCourses = state.courses;
+                    } else {
+                      currentCourses = state.courses.where((element) => StringRenderUtil.searching(element.name, keyword)).toList();
+                    }
+                    if (currentCourses.length < 1) {
+                      return const Center(
+                        child: Text('Empty Course',
+                          style: TextStyle(fontSize: 22, color: Colors.greenAccent),),
+                      );
+                    }
                     return Expanded(
                         child: SizedBox(
                           height: 400,
@@ -69,7 +140,7 @@ class _CourseListPage extends State<CourseListPage> {
                                 visualDensity: VisualDensity(vertical: 3),
                                 onTap: () {
                                   Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) => CourseDetailPage(courseDetail:state.courses[index]))
+                                      MaterialPageRoute(builder: (context) => CourseDetailPage(courseDetail:currentCourses[index]))
                                   );
                                 },
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -81,18 +152,17 @@ class _CourseListPage extends State<CourseListPage> {
                                   height: 100,
                                   child: FadeInImage.assetNetwork(
                                     placeholder: 'assets/images/loading.gif',
-                                    image: state.courses[index].image,
+                                    image: currentCourses[index].image,
                                     fit: BoxFit.fitHeight,
                                     width: 100,
                                     height: 100,),),
-                                title: Text(StringRenderUtil.reduceSentence(state.courses[index].name,45), style: const TextStyle(fontSize: fontSize.medium, fontWeight: FontWeight.bold, letterSpacing: -0.3, wordSpacing: -0.3 ),),
+                                title: Text(StringRenderUtil.reduceSentence(currentCourses[index].name,45), style: const TextStyle(fontSize: fontSize.medium, fontWeight: FontWeight.bold, letterSpacing: -0.3, wordSpacing: -0.3 ),),
                                 isThreeLine: true,
-                                subtitle: Text(StringRenderUtil.reduceSentence(state.courses[index].introduce,70) ,style: TextStyle(fontSize: fontSize.small, letterSpacing: -0.3, wordSpacing: -0.3, ),),
+                                subtitle: Text(StringRenderUtil.reduceSentence(currentCourses[index].introduce,70) ,style: TextStyle(fontSize: fontSize.small, letterSpacing: -0.3, wordSpacing: -0.3, ),),
                               ),
                             );
                           },
-                            itemCount: state.courses.length,
-
+                            itemCount: currentCourses.length,
                           ),
                         )
                     );
