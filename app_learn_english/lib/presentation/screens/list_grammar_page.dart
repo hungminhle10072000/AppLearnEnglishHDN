@@ -2,6 +2,7 @@ import 'package:app_learn_english/blocs/list_grammar_bloc.dart';
 import 'package:app_learn_english/presentation/widgets/grammar_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../utils/StringRenderUtil.dart';
 
 class GrammarListPage extends StatefulWidget {
   const GrammarListPage({Key? key}) : super(key: key);
@@ -19,6 +20,8 @@ class _GrammarListPageState extends State<GrammarListPage> {
   final searchController = TextEditingController();
 
   bool isSearching = false;
+
+  late String keyword='';
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +48,11 @@ class _GrammarListPageState extends State<GrammarListPage> {
               )
             : TextField(
                 controller: searchController,
+                onChanged: (text) {
+                  setState(() {
+                    keyword = text;
+                  });
+                },
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                     icon: GestureDetector(
@@ -67,8 +75,10 @@ class _GrammarListPageState extends State<GrammarListPage> {
                   onPressed: () {
                     setState(() {
                       this.isSearching = !this.isSearching;
-                      // topicVocabularyBloc.topicEventSink.add(
-                      //     SearchTopicVocabularyEvent(''));
+                      setState(() {
+                        keyword = '';
+                      });
+                      searchController.clear();
                     });
                   },
                   icon: Icon(Icons.cancel))
@@ -89,7 +99,11 @@ class _GrammarListPageState extends State<GrammarListPage> {
             );
           }
           if (state is ListGrammarLoadedState) {
-            return GrammarListWidget(state.listGrammar);
+            if(keyword.isEmpty){
+              return GrammarListWidget(state.listGrammar);
+            } else {
+              return GrammarListWidget(state.listGrammar.where((element) => StringRenderUtil.searching(element.name, keyword)).toList());
+            }
           }
           if (state is ListGrammarErrorState) {
             return Center(

@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
 
 class NavBar extends StatelessWidget {
-  const NavBar({Key? key}) : super(key: key);
+  final String email;
+  final String avatar;
+  final String fullname;
+
+  NavBar(this.fullname, this.avatar, this.email);
+
+  // const NavBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print(avatar);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text('Hoàng Dương Hùng'),
-            accountEmail: Text('hungduong.mess32@gmail.com'),
+            accountName: Text(this.fullname),
+            accountEmail: Text(this.email),
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
                 child: Image.network(
-                  'https://oflutter.com/wp-content/uploads/2021/02/girl-profile.png',
+                  this.avatar,
+                  // 'https://oflutter.com/wp-content/uploads/2021/02/girl-profile.png',
                   fit: BoxFit.cover,
                   width: 90,
                   height: 90,
@@ -42,7 +50,7 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.video_collection_outlined),
             title: Text('Khóa học'),
-            onTap: () => null,
+            onTap: () => Navigator.pushNamed(context, 'listCourses'),
           ),
           ListTile(
             leading: Icon(Icons.fitness_center),
@@ -91,7 +99,7 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Thoát'),
-            onTap: (){
+            onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, 'login');
             },
