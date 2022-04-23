@@ -56,7 +56,6 @@ class _CourseListPage extends State<CourseListPage> {
             : TextField(
           controller: searchController,
           onChanged: (text) {
-            print("keyword: $text");
             setState(() {
               keyword = text;
             });
@@ -125,8 +124,8 @@ class _CourseListPage extends State<CourseListPage> {
                     }
                     if (currentCourses.length < 1) {
                       return const Center(
-                        child: Text('Empty Course',
-                          style: TextStyle(fontSize: 22, color: Colors.greenAccent),),
+                        child: Text('Không tìm thấy kết quả!',
+                          style: TextStyle(fontSize: fontSize.medium, color: Colors.redAccent),),
                       );
                     }
                     return Expanded(
