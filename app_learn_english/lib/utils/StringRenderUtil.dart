@@ -48,10 +48,10 @@ class StringRenderUtil {
   // In hoa hết
   // Kiểm tra xem S1 có chứa S2 không
   static bool searching(String s1,String s2) {
-    s1 = s1.toUpperCase();
-    s2 = s2.toUpperCase();
-    return s1.contains(s2);
-    /*String newS1 = "";
+    // s1 = s1.toUpperCase();
+    // s2 = s2.toUpperCase();
+    // return s1.contains(s2);
+    String newS1 = "";
     String newS2 = "";
     Characters charS1 = s1.characters;
     Characters charS2 = s2.characters;
@@ -64,9 +64,9 @@ class StringRenderUtil {
             flag =true;
             break;
           }
-          if (flag == false) {
-            newS1 = newS1 + eTwo;
-          }
+        }
+        if (flag == false) {
+          newS1 = newS1 + eTwo;
         }
       });
     }
@@ -79,9 +79,9 @@ class StringRenderUtil {
             flag =true;
             break;
           }
-          if (flag == false) {
-            newS2 = newS2 + eTwo;
-          }
+        }
+        if (flag == false) {
+          newS2 = newS2 + eTwo;
         }
       });
     }
@@ -90,7 +90,13 @@ class StringRenderUtil {
     newS1 = newS1.toUpperCase();
     newS2 = newS2.toUpperCase();
 
-    return newS1.contains(newS2);*/
+    print("------------Start------------------");
+    print(newS1);
+    print(newS2);
+    print("------------End--------------------");
+
+
+    return newS1.contains(newS2);
     // return false;
   }
 }
