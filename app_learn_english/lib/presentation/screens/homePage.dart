@@ -203,32 +203,37 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  elevation: 4,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new Expanded(
-                        child: Image(
-                          image: AssetImage('assets/images/practice.jpg'),
-                          fit: BoxFit.fill,
-                          width: MediaQuery.of(context).size.width,
-                          height: 128,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/listExercise');
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    elevation: 4,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Expanded(
+                          child: Image(
+                            image: AssetImage('assets/images/practice.jpg'),
+                            fit: BoxFit.fill,
+                            width: MediaQuery.of(context).size.width,
+                            height: 128,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Luyện tập',
-                        style: cardTextStyle,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Luyện tập',
+                          style: cardTextStyle,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Card(

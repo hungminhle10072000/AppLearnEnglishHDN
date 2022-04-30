@@ -1,13 +1,16 @@
 import 'package:app_learn_english/blocs/course_bloc.dart';
+import 'package:app_learn_english/blocs/exercise_bloc.dart';
 
 import 'package:app_learn_english/blocs/list_grammar_bloc.dart';
 import 'package:app_learn_english/blocs/forgetpass_bloc.dart';
 import 'package:app_learn_english/blocs/list_vocabulary_bloc.dart';
 import 'package:app_learn_english/events/course_event.dart';
+import 'package:app_learn_english/events/exercise_event.dart';
 import 'package:app_learn_english/models/course_model.dart';
 import 'package:app_learn_english/presentation/screens/admin_page.dart';
 import 'package:app_learn_english/presentation/screens/course_detail_page.dart';
 import 'package:app_learn_english/presentation/screens/course_list_page.dart';
+import 'package:app_learn_english/presentation/screens/exercise_list_page.dart';
 import 'package:app_learn_english/presentation/screens/forgetPasswordPage.dart';
 import 'package:app_learn_english/presentation/screens/homePage.dart';
 import 'package:app_learn_english/presentation/screens/list_grammar_page.dart';
@@ -39,6 +42,15 @@ void main() {
         debugShowCheckedModeBanner: false,
         initialRoute: 'login',
         routes: <String, WidgetBuilder>{
+          '/listExercise': (context) => BlocProvider(
+            create: (context) {
+              final _exerciseBloc = ExerciseBloc();
+              final _exerciseEvent = ExerciseFetchedEvent();
+              _exerciseBloc.add(_exerciseEvent);
+              return _exerciseBloc;
+            },
+            child: ExerciseListPage()
+          ),
           'home': (context) => HomePage(),
           'admin': (context) => adminPage(),
           'login': (context) => loginPage(),
@@ -63,7 +75,8 @@ void main() {
                   introduce: 'Introduction',
                   numOfChapter: 0,
                   chapters: [],
-                  image: 'This is image'))
+                  image: 'This is image')),
+
         },
       )));
 }
