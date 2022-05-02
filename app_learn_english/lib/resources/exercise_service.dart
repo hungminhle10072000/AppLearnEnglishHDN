@@ -42,7 +42,7 @@ Future<List<ExerciseModel>> getAllExercises() async {
               audio: question['audio'] ?? '',
               paragraph: question['paragraph'] ?? '',
               ordinalNumber: question['ordinalNumber'] ?? 0,
-              type: 1,
+              type: question['type'],
               resultDetailModelList: resultDetailsModel ?? []
           );
         }).toList();
@@ -63,13 +63,12 @@ Future<List<ExerciseModel>> getAllExercises() async {
             id: exercise['id'] ?? -1,
             name: exercise['name'] ?? '',
             image: exercise['image'] ?? '',
-            type: 1,
+            type: exercise['type'],
             description: exercise['description'] ?? '',
             questionEntityList: questionsModel ?? [],
             resultEntityList: resultModel ?? []);
       }).toList();
 
-      print(exercises.toString());
       return exercises;
     } else {
       throw Exception('Cannot load data');
