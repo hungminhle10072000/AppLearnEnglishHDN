@@ -110,7 +110,7 @@ class _CourseListPage extends State<CourseListPage> {
                 }
                 if (state is CourseStateFailure) {
                   return const Center(
-                    child: Text('Connot load comments from Server',
+                    child: Text('Cannot load courses from Server',
                       style: TextStyle(fontSize: 22, color: Colors.red),),
                   );
                 }
@@ -157,7 +157,7 @@ class _CourseListPage extends State<CourseListPage> {
                                     height: 100,),),
                                 title: Text(StringRenderUtil.reduceSentence(currentCourses[index].name,45), style: const TextStyle(fontSize: fontSize.medium, fontWeight: FontWeight.bold, letterSpacing: -0.3, wordSpacing: -0.3 ),),
                                 isThreeLine: true,
-                                subtitle: Text(StringRenderUtil.reduceSentence(currentCourses[index].introduce,70) ,style: TextStyle(fontSize: fontSize.small, letterSpacing: -0.3, wordSpacing: -0.3, ),),
+                                subtitle: Text(StringRenderUtil.reduceSentence(currentCourses[index].introduce,70) ,style: const TextStyle(fontSize: fontSize.small, letterSpacing: -0.3, wordSpacing: -0.3, ),),
                               ),
                             );
                           },
