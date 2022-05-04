@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import '../utils/constants/Cons.dart';
 
 Future<List<ExerciseModel>> getAllExercises() async {
-  const String url = baseUrl + '/api/exercise';
+  const String url = baseUrl + '/api/exercise/getAll';
   final http.Client httpClient = http.Client();
   try {
     final response = await httpClient.get(Uri.parse(url), headers: {'Content-Type': 'application/json'} );
@@ -16,15 +16,15 @@ Future<List<ExerciseModel>> getAllExercises() async {
       final responseData = json.decode(utf8.decode(response.bodyBytes)) as List;
       final List<ExerciseModel> exercises =
       responseData.map((exercise) {
-        List<dynamic> questionsDynamic = exercise['questionEntityList'] ?? [];
+        List<dynamic> questionsDynamic = exercise['questionDtoList'] ?? [];
         List<QuestionModel> questionsModel = questionsDynamic.map((question) {
-          List<dynamic> resultDetailDynamic = question['resultDetailEntityList'];
+          List<dynamic> resultDetailDynamic = question['resultDetailDtoList'];
           List<ResultDetailModel> resultDetailsModel = resultDetailDynamic.map((resultDetail) {
-            dynamic key = resultDetail['id'];
-            int userId = key['userId'] ?? -1;
-            int questionId = key['questionId'] ?? -1;
-            String userAnswer = resultDetail['user_answer'] ?? '';
-            String correctAnswer = resultDetail['correct_answer'] ?? '';
+            // dynamic key = resultDetail['id'];
+            int userId = resultDetail['userId'] ?? -1;
+            int questionId = resultDetail['questionId'] ?? -1;
+            String userAnswer = resultDetail['userAnswer'] ?? '';
+            String correctAnswer = resultDetail['correctAnswer'] ?? '';
             return ResultDetailModel(
                 userId: userId,
                 questionId: questionId,
@@ -33,31 +33,31 @@ Future<List<ExerciseModel>> getAllExercises() async {
           }).toList();
           return QuestionModel(
               id: question['id'] ?? -1,
-              correctAnswer: question['correctAnswer'] ?? '',
+              correctAnswer: question['correct_answer'] ?? '',
               option_1: question['option_1'] ?? '',
               option_2: question['option_2'] ?? '',
               option_3: question['option_3'] ?? '',
               option_4: question['option_4'] ?? '',
-              contentQuestion: question['contentQuestion'] ?? '',
+              contentQuestion: question['content_question'] ?? '',
               audio: question['audio'] ?? '',
               paragraph: question['paragraph'] ?? '',
-              ordinalNumber: question['ordinalNumber'] ?? 0,
+              ordinalNumber: question['ordinal_number'] ?? 0,
               type: question['type'],
               resultDetailModelList: resultDetailsModel ?? []
           );
         }).toList();
 
-        List<dynamic> resultsDynamic = exercise['resultEntityList'] ?? [];
+        List<dynamic> resultsDynamic = exercise['resultDtoList'] ?? [];
         List<ResultModel> resultModel = resultsDynamic.map((result) {
-          dynamic userEntity = result['userEntity'];
-          int userId = userEntity['id'] ?? -1;
+          // dynamic userEntity = result['userEntity'];
+          // int userId = userEntity['id'] ?? -1;
           return ResultModel(
               id: result['id'] ?? -1,
-              correctListen: result['correct_listen'] ?? '',
-              correctRead: result['correct_read'] ?? '',
-              totalRight: result['total_right'] ?? '',
-              totalWrong: result['total_wrong'] ?? '',
-              userId: userId);
+              correctListen: result['correctListen'] ?? '',
+              correctRead: result['correctRead'] ?? '',
+              totalRight: result['totalRight'] ?? '',
+              totalWrong: result['totalWrong'] ?? '',
+              userId: result['userId']);
         }).toList();
         return ExerciseModel(
             id: exercise['id'] ?? -1,
