@@ -1,4 +1,5 @@
 import 'package:app_learn_english/models/exercise_model.dart';
+import 'package:app_learn_english/presentation/screens/start_exercise_page.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseItem extends StatelessWidget {
@@ -9,7 +10,9 @@ class ExerciseItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'topicVocabulary');
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => StartExercisePage(exercise: exercise))
+        );
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

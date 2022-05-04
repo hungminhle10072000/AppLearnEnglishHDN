@@ -51,6 +51,7 @@ void main() {
             },
             child: ExerciseListPage()
           ),
+          // 'startExercisePage': (context) => const StartExercisePage(),
           'home': (context) => HomePage(),
           'admin': (context) => adminPage(),
           'login': (context) => loginPage(),
