@@ -84,7 +84,12 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.supervised_user_circle),
             title: Text('Thông tin cá nhân'),
-            onTap: () => null,
+            onTap: () => Navigator.pushNamed(context, 'accinfor'),
+          ),
+          ListTile(
+            leading: Icon(Icons.password_rounded),
+            title: Text('Đổi mật khẩu'),
+            onTap: () => Navigator.pushNamed(context, 'changepass'),
           ),
           ListTile(
             leading: Icon(Icons.settings),
