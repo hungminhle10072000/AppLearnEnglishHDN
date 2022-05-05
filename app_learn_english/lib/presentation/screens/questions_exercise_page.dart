@@ -1,17 +1,20 @@
+import 'package:app_learn_english/blocs/result_detail_bloc.dart';
+import 'package:app_learn_english/events/result_detail_event.dart';
 import 'package:app_learn_english/models/exercise_model.dart';
 import 'package:app_learn_english/models/question_model.dart';
 import 'package:app_learn_english/models/result_detail_model.dart';
 import 'package:app_learn_english/presentation/screens/end_exercise_page.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:audioplayers/audioplayers.dart';
 var finalScore = 0;
 
 List<ResultDetailModel> yourAnswers = [];
 
 class QuestionsExercisePage extends StatefulWidget {
   final ExerciseModel exercise;
-  const QuestionsExercisePage({Key? key, required this.exercise}) : super(key: key);
-
+  QuestionsExercisePage({Key? key, required this.exercise}) : super(key: key);
+  final AudioPlayer audioPlayer = AudioPlayer();
   @override
   _QuestionsExercisePageState createState() {
     return _QuestionsExercisePageState();
@@ -30,6 +33,7 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
           ResultDetailModel(
               userId: 1,
               questionId: questions[i].id,
+              contentQuestion: questions[i].contentQuestion,
               userAnswer: "",
               correctAnswer: questions[i].correctAnswer));
     }
@@ -47,6 +51,8 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
         child: const Text("Questions is empty"),
       );
     }
+    bool hasImage = questions[questionNumber].imageDescription.isNotEmpty;
+    bool hasAudio = questions[questionNumber].audio.isNotEmpty;
     return WillPopScope(
         onWillPop: ()async => false,
         child: SafeArea(
@@ -77,18 +83,33 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                         ],
                       ),
                     ),
+                    hasAudio ? GestureDetector(
+                      onTap: () async {
+                        await widget.audioPlayer.play(questions[questionNumber].audio);
+                      },
+                      child: const Icon(
+                        Icons.volume_down_outlined,
+                        color: Colors.lightBlue,
+                        size: 50,
+                      ),
+                    ) : const SizedBox(
+                      height: 2,
+                    ),
                     const Padding(padding: EdgeInsets.all(10.0)),
-                    FadeInImage.assetNetwork(
+                    hasImage ? FadeInImage.assetNetwork(
                       placeholder: 'assets/images/loading.gif',
-                      image: 'https://web-english.s3.ap-southeast-1.amazonaws.com/1651390256279-avatar.jpg',
+                      image: questions[questionNumber].imageDescription,
                       fit: BoxFit.fitHeight,
                       width: MediaQuery.of(context).size.width,
                       height: 200,
+                    ) : const SizedBox(
+                      height: 1,
                     ),
                     const Padding(padding: EdgeInsets.all(10.0)),
                     Text('Question ${questionNumber+1}: ${questions[questionNumber].contentQuestion}',
                       style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
                     const Padding(padding: EdgeInsets.all(20.0)),
+                    questions[questionNumber].option_1.isNotEmpty ?
                     MaterialButton(
                       onPressed: () {
                         if (questions[questionNumber].option_1 ==
@@ -101,12 +122,15 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                         updateQuestion(questionNumber,questions[questionNumber].option_1);
                       },
                       minWidth: 320.0,
-                      color: Colors.green,
+                      color: yourAnswers[questionNumber].userAnswer == questions[questionNumber].option_1  ? Colors.blueAccent : Colors.grey,
                       child: Text(questions[questionNumber].option_1,
                         style: const TextStyle(
                             fontSize: 20.0, color: Colors.white
                         ),),
+                    ) : const SizedBox(
+                      height: 2,
                     ),
+                    questions[questionNumber].option_2.isNotEmpty ?
                     MaterialButton(
                       onPressed: () {
                         if (questions[questionNumber].option_2 ==
@@ -119,12 +143,15 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                         updateQuestion(questionNumber,questions[questionNumber].option_2);
                       },
                       minWidth: 320.0,
-                      color: Colors.green,
+                      color: yourAnswers[questionNumber].userAnswer == questions[questionNumber].option_2  ? Colors.blueAccent : Colors.grey,
                       child: Text(questions[questionNumber].option_2,
                         style: const TextStyle(
                             fontSize: 20.0, color: Colors.white
                         ),),
+                    ) : const SizedBox(
+                      height: 2,
                     ),
+                    questions[questionNumber].option_3.isNotEmpty ?
                     MaterialButton(
                       onPressed: () {
                         if (questions[questionNumber].option_3 ==
@@ -137,12 +164,15 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                         updateQuestion(questionNumber,questions[questionNumber].option_3);
                       },
                       minWidth: 320.0,
-                      color: Colors.green,
+                      color: yourAnswers[questionNumber].userAnswer == questions[questionNumber].option_3  ? Colors.blueAccent : Colors.grey,
                       child: Text(questions[questionNumber].option_3,
                         style: const TextStyle(
                             fontSize: 20.0, color: Colors.white
                         ),),
+                    ) : const SizedBox(
+                      height: 2,
                     ),
+                    questions[questionNumber].option_4.isNotEmpty ?
                     MaterialButton(
                       onPressed: () {
                         if (questions[questionNumber].option_4 ==
@@ -155,12 +185,12 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                         updateQuestion(questionNumber,questions[questionNumber].option_4);
                       },
                       minWidth: 320.0,
-                      color: Colors.green,
+                      color: yourAnswers[questionNumber].userAnswer == questions[questionNumber].option_4  ? Colors.blueAccent : Colors.grey,
                       child: Text(questions[questionNumber].option_4,
                         style: const TextStyle(
                             fontSize: 20.0, color: Colors.white
                         ),),
-                    ),
+                    ) : const SizedBox(height: 2,),
                     const Padding(padding: EdgeInsets.all(10.0)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -174,7 +204,7 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                             });
                           },
                           minWidth: 120.0,
-                          color: Colors.green,
+                          color: Colors.grey,
                           child: const Text("Prev"),
                         ),
                         MaterialButton(
@@ -187,8 +217,8 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
 
                           },
                           minWidth: 120.0,
-                          color: Colors.green,
-                          child: Text("Next"),
+                          color: Colors.grey,
+                          child: const Text("Next"),
                         )
                       ],
                     ),
@@ -200,7 +230,7 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                         minWidth: 240.0,
                         height: 30.0,
                         color: Colors.red,
-                        child: const Text("Quit",
+                        child: const Text("Thoát ra",
                           style: TextStyle(
                               fontSize: 18.0,
                               color: Colors.white
@@ -222,6 +252,9 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                       ),
                     ) : Container(
 
+                    ),
+                    const SizedBox(
+                      height: 15,
                     )
                   ],
                 ),
@@ -235,18 +268,30 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
   void resetQuiz() {
     setState(() {
       Navigator.pop(context);
+      Navigator.pop(context);
       finalScore =0;
       questionNumber = 0;
     });
   }
   void submitHandle() {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => EndExercisePage(resultDetail: yourAnswers,))
+        MaterialPageRoute(builder: (context) =>
+          BlocProvider(create: (context) {
+            final _resultDetailBloc = ResultDetailBloc();
+            final _resultDetailEvent = ResultDetailAddEvent(resultDetail: yourAnswers);
+            _resultDetailBloc.add(_resultDetailEvent);
+            return _resultDetailBloc;
+          },
+            child: EndExercisePage(resultDetail: yourAnswers,),
+          )
+        )
     );
   }
   void updateQuestion(int index, String value) {
     print("A: "+yourAnswers.length.toString());
-    yourAnswers[index].userAnswer=value;
+    setState(() {
+      yourAnswers[index].userAnswer=value;
+    });
     print("UpdateQuestion");
     // setState(() {
     //   if (questionNumber == quiz.question.length -1) {
@@ -257,4 +302,37 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
     //   }
     // });
   }
+
+
+}
+showAlertDialog(BuildContext context) {
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: Text("Cancel"),
+    onPressed:  () {},
+  );
+  Widget continueButton = TextButton(
+    child: Text("Continue"),
+    onPressed:  () {
+      // esetQuiz  r();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Thông báo"),
+    content: Text("Bạn có chắc chắn muốn thoát ra không?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
