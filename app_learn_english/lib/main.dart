@@ -7,9 +7,12 @@ import 'package:app_learn_english/blocs/list_vocabulary_bloc.dart';
 import 'package:app_learn_english/events/course_event.dart';
 import 'package:app_learn_english/events/exercise_event.dart';
 import 'package:app_learn_english/models/course_model.dart';
+import 'package:app_learn_english/presentation/screens/acc_infortation.dart';
 import 'package:app_learn_english/presentation/screens/admin_page.dart';
+import 'package:app_learn_english/presentation/screens/changePass.dart';
 import 'package:app_learn_english/presentation/screens/course_detail_page.dart';
 import 'package:app_learn_english/presentation/screens/course_list_page.dart';
+import 'package:app_learn_english/presentation/screens/edit_infor.dart';
 import 'package:app_learn_english/presentation/screens/exercise_list_page.dart';
 import 'package:app_learn_english/presentation/screens/forgetPasswordPage.dart';
 import 'package:app_learn_english/presentation/screens/homePage.dart';
@@ -60,6 +63,9 @@ void main() {
           'topicVocabulary': (context) => topic_vocabulary_page(),
           'listVocaTopic': (context) => VocabularyDetailTopicPage(),
           'listGrammar': (context) => GrammarListPage(),
+          'changepass': (context) => changePassPage(),
+          'accinfor': (context) => accinforPage(),
+          'editinfor': (context) => editinforPage(),
           'listCourses': (context) => BlocProvider(
             create: (context) {
               final _courseBloc = CourseBloc();
