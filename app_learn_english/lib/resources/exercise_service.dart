@@ -25,9 +25,11 @@ Future<List<ExerciseModel>> getAllExercises() async {
             int questionId = resultDetail['questionId'] ?? -1;
             String userAnswer = resultDetail['userAnswer'] ?? '';
             String correctAnswer = resultDetail['correctAnswer'] ?? '';
+            String q = resultDetail['q'] ?? '';
             return ResultDetailModel(
                 userId: userId,
                 questionId: questionId,
+                contentQuestion: q,
                 userAnswer: userAnswer,
                 correctAnswer: correctAnswer);
           }).toList();
@@ -40,6 +42,7 @@ Future<List<ExerciseModel>> getAllExercises() async {
               option_4: question['option_4'] ?? '',
               contentQuestion: question['content_question'] ?? '',
               audio: question['audio'] ?? '',
+              imageDescription: question['imageDescription'] ?? '',
               paragraph: question['paragraph'] ?? '',
               ordinalNumber: question['ordinal_number'] ?? 0,
               type: question['type'],

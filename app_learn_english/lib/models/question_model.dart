@@ -11,6 +11,7 @@ class QuestionModel {
   String option_4;
   String contentQuestion;
   String audio;
+  String imageDescription;
   String paragraph;
   int ordinalNumber;
   int type;
@@ -25,6 +26,7 @@ class QuestionModel {
     required this.option_4,
     required this.contentQuestion,
     required this.audio,
+    required this.imageDescription,
     required this.paragraph,
     required this.ordinalNumber,
     required this.type,
