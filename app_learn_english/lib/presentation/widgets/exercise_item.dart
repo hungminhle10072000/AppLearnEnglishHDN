@@ -16,8 +16,14 @@ class ExerciseItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ResultModel resultModel = exercise.resultEntityList.where((element) => element.userId == CurrentUserState.id).first;
-    bool isDone = resultModel.totalWrong + resultModel.totalRight > 0;
+    bool isDone;
+    if (exercise.resultEntityList.isNotEmpty) {
+      ResultModel resultModel = exercise.resultEntityList.where((element) => element.userId == CurrentUserState.id).first;
+      isDone = resultModel.totalWrong + resultModel.totalRight > 0;
+    } else {
+      isDone = false;
+    }
+
     return GestureDetector(
       onTap: () {
         !isDone ?

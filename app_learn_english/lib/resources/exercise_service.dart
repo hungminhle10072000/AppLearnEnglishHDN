@@ -18,7 +18,7 @@ Future<List<ExerciseModel>> getAllExercises() async {
       responseData.map((exercise) {
         List<dynamic> questionsDynamic = exercise['questionDtoList'] ?? [];
         List<QuestionModel> questionsModel = questionsDynamic.map((question) {
-          List<dynamic> resultDetailDynamic = question['resultDetailDtoList'];
+          List<dynamic> resultDetailDynamic = question['resultDetailDtoList'] ?? [];
           List<ResultDetailModel> resultDetailsModel = resultDetailDynamic.map((resultDetail) {
             // dynamic key = resultDetail['id'];
             int userId = resultDetail['userId'] ?? -1;
