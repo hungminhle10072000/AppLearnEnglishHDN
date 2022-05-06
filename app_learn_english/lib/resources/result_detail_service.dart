@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:app_learn_english/states/current_user_state.dart';
+
 import '../models/result_detail_model.dart';
 import 'package:http/http.dart' as http;
 import '../utils/constants/Cons.dart';
@@ -13,7 +15,7 @@ Future<bool> addResultDetail(List<ResultDetailModel> answers) async {
     final response = await httpClient.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuZ2hpYWFkbWluIiwiZXhwIjoxNjUxODQ5ODg3LCJpYXQiOjE2NTE4MzE4ODd9.ApgCtsXUy4vMRaNGwTlWH_Rpyz0yjr6oH9Y_foNpWyhDQN-2oS0cgR5jKzSNn5N1vk3-L04Ym0CANveQwHVMOQ'},
+          'Authorization': CurrentUserState.token},
         body: jsonEncode(answers)
     );
     if (response.statusCode == 200) {
@@ -33,7 +35,7 @@ Future<List<ResultDetailModel>> findResultDetailsByUserIdAndExerciseId(int userI
     final response = await httpClient.get(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuZ2hpYWFkbWluIiwiZXhwIjoxNjUxODQ5ODg3LCJpYXQiOjE2NTE4MzE4ODd9.ApgCtsXUy4vMRaNGwTlWH_Rpyz0yjr6oH9Y_foNpWyhDQN-2oS0cgR5jKzSNn5N1vk3-L04Ym0CANveQwHVMOQ'}
+          'Authorization': CurrentUserState.token}
     );
 
     if (response.statusCode == 200) {

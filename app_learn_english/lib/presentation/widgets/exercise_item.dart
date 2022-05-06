@@ -2,6 +2,7 @@ import 'package:app_learn_english/events/result_detail_event.dart';
 import 'package:app_learn_english/models/exercise_model.dart';
 import 'package:app_learn_english/models/result_model.dart';
 import 'package:app_learn_english/presentation/screens/start_exercise_page.dart';
+import 'package:app_learn_english/states/current_user_state.dart';
 import 'package:app_learn_english/utils/constants/Cons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,7 @@ class ExerciseItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ResultModel resultModel = exercise.resultEntityList.where((element) => element.userId == 1).first;
+    ResultModel resultModel = exercise.resultEntityList.where((element) => element.userId == CurrentUserState.id).first;
     bool isDone = resultModel.totalWrong + resultModel.totalRight > 0;
     return GestureDetector(
       onTap: () {
@@ -27,7 +28,7 @@ class ExerciseItem extends StatelessWidget {
             MaterialPageRoute(builder: (context) =>
                 BlocProvider(create: (context) {
                   final _resultDetailBloc = ResultDetailBloc();
-                  final _resultDetailEvent = ResultDetailFetchEvent(userId: 1,exerciseId: exercise.id);
+                  final _resultDetailEvent = ResultDetailFetchEvent(userId: CurrentUserState.id,exerciseId: exercise.id);
                   _resultDetailBloc.add(_resultDetailEvent);
                   return _resultDetailBloc;
                 },
