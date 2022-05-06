@@ -6,6 +6,7 @@ import '../states/result_detail_state.dart';
 class ResultDetailBloc extends Bloc<ResultDetailEvent, ResultDetailState> {
   ResultDetailBloc() : super(ResultDetailInitial()) {
     on<ResultDetailAddEvent> (_onAddDetailResult);
+    on<ResultDetailFetchEvent> (_onFetchDetailResult);
   }
 
   void _onAddDetailResult(ResultDetailAddEvent event,Emitter<ResultDetailState> emit) async {
@@ -16,5 +17,8 @@ class ResultDetailBloc extends Bloc<ResultDetailEvent, ResultDetailState> {
       emit(ResultDetailFailure());
     }
   }
-
+  void _onFetchDetailResult(ResultDetailFetchEvent event, Emitter<ResultDetailState> emit) async {
+    final resultDetails = await findResultDetailsByUserIdAndExerciseId(event.userId,event.exerciseId);
+    emit(ResultDetailSuccess(resultDetails: resultDetails));
+  }
 }

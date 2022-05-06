@@ -4,6 +4,7 @@ import 'package:app_learn_english/models/exercise_model.dart';
 import 'package:app_learn_english/models/question_model.dart';
 import 'package:app_learn_english/models/result_detail_model.dart';
 import 'package:app_learn_english/presentation/screens/end_exercise_page.dart';
+import 'package:app_learn_english/presentation/screens/exercise_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -26,6 +27,7 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
   List<QuestionModel> questions = [];
   @override
   void initState() {
+    yourAnswers = [];
     // TODO: implement initState
     questions = widget.exercise.questionEntityList;
     for (int i =0; i< questions.length; i++) {
@@ -33,6 +35,7 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
           ResultDetailModel(
               userId: 1,
               questionId: questions[i].id,
+              exerciseId: questions[i].exerciseId,
               contentQuestion: questions[i].contentQuestion,
               userAnswer: "",
               correctAnswer: questions[i].correctAnswer));
@@ -46,6 +49,10 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
   }
   @override
   Widget build(BuildContext context) {
+    Future<bool> _onBackPressed() async {
+      Navigator.pushNamed(context, '/listExercise');
+      return true;
+    }
     if (questions.length < 1) {
       return Container(
         child: const Text("Questions is empty"),
@@ -54,11 +61,19 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
     bool hasImage = questions[questionNumber].imageDescription.isNotEmpty;
     bool hasAudio = questions[questionNumber].audio.isNotEmpty;
     return WillPopScope(
-        onWillPop: ()async => false,
+        onWillPop: _onBackPressed,
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
               title: const Text("Quiz"),
+              leading: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/listExercise');
+                  },
+                  child: const Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: Colors.white,
+                  )),
             ),
             body: SingleChildScrollView(
               child: Container(
@@ -267,10 +282,9 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
   }
   void resetQuiz() {
     setState(() {
-      Navigator.pop(context);
-      Navigator.pop(context);
       finalScore =0;
       questionNumber = 0;
+      Navigator.pushNamed(context, '/listExercise');
     });
   }
   void submitHandle() {
@@ -282,7 +296,7 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
             _resultDetailBloc.add(_resultDetailEvent);
             return _resultDetailBloc;
           },
-            child: EndExercisePage(resultDetail: yourAnswers,),
+            child: EndExercisePage(resultDetail: yourAnswers, exerciseModel: widget.exercise,),
           )
         )
     );

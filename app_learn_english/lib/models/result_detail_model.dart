@@ -4,6 +4,7 @@ class ResultDetailModel {
 
   int userId;
   int questionId;
+  int exerciseId;
   String contentQuestion;
   // QuestionModel questionEntity;
   String userAnswer;
@@ -12,6 +13,7 @@ class ResultDetailModel {
   ResultDetailModel({
     required this.userId,
     required this.questionId,
+    required this.exerciseId,
     required this.contentQuestion,
     // required this.questionEntity,
     required this.userAnswer,

@@ -12,7 +12,7 @@ class ResultDetailInitial extends ResultDetailState{}
 class ResultDetailFailure extends ResultDetailState{}
 class ResultDetailSuccess extends ResultDetailState{
   final List<ResultDetailModel> resultDetails;
-  ResultDetailSuccess({required this.resultDetails});
+  const ResultDetailSuccess({required this.resultDetails});
   @override
   // TODO: implement props
   List<Object?> get props => [resultDetails];

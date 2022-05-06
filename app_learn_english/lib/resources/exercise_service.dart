@@ -23,18 +23,21 @@ Future<List<ExerciseModel>> getAllExercises() async {
             // dynamic key = resultDetail['id'];
             int userId = resultDetail['userId'] ?? -1;
             int questionId = resultDetail['questionId'] ?? -1;
+            int exerciseId = resultDetail['exerciseId'] ?? -1;
             String userAnswer = resultDetail['userAnswer'] ?? '';
             String correctAnswer = resultDetail['correctAnswer'] ?? '';
             String q = resultDetail['q'] ?? '';
             return ResultDetailModel(
                 userId: userId,
                 questionId: questionId,
+                exerciseId: exerciseId,
                 contentQuestion: q,
                 userAnswer: userAnswer,
                 correctAnswer: correctAnswer);
           }).toList();
           return QuestionModel(
               id: question['id'] ?? -1,
+              exerciseId: question['exerciseId'] ?? -1,
               correctAnswer: question['correct_answer'] ?? '',
               option_1: question['option_1'] ?? '',
               option_2: question['option_2'] ?? '',

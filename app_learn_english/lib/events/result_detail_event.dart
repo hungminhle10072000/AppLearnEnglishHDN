@@ -11,3 +11,8 @@ class ResultDetailAddEvent extends ResultDetailEvent {
   List<ResultDetailModel> resultDetail;
   ResultDetailAddEvent({required this.resultDetail});
 }
+class ResultDetailFetchEvent extends ResultDetailEvent {
+  int userId;
+  int exerciseId;
+  ResultDetailFetchEvent({required this.userId, required this.exerciseId});
+}
