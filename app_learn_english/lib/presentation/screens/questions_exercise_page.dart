@@ -5,6 +5,7 @@ import 'package:app_learn_english/models/question_model.dart';
 import 'package:app_learn_english/models/result_detail_model.dart';
 import 'package:app_learn_english/presentation/screens/end_exercise_page.dart';
 import 'package:app_learn_english/presentation/screens/exercise_list_page.dart';
+import 'package:app_learn_english/states/current_user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -33,7 +34,7 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
     for (int i =0; i< questions.length; i++) {
       yourAnswers.add(
           ResultDetailModel(
-              userId: 1,
+              userId: CurrentUserState.id,
               questionId: questions[i].id,
               exerciseId: questions[i].exerciseId,
               contentQuestion: questions[i].contentQuestion,

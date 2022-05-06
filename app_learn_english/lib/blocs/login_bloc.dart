@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app_learn_english/events/login_event.dart';
 import 'package:app_learn_english/resources/login_service.dart';
+import 'package:app_learn_english/states/current_user_state.dart';
 import 'package:app_learn_english/states/login_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,8 +26,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     );
     on<LoginButtonPressed>((event, emit) async {
       var ref = await SharedPreferences.getInstance();
-      print("Chay o day");
-
       var status = await repo.login(event.username, event.password);
       if (status.statusCode == 200) {
         // final data = json.decode(status.body);
@@ -40,12 +39,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             ref.setString("fullname", data['user']['fullname']);
             ref.setString("email", data['user']['email']);
             ref.setString("avartar", data['user']['avartar']);
+            CurrentUserState.username = data['user']['username'];
+            CurrentUserState.token += data['token']['token'];
+            CurrentUserState.id  = data['user']['id'];
             emit(UserLoginSuccessState());
           } else if (data['user']['role'] == "Admin") {
             ref.setString("token", data['token']['token']);
             ref.setString("role", data['user']['role']);
             ref.setString("username", data['user']['username']);
             ref.setString("fullname", data['user']['fullname']);
+            CurrentUserState.username = data['user']['username'];
+            CurrentUserState.token += data['token']['token'];
+            CurrentUserState.id  = data['user']['id'];
             emit(AdminLoginSuccessState());
           } else if (data['user']['role'] == null) {
             emit(LoginErrorState(message: "Auth error"));

@@ -1,6 +1,5 @@
 import 'package:app_learn_english/blocs/exercise_bloc.dart';
 import 'package:app_learn_english/models/exercise_model.dart';
-import 'package:app_learn_english/presentation/widgets/exercise_item.dart';
 import 'package:app_learn_english/presentation/widgets/exercise_item_list.dart';
 import 'package:app_learn_english/states/exercise_state.dart';
 import 'package:app_learn_english/utils/constants/Cons.dart';
@@ -35,7 +34,7 @@ class _ExerciseListPage extends State<ExerciseListPage> {
             onPressed: () {
               Navigator.pushNamed(context, 'home');
             },
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back_ios_rounded,
               color: Colors.white,
             ))
@@ -55,13 +54,13 @@ class _ExerciseListPage extends State<ExerciseListPage> {
               keyword = text;
             });
           },
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
               icon: GestureDetector(
                 onTap: () {
                   print('OnTap 1');
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.search,
                   color: Colors.white,
                 ),
@@ -74,21 +73,21 @@ class _ExerciseListPage extends State<ExerciseListPage> {
               ? IconButton(
               onPressed: () {
                 setState(() {
-                  this.isSearching = !this.isSearching;
+                  isSearching = !isSearching;
                   setState(() {
                     keyword = '';
                   });
                   searchController.clear();
                 });
               },
-              icon: Icon(Icons.cancel))
+              icon: const Icon(Icons.cancel))
               : IconButton(
               onPressed: () {
                 setState(() {
-                  this.isSearching = !this.isSearching;
+                  isSearching = !isSearching;
                 });
               },
-              icon: Icon(Icons.search))
+              icon: const Icon(Icons.search))
         ],
       ),
       body: SafeArea(
@@ -131,7 +130,7 @@ class _ExerciseListPage extends State<ExerciseListPage> {
 
                     }
                   }
-                  return Text("");
+                  return const Text("");
                 }
 
             ),
