@@ -8,10 +8,22 @@ class StartExercisePage extends StatelessWidget {
   const StartExercisePage({Key? key, required this.exercise}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    Future<bool> _onBackPressed() async {
+      Navigator.pushNamed(context, '/listExercise');
+      return true;
+    }
+    return WillPopScope(child: Scaffold(
       appBar: AppBar(
         title: const Text("Multiple Choice Quiz"),
         backgroundColor: Colors.blueAccent,
+        leading: TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/listExercise');
+            },
+            child: const Icon(
+              Icons.arrow_back_ios_rounded,
+              color: Colors.white,
+            )),
       ),
       body: Container(
         margin: const EdgeInsets.all(15.0),
@@ -44,7 +56,7 @@ class StartExercisePage extends StatelessWidget {
               color: Colors.blueAccent,
               onPressed: () {
                 Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => QuestionsExercisePage(exercise: exercise))
+                    MaterialPageRoute(builder: (context) => QuestionsExercisePage(exercise: exercise))
                 );
               },
               child:  const Text("Bắt đầu", style: TextStyle(
@@ -55,6 +67,8 @@ class StartExercisePage extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ), onWillPop: _onBackPressed);
   }
+
+
 }

@@ -1,13 +1,16 @@
 import 'package:app_learn_english/blocs/result_detail_bloc.dart';
+import 'package:app_learn_english/models/exercise_model.dart';
 import 'package:app_learn_english/models/result_detail_model.dart';
+import 'package:app_learn_english/presentation/screens/start_exercise_page.dart';
 import 'package:app_learn_english/states/result_detail_state.dart';
 import 'package:app_learn_english/utils/constants/Cons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EndExercisePage extends StatelessWidget {
-  final List<ResultDetailModel> resultDetail;
-  const EndExercisePage({Key? key, required this.resultDetail}) : super(key: key);
+  List<ResultDetailModel> resultDetail;
+  ExerciseModel exerciseModel;
+  EndExercisePage({Key? key, required this.resultDetail, required this.exerciseModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,77 +20,111 @@ class EndExercisePage extends StatelessWidget {
         numOfCorrect++;
       }
     }
-    return SafeArea(
+    Future<bool> _onBackPressed() async {
+      Navigator.pushNamed(context, '/listExercise');
+      return true;
+    }
+    return WillPopScope(child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
             title: const Text("Kết quả"),
           ),
-          body: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                BlocBuilder<ResultDetailBloc,ResultDetailState>(
-                builder: (context,state) {
-                  if (state is ResultDetailInitial) {
-                    return const Center(child: CircularProgressIndicator(),);
-                  }
-                  if (state is ResultDetailFailure) {
-                    return const Center(
-                      child: Text('Something went wrong!',
-                        style: TextStyle(fontSize: 22, color: Colors.red),),
-                    );
-                  }
-                  if (state is ResultDetailSuccess) {
-                    return const Center(
-                      child: Text('ResultDetailSuccess',
-                        style: TextStyle(fontSize: 22, color: Colors.red),),
-                    );
-                  }
+
+          body: BlocBuilder<ResultDetailBloc,ResultDetailState>(
+              builder: (context,state) {
+                if (state is ResultDetailInitial) {
+                  return const Center(child: CircularProgressIndicator(),);
+                }
+                if (state is ResultDetailFailure) {
                   return const Center(
                     child: Text('Something went wrong!',
                       style: TextStyle(fontSize: 22, color: Colors.red),),
                   );
-                }),
-                const Text("Kết quả của bạn", style: TextStyle(fontSize: fontSize.large, fontWeight: FontWeight.bold),),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text("$numOfCorrect/${resultDetail.length}",style: const TextStyle(fontSize: fontSize.medium)),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text("${numOfCorrect/resultDetail.length*100}%",style: const TextStyle(fontSize: fontSize.medium, fontWeight: FontWeight.bold)),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    MaterialButton(
-                      onPressed: () {
-                        showDialogFunc(context,resultDetail);
-                      },
-                      minWidth: 120.0,
-                      color: Colors.green,
-                      child: const Text("Xem lại KQ", style: TextStyle(fontSize: fontSize.medium, fontWeight: FontWeight.bold,color: Colors.white),),
+                }
+                if (state is ResultDetailSuccess) {
+                  if (resultDetail.length < 1) {
+                    resultDetail = state.resultDetails;
+                    numOfCorrect = 0;
+                    for (var value in resultDetail) {
+                      if (value.userAnswer.trim() == value.correctAnswer.trim()) {
+                        numOfCorrect++;
+                      }
+                    }
+                  }
+                  return Center(
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Kết quả của bạn", style: TextStyle(fontSize: fontSize.large, fontWeight: FontWeight.bold),),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Text("$numOfCorrect/${resultDetail.length}",style: const TextStyle(fontSize: fontSize.medium)),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Text("${numOfCorrect/resultDetail.length*100}%",style: const TextStyle(fontSize: fontSize.medium, fontWeight: FontWeight.bold)),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              MaterialButton(
+                                onPressed: () {
+                                  showDialogFunc(context,resultDetail);
+                                },
+                                minWidth: 120.0,
+                                color: Colors.green,
+                                child: const Text("Xem lại KQ", style: TextStyle(fontSize: fontSize.medium, fontWeight: FontWeight.bold,color: Colors.white),),
+                              ),
+                              MaterialButton(
+                                onPressed: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) => StartExercisePage(exercise: exerciseModel))
+                                  );
+                                },
+                                minWidth: 120.0,
+                                color: Colors.green,
+                                child: const Text("Làm lại", style: TextStyle(fontSize: fontSize.medium, fontWeight: FontWeight.bold,color: Colors.white)),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Container(
+                            alignment: Alignment.bottomCenter,
+                            child: MaterialButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/listExercise');
+                              },
+                              minWidth: 240.0,
+                              height: 40.0,
+                              color: Colors.red,
+                              child: const Text("Thoát ra",
+                                style: TextStyle(
+                                    fontSize: fontSize.medium,
+                                    color: Colors.white
+                                ),),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    MaterialButton(
-                      onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                      },
-                      minWidth: 120.0,
-                      color: Colors.green,
-                      child: const Text("Làm lại", style: TextStyle(fontSize: fontSize.medium, fontWeight: FontWeight.bold,color: Colors.white)),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
+                  );
+                }
+                return const Center(
+                  child: Text('Something went wrong!',
+                    style: TextStyle(fontSize: 22, color: Colors.red),),
+                );
+              }),
+
+
         )
-    );
+    ), onWillPop: _onBackPressed);
   }
 
   displayResultDetail() {

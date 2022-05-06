@@ -4,6 +4,7 @@ import 'package:app_learn_english/models/result_detail_model.dart';
 
 class QuestionModel {
   int id;
+  int exerciseId;
   String correctAnswer;
   String option_1;
   String option_2;
@@ -19,6 +20,7 @@ class QuestionModel {
 
   QuestionModel({
     required this.id,
+    required this.exerciseId,
     required this.correctAnswer,
     required this.option_1,
     required this.option_2,
