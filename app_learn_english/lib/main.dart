@@ -4,8 +4,10 @@ import 'package:app_learn_english/blocs/exercise_bloc.dart';
 import 'package:app_learn_english/blocs/list_grammar_bloc.dart';
 import 'package:app_learn_english/blocs/forgetpass_bloc.dart';
 import 'package:app_learn_english/blocs/list_vocabulary_bloc.dart';
+import 'package:app_learn_english/blocs/statistical_bloc.dart';
 import 'package:app_learn_english/events/course_event.dart';
 import 'package:app_learn_english/events/exercise_event.dart';
+import 'package:app_learn_english/events/statistical_event.dart';
 import 'package:app_learn_english/models/course_model.dart';
 import 'package:app_learn_english/presentation/screens/acc_infortation.dart';
 import 'package:app_learn_english/presentation/screens/admin_page.dart';
@@ -19,6 +21,7 @@ import 'package:app_learn_english/presentation/screens/homePage.dart';
 import 'package:app_learn_english/presentation/screens/list_grammar_page.dart';
 import 'package:app_learn_english/presentation/screens/loginPage.dart';
 import 'package:app_learn_english/presentation/screens/registerPage.dart';
+import 'package:app_learn_english/presentation/screens/statistical_page.dart';
 import 'package:app_learn_english/presentation/screens/topic_vocabulary_Page.dart';
 import 'package:app_learn_english/presentation/screens/vocabulary_detail_topic_page.dart';
 import 'package:app_learn_english/resources/forgetpass_service.dart';
@@ -66,6 +69,15 @@ void main() {
           'changepass': (context) => changePassPage(),
           'accinfor': (context) => accinforPage(),
           'editinfor': (context) => editinforPage(),
+          '/statistical':(context) => BlocProvider(
+              create: (context) {
+                final _statisticalBloc = StatisticalBloc();
+                final _statisticalEvent = StatisticalFetchedEvent();
+                _statisticalBloc.add(_statisticalEvent);
+                return _statisticalBloc;
+              },
+            child: StatisticalPage(),
+          ),
           'listCourses': (context) => BlocProvider(
             create: (context) {
               final _courseBloc = CourseBloc();
