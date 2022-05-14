@@ -16,6 +16,7 @@ import 'package:app_learn_english/presentation/screens/edit_infor.dart';
 import 'package:app_learn_english/presentation/screens/exercise_list_page.dart';
 import 'package:app_learn_english/presentation/screens/forgetPasswordPage.dart';
 import 'package:app_learn_english/presentation/screens/homePage.dart';
+import 'package:app_learn_english/presentation/screens/home_practice_total_vocabulary.dart';
 import 'package:app_learn_english/presentation/screens/list_grammar_page.dart';
 import 'package:app_learn_english/presentation/screens/loginPage.dart';
 import 'package:app_learn_english/presentation/screens/registerPage.dart';
@@ -66,6 +67,7 @@ void main() {
           'changepass': (context) => changePassPage(),
           'accinfor': (context) => accinforPage(),
           'editinfor': (context) => editinforPage(),
+          'homeTotalPracticeVocabulary': (context) => HomePracticeTotalVocabulary(),
           'listCourses': (context) => BlocProvider(
             create: (context) {
               final _courseBloc = CourseBloc();
