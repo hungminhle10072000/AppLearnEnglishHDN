@@ -1,20 +1,16 @@
 import 'dart:io';
-
-//import 'package:app_learn_english/blocs/register_bloc.dart';
-//import 'package:app_learn_english/resources/login_service.dart';
+import 'package:app_learn_english/blocs/user_bloc.dart';
+import 'package:app_learn_english/events/user_event.dart';
+import 'package:app_learn_english/models/user_model.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
-//import '../../events/user_event.dart';
-//import '../../states/user_state.dart';
-//import 'CircularLoading.dart';
+import 'package:http/http.dart' as http;
 
-//import '../../resources/register_service.dart';
+import '../../utils/constants/Cons.dart';
 
 class registerPage extends StatefulWidget {
   const registerPage({Key? key}) : super(key: key);
@@ -71,21 +67,26 @@ class _registerPageState extends State<registerPage> {
   //late RegisterBloc registerBloc;
   @override
   void initState() {
-    //registerBloc = BlocProvider.of<RegisterBloc>(context);
     super.initState();
   }
 
   void validate() async{
     if (formRegisterKey.currentState!.validate()) {
-      // if (f != null) {
-      //   //RegistUser("", "", f!);
-      // }
-      // registerBloc.add(RegisterButtonPressed(
-      //     username: usernameController.text, fullname: nameController.text,email: emailController.text,
-      //     password: passwordController.text, gender:genderController.text,
-      //     address: addressController.text, phonenumber: numberphoneController.text,
-      //     birthday: birthdayController.text, role:"User",
-      //     file: _image));
+      UserModel userModel = UserModel(id:-1,
+          fullname: nameController.text.trim(),
+          username: usernameController.text.trim(),
+          password: passwordController.text.trim(),
+          email: emailController.text.trim(),
+          gender: genderController.text.trim(),
+          address: addressController.text.trim(),
+          phonenumber: numberphoneController.text.trim(),
+          avartar: _image?.path ?? '',
+          role:'User',
+      birthday: birthdayController.text);
+
+      final UserBloc _userBloc = UserBloc();
+      final UserEvent _userEvent = UserRegisterEvent(userModel: userModel);
+      _userBloc.add(_userEvent);
     }
   }
 
@@ -114,41 +115,6 @@ class _registerPageState extends State<registerPage> {
                 fit: BoxFit.cover,
               ),
             ),
-            // child: BlocListener<RegisterBloc, UserState>(
-            //   listener: (context, state) {
-            //     try {
-            //       // if (state is UserLoadingState) {
-            //       //   WidgetsBinding.instance!.addPostFrameCallback(
-            //       //       (_) => loadingIndicator(context, "Loading..."));
-            //       //   //   final snackBar = SnackBar(
-            //       //   //   content: const Text('Đăng nhập thành công!'),
-            //       //   // );
-            //       //   // ScaffoldMessenger.of(context)..removeCurrentSnackBar()..showSnackBar(snackBar);
-            //       //   // Navigator.pushNamed(context, 'home');
-            //       // } else
-            //       if (state is SuccessRegisterUser) {
-            //         clearForm();
-            //         final snackBar = SnackBar(
-            //           content: const Text('Đăng ki thành công!'),
-            //         );
-            //         ScaffoldMessenger.of(context)
-            //           ..removeCurrentSnackBar()
-            //           ..showSnackBar(snackBar);
-            //         Navigator.pushNamed(context, 'login');
-            //       } else if (state is RegisterErrorState) {
-            //         final snackBar = SnackBar(
-            //           content: const Text('Kiem tra lai thong tin cua ban'),
-            //         );
-            //         ScaffoldMessenger.of(context)
-            //           ..removeCurrentSnackBar()
-            //           ..showSnackBar(snackBar);
-            //         Navigator.pushNamed(context, 'register');
-            //       }
-            //     } catch (e) {
-            //       var snackbar = SnackBar(content: Text(e.toString()));
-            //       ScaffoldMessenger.of(context).showSnackBar(snackbar);
-            //     }
-            //   },
               child: Scaffold(
                 appBar: AppBar(
                     elevation: null,
@@ -419,23 +385,6 @@ class _registerPageState extends State<registerPage> {
     );
   }
 
-  // void Pickfile() async {
-  //   FilePickerResult? restule = await FilePicker.platform.pickFiles(
-  //       allowedExtensions: ['jpg','png','jpeg'],
-  //       allowMultiple: true,
-  //       type: FileType.custom,
-  //       allowCompression: true
-  //
-  //
-  //   );
-  //   if(restule!=null){
-  //     File f_ = File(restule.files.single.path.toString());
-  //     setState(() {
-  //       f = f_;
-  //     });
-  //
-  //   }
-  //}
   void clearForm(){
     usernameController.text = "";
     emailController.text = "";

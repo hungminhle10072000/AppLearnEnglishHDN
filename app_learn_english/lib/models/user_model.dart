@@ -10,6 +10,7 @@ class UserModel {
   String phonenumber;
   String avartar;
   String role;
+  String birthday;
 
   UserModel({
     required this.id,
@@ -21,6 +22,20 @@ class UserModel {
     required this.address,
     required this.phonenumber,
     required this.avartar,
-    required this.role
+    required this.role,
+    required this.birthday
   });
+
+  Map<String,String> toJson() => {
+    'fullname':fullname,
+    'username':username,
+    'password':password,
+    'email':email,
+    'gender':gender,
+    'address':address,
+    'phonenumber':phonenumber,
+    'avartar':avartar,
+    'role':role,
+    'birthday': birthday
+  };
 }
