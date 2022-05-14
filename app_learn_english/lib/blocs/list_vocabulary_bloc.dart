@@ -14,6 +14,16 @@ class ListVocabularyBloc
   List<VocabularyModel> listVoca = [];
 
   ListVocabularyBloc() : super(ListVocabularyLoadingState()) {
+    on<ListVocabularyRandomEventLoad>((event, emit) async {
+      emit(ListVocabularyLoadingState());
+      try {
+        final listVocaRandom =
+            await VocabularyService.getRandomVocabulary(event.count);
+        emit(ListVocabularyLoadedState(listVocaRandom));
+      } catch (e) {
+        emit(ListVocabularyErrorState(e.toString()));
+      }
+    });
     on<ListVocabularyEventLoad>((event, emit) async {
       emit(ListVocabularyLoadingState());
       try {

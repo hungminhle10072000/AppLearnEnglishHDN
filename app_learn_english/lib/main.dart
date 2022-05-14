@@ -21,6 +21,7 @@ import 'package:app_learn_english/presentation/screens/homePage.dart';
 import 'package:app_learn_english/presentation/screens/home_practice_total_vocabulary.dart';
 import 'package:app_learn_english/presentation/screens/list_grammar_page.dart';
 import 'package:app_learn_english/presentation/screens/loginPage.dart';
+import 'package:app_learn_english/presentation/screens/practice_vocabulary.dart';
 import 'package:app_learn_english/presentation/screens/registerPage.dart';
 import 'package:app_learn_english/presentation/screens/statistical_page.dart';
 import 'package:app_learn_english/presentation/screens/topic_vocabulary_Page.dart';
@@ -40,7 +41,10 @@ void main() {
         BlocProvider(
             create: (context) => LoginBloc(
                 initialStatem: LoginState(), repo: LoginRepository())),
-        BlocProvider(create: (context) => ForgetPassBloc( initialStatem: ForgetPassState(),repo: ForgetPassRepository())),
+        BlocProvider(
+            create: (context) => ForgetPassBloc(
+                initialStatem: ForgetPassState(),
+                repo: ForgetPassRepository())),
         BlocProvider(create: (context) => ListVocabularyBloc()),
         BlocProvider(create: (context) => ListGrammarBloc())
       ],
@@ -50,14 +54,13 @@ void main() {
         initialRoute: 'login',
         routes: <String, WidgetBuilder>{
           '/listExercise': (context) => BlocProvider(
-            create: (context) {
-              final _exerciseBloc = ExerciseBloc();
-              final _exerciseEvent = ExerciseFetchedEvent();
-              _exerciseBloc.add(_exerciseEvent);
-              return _exerciseBloc;
-            },
-            child: ExerciseListPage()
-          ),
+              create: (context) {
+                final _exerciseBloc = ExerciseBloc();
+                final _exerciseEvent = ExerciseFetchedEvent();
+                _exerciseBloc.add(_exerciseEvent);
+                return _exerciseBloc;
+              },
+              child: ExerciseListPage()),
           // 'startExercisePage': (context) => const StartExercisePage(),
           'home': (context) => HomePage(),
           'admin': (context) => adminPage(),
@@ -70,25 +73,27 @@ void main() {
           'changepass': (context) => changePassPage(),
           'accinfor': (context) => accinforPage(),
           'editinfor': (context) => editinforPage(),
-          'homeTotalPracticeVocabulary': (context) => HomePracticeTotalVocabulary(),
-          '/statistical':(context) => BlocProvider(
-              create: (context) {
-                final _statisticalBloc = StatisticalBloc();
-                final _statisticalEvent = StatisticalFetchedEvent();
-                _statisticalBloc.add(_statisticalEvent);
-                return _statisticalBloc;
-              },
-            child: StatisticalPage(),
-          ),
+          'homeTotalPracticeVocabulary': (context) =>
+              HomePracticeTotalVocabulary(),
+          'practiceVocabulary': (context) => PracticeVocabularyPage(),
+          '/statistical': (context) => BlocProvider(
+                create: (context) {
+                  final _statisticalBloc = StatisticalBloc();
+                  final _statisticalEvent = StatisticalFetchedEvent();
+                  _statisticalBloc.add(_statisticalEvent);
+                  return _statisticalBloc;
+                },
+                child: StatisticalPage(),
+              ),
           'listCourses': (context) => BlocProvider(
-            create: (context) {
-              final _courseBloc = CourseBloc();
-              final _courseEvent = CourseFetchedEvent();
-              _courseBloc.add(_courseEvent);
-              return _courseBloc;
-            },
-            child: CourseListPage(),
-          ),
+                create: (context) {
+                  final _courseBloc = CourseBloc();
+                  final _courseEvent = CourseFetchedEvent();
+                  _courseBloc.add(_courseEvent);
+                  return _courseBloc;
+                },
+                child: CourseListPage(),
+              ),
           '/courseDetail': (context) => CourseDetailPage(
               courseDetail: CourseModel(
                   id: -1,
@@ -97,7 +102,6 @@ void main() {
                   numOfChapter: 0,
                   chapters: [],
                   image: 'This is image')),
-
         },
       )));
 }

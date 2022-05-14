@@ -1,4 +1,6 @@
+import 'package:app_learn_english/blocs/list_vocabulary_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePracticeTotalVocabulary extends StatefulWidget {
   const HomePracticeTotalVocabulary({Key? key}) : super(key: key);
@@ -94,7 +96,12 @@ class _HomePracticeTotalVocabularyState
               height: 20,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context
+                .read<ListVocabularyBloc>()
+                .add(ListVocabularyRandomEventLoad(this._count));
+                Navigator.pushNamed(context, 'practiceVocabulary');
+              },
               child: Text(
                 "Bắt đầu",
                 style: TextStyle(fontSize: 20),
