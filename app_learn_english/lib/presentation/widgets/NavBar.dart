@@ -55,12 +55,12 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.fitness_center),
             title: Text('Luyện tập'),
-            onTap: () => null,
+            onTap: () => Navigator.pushNamed(context, '/listExercise'),
           ),
           ListTile(
             leading: Icon(Icons.monitor),
             title: Text('Thống kê'),
-            onTap: () => null,
+            onTap: () => Navigator.pushNamed(context, '/statistical'),
           ),
           ListTile(
             leading: Icon(Icons.notifications),

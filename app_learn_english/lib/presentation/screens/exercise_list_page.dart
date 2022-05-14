@@ -98,10 +98,16 @@ class _ExerciseListPage extends State<ExerciseListPage> {
       body: SafeArea(
         child: Column(
           children: [
+            const SizedBox(
+              height: 10,
+            ),
             const Text(
               "Luyện từ vựng",
               style: TextStyle(
                   fontSize: fontSize.large, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 10,
             ),
             Row(
               children: [
@@ -113,9 +119,16 @@ class _ExerciseListPage extends State<ExerciseListPage> {
                     width: MediaQuery.of(context).size.width * 0.5,
                     child: Card(
                       elevation: 4,
-                      child: Row(
+                      child: Column(
                         children: [
-                          const Text("Tổng ôn")
+                          FadeInImage.assetNetwork(
+                            placeholder: 'assets/images/loading.gif',
+                            image: 'https://s18670.pcdn.co/wp-content/uploads/GettyImages-502558245-1.jpg',
+                            fit: BoxFit.fitHeight,
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            height: 100,
+                          ),
+                          const Text("Tổng ôn",style: TextStyle(fontSize: fontSize.medium, fontWeight: FontWeight.bold))
                         ],
                       ),
                     ),
@@ -129,7 +142,14 @@ class _ExerciseListPage extends State<ExerciseListPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Luyện theo chủ đề")
+                          FadeInImage.assetNetwork(
+                            placeholder: 'assets/images/loading.gif',
+                            image: 'https://theidealteacher.com/wp-content/uploads/2018/11/Excellent-Vocabulary-Practice-Ideas-for-Language-Lessons-Revision-1.png',
+                            fit: BoxFit.fitHeight,
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            height: 100,
+                          ),
+                          const Text("Luyện theo chủ đề", style: TextStyle(fontSize: fontSize.medium, fontWeight: FontWeight.bold),)
                         ],
                       ),
                     ),
