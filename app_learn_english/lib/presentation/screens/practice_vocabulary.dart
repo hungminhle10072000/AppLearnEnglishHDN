@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:app_learn_english/blocs/list_vocabulary_bloc.dart';
+import 'package:app_learn_english/resources/vocabulary_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../../models/vocabulary_model.dart';
 
@@ -20,37 +22,85 @@ class _PracticeVocabularyPageState extends State<PracticeVocabularyPage> {
   int indexQuestion = 0;
   int indexColor = 0;
   bool checkDisplay = false;
+  bool _checkCreateMapAnswer = false;
   AudioPlayer audioPlayer = AudioPlayer();
   TextEditingController answerController = TextEditingController();
   List<Color> squareColors = [Colors.grey.shade100, Colors.green, Colors.red];
+  bool checkOpenSuggest = false;
+
+  void _countCorrectAnswer() async {
+    int count = 0;
+    this.mapResult.forEach((key, value) {
+      String keyCheck = key.toString().trim();
+      String valueCheck = value.toString().trim();
+      if (keyCheck == valueCheck) {
+        count++;
+      }
+    });
+    var response = await VocabularyService.writeScore(count);
+    if (response.statusCode == 200) {
+      Alert(
+          closeFunction: () {
+            Navigator.pushNamed(context, '/listExercise');
+          },
+          context: context,
+          title: "Kết quả: ${count}/${listQuestionVoca.length}",
+          desc: "Bạn đã đạt được ${count * 10} điểm !!!",
+          image: Image.asset("assets/images/success.png"),
+          buttons: []).show();
+    } else {
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "Kết quả: ${count}/${listQuestionVoca.length}",
+        desc: "Ghi điểm thất bại!!! \n Xin hãy thử lại",
+        buttons: [],
+      ).show();
+      // throw Exception(response.errors);
+    }
+  }
 
   void _incrementQuestion() {
-    if (indexQuestion < listQuestionVoca.length - 1) {
-      setState(() {
-        indexQuestion++;
-        indexColor = 0;
-        answerController.clear();
-      });
-    }
-    if (indexQuestion == listQuestionVoca.length - 1) {
-      setState(() {
-        checkDisplay = true;
-      });
+    if (!checkOpenSuggest) {
+      String answerSubmit = answerController.text;
+      this.mapResult[listQuestionVoca[indexQuestion].content.trim()] =
+          answerSubmit;
+      if (indexQuestion < listQuestionVoca.length - 1) {
+        setState(() {
+          indexQuestion++;
+          indexColor = 0;
+          // answerController.clear();
+        });
+      }
+      if (indexQuestion == listQuestionVoca.length - 1) {
+        setState(() {
+          checkDisplay = true;
+        });
+      }
+      answerController.text =
+          mapResult[listQuestionVoca[indexQuestion].content.trim()].toString();
     }
   }
 
   void _decrementQuestion() {
-    if (indexQuestion > 0) {
-      setState(() {
-        indexQuestion--;
-        indexColor = 0;
-        answerController.clear();
-      });
-    }
-    if (indexQuestion < listQuestionVoca.length - 1) {
-      setState(() {
-        checkDisplay = false;
-      });
+    if (!checkOpenSuggest) {
+      String answerSubmit = answerController.text;
+      this.mapResult[listQuestionVoca[indexQuestion].content.trim()] =
+          answerSubmit;
+      if (indexQuestion > 0) {
+        setState(() {
+          indexQuestion--;
+          indexColor = 0;
+          // answerController.clear();
+        });
+      }
+      if (indexQuestion < listQuestionVoca.length - 1) {
+        setState(() {
+          checkDisplay = false;
+        });
+      }
+      answerController.text =
+          mapResult[listQuestionVoca[indexQuestion].content.trim()].toString();
     }
   }
 
@@ -58,6 +108,7 @@ class _PracticeVocabularyPageState extends State<PracticeVocabularyPage> {
     var duration = Duration(seconds: 3);
     setState(() {
       answerController.text = this.listQuestionVoca[indexQuestion].content;
+      checkOpenSuggest = true;
     });
     Timer(duration, _closeSuggetAnswer);
   }
@@ -65,24 +116,27 @@ class _PracticeVocabularyPageState extends State<PracticeVocabularyPage> {
   void _closeSuggetAnswer() {
     setState(() {
       answerController.clear();
+      checkOpenSuggest = false;
     });
   }
 
   createResult(List<VocabularyModel> listVoca) {
-    listQuestionVoca = listVoca;
-    if (listVoca.length > 0) {
-      for (int i = 0; i < listVoca.length; i++) {
-        this.mapResult[listVoca[i].content] = "No Answer";
+    if (!_checkCreateMapAnswer) {
+      _checkCreateMapAnswer = true;
+      listQuestionVoca = listVoca;
+      if (listVoca.length > 0) {
+        for (int i = 0; i < listVoca.length; i++) {
+          this.mapResult[listVoca[i].content.trim()] = "";
+        }
+        ;
       }
-      ;
     }
   }
 
   void _checkAnswer() {
     String answerSubmit = answerController.text;
-    setState(() {
-      mapResult[listQuestionVoca[indexQuestion].content] = answerSubmit;
-    });
+    this.mapResult[listQuestionVoca[indexQuestion].content.trim()] =
+        answerSubmit;
     String corectAnswer =
         listQuestionVoca[indexQuestion].content.toString().trim();
     String answer = answerSubmit.toString().trim();
@@ -235,7 +289,8 @@ class _PracticeVocabularyPageState extends State<PracticeVocabularyPage> {
                           ElevatedButton(
                               onPressed: _suggestAnswer, child: Text("Gợi ý")),
                           ElevatedButton(
-                              onPressed: _checkAnswer, child: Text("kiểm tra")),
+                              onPressed: checkOpenSuggest ? null : _checkAnswer,
+                              child: Text("kiểm tra")),
                           FloatingActionButton(
                             onPressed: _incrementQuestion,
                             child: Icon(
@@ -251,7 +306,8 @@ class _PracticeVocabularyPageState extends State<PracticeVocabularyPage> {
                       ),
                       Visibility(
                         child: ElevatedButton(
-                            onPressed: () {}, child: Text("Ghi điểm")),
+                            onPressed: _countCorrectAnswer,
+                            child: Text("Ghi điểm")),
                         visible: checkDisplay,
                       ),
                     ],

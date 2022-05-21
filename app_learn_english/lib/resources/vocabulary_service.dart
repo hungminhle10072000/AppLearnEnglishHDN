@@ -36,7 +36,14 @@ class VocabularyService {
     if (response.statusCode == 200) {
       return parseVocabularyList(utf8.decode(response.bodyBytes));
     } else {
-      throw Exception('nable to fetch products from the REST API');
+      throw Exception('unable to fetch products from the REST API');
     }
+  }
+
+  static Future<dynamic> writeScore(int totalCorrect) async {
+    var response = await http.put(
+        Uri.parse(_baseUrlVocabuary + 'write-score/' + totalCorrect.toString()),
+        headers: {'Content-Type': 'application/json'});
+    return response;
   }
 }

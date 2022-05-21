@@ -21,6 +21,7 @@ import 'package:app_learn_english/presentation/screens/homePage.dart';
 import 'package:app_learn_english/presentation/screens/home_practice_total_vocabulary.dart';
 import 'package:app_learn_english/presentation/screens/list_grammar_page.dart';
 import 'package:app_learn_english/presentation/screens/loginPage.dart';
+import 'package:app_learn_english/presentation/screens/practice_list_topic.dart';
 import 'package:app_learn_english/presentation/screens/practice_vocabulary.dart';
 import 'package:app_learn_english/presentation/screens/registerPage.dart';
 import 'package:app_learn_english/presentation/screens/statistical_page.dart';
@@ -69,6 +70,7 @@ void main() {
           'forget': (context) => forgetPasswordPage(),
           'topicVocabulary': (context) => topic_vocabulary_page(),
           'listVocaTopic': (context) => VocabularyDetailTopicPage(),
+          'listVocaTopicPractice': (context) => PracticeListTopic(),
           'listGrammar': (context) => GrammarListPage(),
           'changepass': (context) => changePassPage(),
           'accinfor': (context) => accinforPage(),

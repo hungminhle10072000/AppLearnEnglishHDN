@@ -1,6 +1,8 @@
 import 'package:app_learn_english/presentation/widgets/NavBar.dart';
+import 'package:context_holder/context_holder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -14,25 +16,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   String fullname = "";
   String email = "";
   String avatar = "";
+  dynamic pref;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     getData();
   }
 
-  void getData() async{
-    SharedPreferences pref = await SharedPreferences.getInstance();
+  void getData() async {
+    pref = await SharedPreferences.getInstance();
     setState(() {
       fullname = pref.getString('fullname')!;
       email = pref.getString('email')!;
       avatar = pref.getString('avartar')!;
     });
-
   }
 
   final controller = CarouselController();
@@ -66,7 +67,6 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: [
             IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
-            // IconButton(onPressed: () {}, icon: Icon(Icons.search))
           ],
           elevation: 0,
         ),
@@ -169,7 +169,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, 'listCourses');
@@ -269,7 +268,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-
                 Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),

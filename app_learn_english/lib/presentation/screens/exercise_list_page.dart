@@ -135,6 +135,9 @@ class _ExerciseListPage extends State<ExerciseListPage> {
                   ),
                 ),
                 GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'listVocaTopicPractice');
+                  },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.5,
                     child: Card(

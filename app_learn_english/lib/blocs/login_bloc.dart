@@ -8,6 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  int daysBetween(DateTime from, DateTime to) {
+    from = DateTime(from.year, from.month, from.day);
+    to = DateTime(to.year, to.month, to.day);
+    return (to.difference(from).inHours / 24).round();
+  }
+
   // AuthRepository repo;
   //
   // AuthBloc(AuthState initialStatem, this.repo);
@@ -41,7 +47,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             ref.setString("avartar", data['user']['avartar']);
             CurrentUserState.username = data['user']['username'];
             CurrentUserState.token += data['token']['token'];
-            CurrentUserState.id  = data['user']['id'];
+            CurrentUserState.id = data['user']['id'];
             emit(UserLoginSuccessState());
           } else if (data['user']['role'] == "Admin") {
             ref.setString("token", data['token']['token']);
@@ -50,7 +56,30 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             ref.setString("fullname", data['user']['fullname']);
             CurrentUserState.username = data['user']['username'];
             CurrentUserState.token += data['token']['token'];
-            CurrentUserState.id  = data['user']['id'];
+            CurrentUserState.id = data['user']['id'];
+
+            //  Set login late
+            ref.setBool("alertLoginLast", false);
+            DateTime dateNow = DateTime.now();
+            if (ref.getInt("dayLast") != null &&
+                ref.getInt("monthLast") != null &&
+                ref.getInt("yearLast") != null) {
+              int dayLast = ref.getInt("dayLast") ?? 0;
+              int monthLast = ref.getInt("monthLast") ?? 0;
+              int yearLast = ref.getInt("yearLast") ?? 0;
+              var dateLoginLast = DateTime(yearLast, monthLast, dayLast);
+              int dayBackLogin = daysBetween(dateLoginLast, dateNow);
+              if (dayBackLogin == 0) {
+                ref.setBool("alertLoginLast", true);
+              }
+            }
+            int dayNow = dateNow.day;
+            int monthNow = dateNow.month;
+            int yearNow = dateNow.year;
+            ref.setInt("dayLast", dayNow);
+            ref.setInt("monthLast", monthNow);
+            ref.setInt("yearLast", yearNow);
+
             emit(AdminLoginSuccessState());
           } else if (data['user']['role'] == null) {
             emit(LoginErrorState(message: "Auth error"));
