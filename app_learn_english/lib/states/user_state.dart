@@ -12,16 +12,18 @@ class UserStateRegisterFailure extends UserState {}
 class UserStateRegisterSuccess extends UserState {}
 class UserStateUpdateInfoInitial extends UserState {}
 class UserStateUpdateInfoSuccess extends UserState {
-  final String message;
-  const UserStateUpdateInfoSuccess(this.message);
+  final message;
+  const UserStateUpdateInfoSuccess({required this.message});
+
   @override
   // TODO: implement props
   List<Object?> get props => [message];
 }
 class UserStateUpdateInfoFailure extends UserState {
   final String message;
-  const UserStateUpdateInfoFailure(this.message);
+  final uuid;
+  const UserStateUpdateInfoFailure({required this.message,required this.uuid});
   @override
   // TODO: implement props
-  List<Object?> get props => [message];
+  List<Object?> get props => [message,uuid];
 }

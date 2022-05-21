@@ -5,12 +5,12 @@ import 'package:app_learn_english/blocs/list_grammar_bloc.dart';
 import 'package:app_learn_english/blocs/forgetpass_bloc.dart';
 import 'package:app_learn_english/blocs/list_vocabulary_bloc.dart';
 import 'package:app_learn_english/blocs/statistical_bloc.dart';
+import 'package:app_learn_english/blocs/update_info_bloc.dart';
 import 'package:app_learn_english/blocs/user_bloc.dart';
 import 'package:app_learn_english/events/course_event.dart';
 import 'package:app_learn_english/events/exercise_event.dart';
 import 'package:app_learn_english/events/statistical_event.dart';
 import 'package:app_learn_english/models/course_model.dart';
-import 'package:app_learn_english/presentation/screens/acc_infortation.dart';
 import 'package:app_learn_english/presentation/screens/admin_page.dart';
 import 'package:app_learn_english/presentation/screens/changePass.dart';
 import 'package:app_learn_english/presentation/screens/course_detail_page.dart';
@@ -50,6 +50,7 @@ void main() {
         BlocProvider(create: (context) => ListVocabularyBloc()),
         BlocProvider(create: (context) => ListGrammarBloc()),
         BlocProvider(create: (context) => UserBloc()),
+        BlocProvider(create: (context) => UserUpdateInfoBloc())
       ],
       child: MaterialApp(
         title: 'Cùng nhau học tiếng anh',
@@ -74,7 +75,6 @@ void main() {
           'listVocaTopic': (context) => VocabularyDetailTopicPage(),
           'listGrammar': (context) => GrammarListPage(),
           'changepass': (context) => changePassPage(),
-          'accinfor': (context) => accinforPage(),
           'editinfor': (context) => editinforPage(),
           '/updateinfomation':(context) => UserInformation(),
           'homeTotalPracticeVocabulary': (context) =>

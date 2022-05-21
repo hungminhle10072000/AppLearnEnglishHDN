@@ -59,7 +59,7 @@ class _loginPageState extends State<loginPage> {
         inAsyncCall: _isInAsyncCall,
         child: SafeArea(
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
                 image: AssetImage(
