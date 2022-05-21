@@ -6,7 +6,7 @@ import 'package:app_learn_english/models/user_model.dart';
 import '../utils/constants/Cons.dart';
 import 'package:http/http.dart' as http;
 
-Future<bool> registerUser(UserModel userModel) async {
+Future<int> registerUser(UserModel userModel) async {
   const String url = baseUrl + '/registerMobile';
   var postUri = Uri.parse(url);
   print(json.encode(userModel.toJson()));
@@ -17,12 +17,13 @@ Future<bool> registerUser(UserModel userModel) async {
 
   request.files.add(multipartFile);
   request.fields['strUser']=json.encode(userModel.toJson());
-  http.StreamedResponse response = await request.send();
-  print(response.statusCode);
+  http.StreamedResponse streamedResponse = await request.send();
+  var response = await http.Response.fromStream(streamedResponse);
+
   if (response.statusCode == 200) {
-    return true;
+    return response.statusCode;
   } else {
-    return false;
+    return response.statusCode;
   }
 
 }

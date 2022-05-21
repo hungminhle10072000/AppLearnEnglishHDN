@@ -39,6 +39,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             ref.setString("fullname", data['user']['fullname']);
             ref.setString("email", data['user']['email']);
             ref.setString("avartar", data['user']['avartar']);
+            ref.setString("phonenumber", data['user']['phonenumber']);
+            ref.setString('gender', data['user']['gender']);
+            ref.setString('address', data['user']['address']);
+            ref.setString('birthday', data['user']['birthday']);
             CurrentUserState.username = data['user']['username'];
             CurrentUserState.token += data['token']['token'];
             CurrentUserState.id  = data['user']['id'];

@@ -2,9 +2,11 @@ import 'dart:io';
 import 'package:app_learn_english/blocs/user_bloc.dart';
 import 'package:app_learn_english/events/user_event.dart';
 import 'package:app_learn_english/models/user_model.dart';
+import 'package:app_learn_english/states/user_state.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -37,6 +39,8 @@ class _registerPageState extends State<registerPage> {
 
   final format = DateFormat('yyyy-MM-dd');
 
+  late UserBloc _userBloc = UserBloc();
+
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
@@ -67,12 +71,14 @@ class _registerPageState extends State<registerPage> {
   //late RegisterBloc registerBloc;
   @override
   void initState() {
+    _userBloc = BlocProvider.of<UserBloc>(context);
     super.initState();
   }
 
-  void validate() async{
+  void validate() async {
     if (formRegisterKey.currentState!.validate()) {
-      UserModel userModel = UserModel(id:-1,
+      UserModel userModel = UserModel(
+          id: -1,
           fullname: nameController.text.trim(),
           username: usernameController.text.trim(),
           password: passwordController.text.trim(),
@@ -81,10 +87,9 @@ class _registerPageState extends State<registerPage> {
           address: addressController.text.trim(),
           phonenumber: numberphoneController.text.trim(),
           avartar: _image?.path ?? '',
-          role:'User',
-      birthday: birthdayController.text);
+          role: 'User',
+          birthday: birthdayController.text);
 
-      final UserBloc _userBloc = UserBloc();
       final UserEvent _userEvent = UserRegisterEvent(userModel: userModel);
       _userBloc.add(_userEvent);
     }
@@ -105,16 +110,37 @@ class _registerPageState extends State<registerPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              image: DecorationImage(
-                image: AssetImage(
-                  'assets/images/background.jpg',
+        child: BlocListener<UserBloc, UserState>(
+            listener: (context, state) {
+              if (state is UserStateRegisterSuccess) {
+                final snackBar = SnackBar(
+                  content: const Text('Đăng ký thành công!'),
+                );
+                ScaffoldMessenger.of(context)
+                  ..removeCurrentSnackBar()
+                  ..showSnackBar(snackBar);
+                Navigator.pushNamed(context, 'login');
+              }
+              if (state is UserStateRegisterFailure) {
+                final snackBar = SnackBar(
+                  content: const Text('Đã xảy ra lỗi!'),
+                );
+                ScaffoldMessenger.of(context)
+                  ..removeCurrentSnackBar()
+                  ..showSnackBar(snackBar);
+              }
+              print("RegisterPage");
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/background.jpg',
+                  ),
+                  fit: BoxFit.cover,
                 ),
-                fit: BoxFit.cover,
               ),
-            ),
               child: Scaffold(
                 appBar: AppBar(
                     elevation: null,
@@ -130,19 +156,9 @@ class _registerPageState extends State<registerPage> {
                     )),
                 backgroundColor: Colors.transparent,
                 body: ListView(children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                          child: Image.asset(
-                              'assets/images/logo-removebg-preview.png',
-                              width: 150,
-                              height: 150)),
-                    ],
-                  ),
                   SingleChildScrollView(
                     child: Container(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           top: 20,
                           left: 35,
                           right: 35,
@@ -166,13 +182,18 @@ class _registerPageState extends State<registerPage> {
                                     borderRadius: BorderRadius.circular(200),
                                     color: Colors.grey[300],
                                     image: DecorationImage(
-                                        image: (_image != null) ? FileImage(_image!) : NetworkImage(userBlank) as ImageProvider ,
-                                        fit: BoxFit.cover
-                                    )
-                                ),
+                                        image: (_image != null)
+                                            ? FileImage(_image!)
+                                            : NetworkImage(userBlank)
+                                                as ImageProvider,
+                                        fit: BoxFit.cover)),
                                 child: InkWell(
-                                  child: Icon(Icons.camera_alt_outlined, size: 100, color: Colors.grey,),
-                                  onTap: (){
+                                  child: Icon(
+                                    Icons.camera_alt_outlined,
+                                    size: 100,
+                                    color: Colors.grey,
+                                  ),
+                                  onTap: () {
                                     getImage();
                                   },
                                 ),
@@ -194,7 +215,7 @@ class _registerPageState extends State<registerPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 20.0),
+                              const SizedBox(height: 20.0),
                               TextFormField(
                                 controller: usernameController,
                                 validator: (value) {
@@ -211,7 +232,7 @@ class _registerPageState extends State<registerPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 20.0),
+                              const SizedBox(height: 20.0),
                               TextFormField(
                                 controller: emailController,
                                 validator: (value) {
@@ -249,7 +270,7 @@ class _registerPageState extends State<registerPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 20.0),
+                              const SizedBox(height: 20.0),
                               TextFormField(
                                 controller: repeatpasswordController,
                                 validator: checkRepeatPassWord,
@@ -264,7 +285,7 @@ class _registerPageState extends State<registerPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 20.0),
+                              const SizedBox(height: 20.0),
                               TextFormField(
                                 //keyboardType: TextInputType.number,
                                 controller: numberphoneController,
@@ -282,7 +303,7 @@ class _registerPageState extends State<registerPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 20.0),
+                              const SizedBox(height: 20.0),
                               TextFormField(
                                 controller: genderController,
                                 validator: (value) {
@@ -299,7 +320,7 @@ class _registerPageState extends State<registerPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 20.0),
+                              const SizedBox(height: 20.0),
                               TextFormField(
                                 controller: addressController,
                                 validator: (value) {
@@ -316,7 +337,7 @@ class _registerPageState extends State<registerPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 20.0),
+                              const SizedBox(height: 20.0),
                               DateTimeField(
                                 format: format,
                                 onShowPicker: (context, currentValue) async {
@@ -324,7 +345,7 @@ class _registerPageState extends State<registerPage> {
                                       context: context,
                                       firstDate: DateTime(1900),
                                       initialDate:
-                                      currentValue ?? DateTime.now(),
+                                          currentValue ?? DateTime.now(),
                                       lastDate: DateTime(2100));
                                   return date;
                                 },
@@ -343,7 +364,7 @@ class _registerPageState extends State<registerPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 20.0),
+                              const SizedBox(height: 20.0),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -357,8 +378,8 @@ class _registerPageState extends State<registerPage> {
                                       onPressed: validate,
                                       child: Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
+                                            MainAxisAlignment.spaceBetween,
+                                        children: const [
                                           Text(
                                             'Đăng ký',
                                             style: TextStyle(
@@ -373,19 +394,17 @@ class _registerPageState extends State<registerPage> {
                                       ))
                                 ],
                               ),
-                              SizedBox(height: 20.0),
+                              const SizedBox(height: 20.0),
                             ],
                           ),
                         )),
                   ),
                 ]),
               ),
-            )
-    //)
-    );
+            )));
   }
 
-  void clearForm(){
+  void clearForm() {
     usernameController.text = "";
     emailController.text = "";
     numberphoneController.text = "";

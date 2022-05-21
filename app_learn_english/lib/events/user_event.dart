@@ -12,3 +12,8 @@ class UserRegisterEvent extends UserEvent {
   final UserModel userModel;
   UserRegisterEvent({required this.userModel});
 }
+
+class UserUpdateInfoEvent extends UserEvent {
+  final UserModel userModel;
+  UserUpdateInfoEvent({required this.userModel});
+}

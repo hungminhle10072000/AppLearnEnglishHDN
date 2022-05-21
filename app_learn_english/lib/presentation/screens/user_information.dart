@@ -1,10 +1,7 @@
 import 'dart:io';
-
-
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -15,14 +12,17 @@ import '../../events/user_event.dart';
 import '../../models/user_model.dart';
 import '../../states/current_user_state.dart';
 import '../../states/user_state.dart';
-class accinforPage extends StatefulWidget {
-  const accinforPage({Key? key}) : super(key: key);
+
+
+class UserInformation extends StatefulWidget {
+  const UserInformation({Key? key}) : super(key: key);
 
   @override
-  _accinforPageState createState() => _accinforPageState();
+  _UserInformationState createState() => _UserInformationState();
 }
 
-class _accinforPageState extends State<accinforPage> {
+class _UserInformationState extends State<UserInformation> {
+
   GlobalKey<FormState> formRegisterKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
@@ -79,7 +79,6 @@ class _accinforPageState extends State<accinforPage> {
   }
 
 
-
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -93,7 +92,6 @@ class _accinforPageState extends State<accinforPage> {
     super.dispose();
   }
 
-  //late RegisterBloc registerBloc;
   @override
   void initState() {
 
@@ -171,8 +169,6 @@ class _accinforPageState extends State<accinforPage> {
     addressController.text = address;
     birthdayController.text = birthday;
   }
-
-
 
 
 
@@ -445,7 +441,7 @@ class _accinforPageState extends State<accinforPage> {
                                           child: Row(
                                             mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                            children:  [
+                                            children:  const [
                                               Text(
                                                 'Lưu ',
                                                 style: TextStyle(
