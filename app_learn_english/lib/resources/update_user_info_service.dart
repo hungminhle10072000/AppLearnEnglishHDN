@@ -43,7 +43,5 @@ Future<int> updateUser(UserModel userModel) async {
     pref.setString('birthday', userModel.birthday);
   }
 
-  print("END");
-
   return status;
 }

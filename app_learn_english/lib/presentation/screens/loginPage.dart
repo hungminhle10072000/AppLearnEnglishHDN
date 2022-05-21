@@ -1,4 +1,3 @@
-
 import 'package:app_learn_english/presentation/screens/forgetPasswordPage.dart';
 import 'package:app_learn_english/blocs/login_bloc.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../events/login_event.dart';
 import '../../states/login_state.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-
-
 
 class loginPage extends StatefulWidget {
   const loginPage({Key? key}) : super(key: key);
@@ -22,6 +19,7 @@ class _loginPageState extends State<loginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   bool _isInAsyncCall = false;
+  bool _isObscure = true;
 
   @override
   void dispose() {
@@ -40,9 +38,8 @@ class _loginPageState extends State<loginPage> {
   void validate() {
     if (formKey.currentState!.validate()) {
       setState(() {
-        _isInAsyncCall =true;
+        _isInAsyncCall = true;
       });
-      print(usernameController.text);
       loginBloc.add(LoginButtonPressed(
           username: usernameController.text,
           password: passwordController.text));
@@ -50,8 +47,6 @@ class _loginPageState extends State<loginPage> {
   }
 
   late LoginBloc loginBloc;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,28 +66,37 @@ class _loginPageState extends State<loginPage> {
             child: BlocListener<LoginBloc, LoginState>(
               listener: (context, state) {
                 //state = LoginInitState;
-                try{
-                  if (state is UserLoginSuccessState){
+                try {
+                  if (state is UserLoginSuccessState) {
                     final snackBar = SnackBar(
                       content: const Text('Đăng nhập thành công!'),
                     );
-                    ScaffoldMessenger.of(context)..removeCurrentSnackBar()..showSnackBar(snackBar);
+                    ScaffoldMessenger.of(context)
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(snackBar);
                     Navigator.pushNamed(context, 'home');
-                  }else if (state is AdminLoginSuccessState){
+                  } else if (state is AdminLoginSuccessState) {
                     Navigator.pushNamed(context, 'admin');
-                  }
-                  else  if (state is LoginErrorState){
+                  } else if (state is LoginErrorState) {
                     final snackBar = SnackBar(
-                      content: const Text('Tên đăng nhập hoặc mật khẩu không đúng!'),
+                      content:
+                          const Text('Tên đăng nhập hoặc mật khẩu không đúng!'),
                     );
-                    ScaffoldMessenger.of(context)..removeCurrentSnackBar()..showSnackBar(snackBar);
+                    ScaffoldMessenger.of(context)
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(snackBar);
                     Navigator.pushNamed(context, 'login');
+                  } else {
+                    setState(() {
+                      _isInAsyncCall = false;
+                    });
                   }
-                }
-                catch(e)
-                {
+                } catch (e) {
                   var snackbar = SnackBar(content: Text(e.toString()));
                   ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                  setState(() {
+                    _isInAsyncCall = false;
+                  });
                 }
               },
               child: Scaffold(
@@ -152,7 +156,7 @@ class _loginPageState extends State<loginPage> {
                                     return 'Mật khẩu phải >= 6 kí tự';
                                   }
                                 },
-                                obscureText: true,
+                                obscureText: _isObscure,
                                 decoration: InputDecoration(
                                   labelText: 'Mật khẩu',
                                   fillColor: Colors.grey.shade100,
@@ -160,6 +164,15 @@ class _loginPageState extends State<loginPage> {
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
+                                  suffixIcon: IconButton(
+                                      icon: Icon(_isObscure
+                                          ? Icons.visibility
+                                          : Icons.visibility_off),
+                                      onPressed: () {
+                                        setState(() {
+                                          _isObscure = !_isObscure;
+                                        });
+                                      }),
                                 ),
                               ),
                               SizedBox(height: 30.0),
@@ -183,7 +196,7 @@ class _loginPageState extends State<loginPage> {
                                       // },
                                       child: Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             'Đăng nhập',
@@ -222,7 +235,8 @@ class _loginPageState extends State<loginPage> {
                                       ),
                                       TextButton(
                                         onPressed: () {
-                                          Navigator.pushNamed(context, 'register');
+                                          Navigator.pushNamed(
+                                              context, 'register');
                                         },
                                         child: Text(
                                           'Đăng ký',

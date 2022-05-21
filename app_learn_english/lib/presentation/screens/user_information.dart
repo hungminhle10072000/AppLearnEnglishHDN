@@ -375,9 +375,9 @@ class _UserInformationState extends State<UserInformation> {
                                       ),
                                     ),
                                     const SizedBox(height: 20.0),
-                                    // Container(
-                                    //   child:
-                                      DropdownButton(
+                                    Container(
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: DropdownButton(
                                         itemHeight: 60,
                                         borderRadius: BorderRadius.circular(10.0),
                                         dropdownColor: Colors.grey.shade100,
@@ -402,11 +402,11 @@ class _UserInformationState extends State<UserInformation> {
                                           });
                                         },
                                       ),
-                                    //   decoration: BoxDecoration(
-                                    //     color: Colors.grey.shade100,
-                                    //     borderRadius: BorderRadius.circular(10.0),
-                                    //   ),
-                                    // ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade100,
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                    ),
                                     const SizedBox(height: 20.0),
                                     TextFormField(
                                       controller: addressController,
