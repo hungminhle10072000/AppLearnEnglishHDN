@@ -26,7 +26,8 @@ class UserModel {
     required this.birthday
   });
 
-  Map<String,String> toJson() => {
+  Map<String,dynamic> toJson() => {
+    'id':id,
     'fullname':fullname,
     'username':username,
     'password':password,

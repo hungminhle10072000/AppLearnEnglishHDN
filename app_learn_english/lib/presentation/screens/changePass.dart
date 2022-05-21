@@ -14,6 +14,9 @@ class _changePassPageState extends State<changePassPage> {
   final passwordController = TextEditingController();
   final repeatpasswordController = TextEditingController();
 
+  bool _isOldObscure = true;
+  bool _isNewObscure = true;
+  bool _isNewRepeatObscure = true;
 
   @override
   void dispose() {
@@ -132,6 +135,7 @@ class _changePassPageState extends State<changePassPage> {
                         children: [
                           TextFormField(
                             controller: usernameController,
+                            obscureText: _isOldObscure,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Yêu cầu nhập mật khẩu cũ';
@@ -140,6 +144,15 @@ class _changePassPageState extends State<changePassPage> {
                             decoration: InputDecoration(
                               labelText: 'Mật khẩu cũ',
                               fillColor: Colors.grey.shade100,
+                              suffixIcon: IconButton(
+                                  icon: Icon(_isOldObscure
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isOldObscure = !_isOldObscure;
+                                    });
+                                  }),
                               filled: true,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -158,11 +171,20 @@ class _changePassPageState extends State<changePassPage> {
                                 return 'Mật khẩu phải >= 6 kí tự';
                               }
                             },
-                            obscureText: true,
+                            obscureText: _isNewObscure,
                             decoration: InputDecoration(
                               labelText: 'Mật khẩu mới',
                               fillColor: Colors.grey.shade100,
                               filled: true,
+                              suffixIcon: IconButton(
+                                  icon: Icon(_isNewObscure
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isNewObscure = !_isNewObscure;
+                                    });
+                                  }),
                               // hintText: 'Password',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -175,11 +197,20 @@ class _changePassPageState extends State<changePassPage> {
                           TextFormField(
                             controller: repeatpasswordController,
                             validator: checkRepeatPassWord,
-                            obscureText: true,
+                            obscureText: _isNewRepeatObscure,
                             decoration: InputDecoration(
                               labelText: 'Nhập lại mật khẩu mới',
                               fillColor: Colors.grey.shade100,
-                              filled: true,
+                              filled: _isNewRepeatObscure,
+                              suffixIcon: IconButton(
+                                  icon: Icon(_isNewRepeatObscure
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isNewRepeatObscure = !_isNewRepeatObscure;
+                                    });
+                                  }),
                               // hintText: 'Password',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),

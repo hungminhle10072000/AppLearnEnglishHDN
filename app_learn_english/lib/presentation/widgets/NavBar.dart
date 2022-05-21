@@ -84,7 +84,7 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.supervised_user_circle),
             title: Text('Thông tin cá nhân'),
-            onTap: () => Navigator.pushNamed(context, 'accinfor'),
+            onTap: () => Navigator.pushNamed(context, '/updateinfomation'),
           ),
           ListTile(
             leading: Icon(Icons.password_rounded),

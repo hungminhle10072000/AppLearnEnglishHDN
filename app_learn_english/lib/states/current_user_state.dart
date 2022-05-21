@@ -3,4 +3,5 @@ class CurrentUserState {
   static String password="";
   static String token="Bearer ";
   static int id = -1;
+
 }
