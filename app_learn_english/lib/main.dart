@@ -1,3 +1,4 @@
+import 'package:app_learn_english/blocs/change_password_bloc.dart';
 import 'package:app_learn_english/blocs/course_bloc.dart';
 import 'package:app_learn_english/blocs/exercise_bloc.dart';
 
@@ -51,7 +52,8 @@ void main() {
         BlocProvider(create: (context) => ListVocabularyBloc()),
         BlocProvider(create: (context) => ListGrammarBloc()),
         BlocProvider(create: (context) => UserBloc()),
-        BlocProvider(create: (context) => UserUpdateInfoBloc())
+        BlocProvider(create: (context) => UserUpdateInfoBloc()),
+        BlocProvider(create: (context) => ChangePasswordBloc())
       ],
       child: MaterialApp(
         title: 'Cùng nhau học tiếng anh',
