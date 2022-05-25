@@ -10,6 +10,6 @@ class StatisticalBloc extends Bloc<StatisticalEvent, StatisticalState> {
   }
   void _onLoadStatisticalOfWeek(StatisticalFetchedEvent event,  Emitter<StatisticalState> emit) async {
     final statisticals = await getStatisticalOfWeek(CurrentUserState.id);
-    emit(StatisticalStateSuccess(statisticals: statisticals));
+    emit(StatisticalStateSuccess(statisticalMaster: statisticals));
   }
 }
