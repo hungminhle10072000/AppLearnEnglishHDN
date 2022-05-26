@@ -18,8 +18,13 @@ class ExerciseItem extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isDone;
     if (exercise.resultEntityList.isNotEmpty) {
-      ResultModel resultModel = exercise.resultEntityList.where((element) => element.userId == CurrentUserState.id).first;
-      isDone = resultModel.totalWrong + resultModel.totalRight > 0;
+      ResultModel resultModel = exercise.resultEntityList.firstWhere((element) => element.userId == CurrentUserState.id,
+          orElse: () => ResultModel(totalRight: 0, id: -1, userId: -1, totalWrong: 0, correctListen: '', correctRead: ''));
+      if (resultModel.id == -1 && resultModel.userId == -1) {
+        isDone = false;
+      } else {
+        isDone = resultModel.totalWrong + resultModel.totalRight > 0;
+      }
     } else {
       isDone = false;
     }

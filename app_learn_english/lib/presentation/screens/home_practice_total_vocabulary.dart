@@ -60,6 +60,7 @@ class _HomePracticeTotalVocabularyState
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 FloatingActionButton(
+                  heroTag: 'btn2',
                   onPressed: _decrementCount,
                   child: Icon(
                     Icons.remove,
@@ -71,6 +72,7 @@ class _HomePracticeTotalVocabularyState
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
                 ),
                 FloatingActionButton(
+                    heroTag: 'btn1',
                     onPressed: _incrementCount,
                     child: Icon(
                       Icons.add,
