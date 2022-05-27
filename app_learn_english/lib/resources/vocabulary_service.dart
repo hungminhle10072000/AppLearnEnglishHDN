@@ -40,9 +40,11 @@ class VocabularyService {
     }
   }
 
-  static Future<dynamic> writeScore(int totalCorrect) async {
+  static Future<dynamic> writeScore(int totalCorrect, dynamic userId) async {
+    print(totalCorrect);
+    print(userId);
     var response = await http.put(
-        Uri.parse(_baseUrlVocabuary + 'write-score/' + totalCorrect.toString()),
+        Uri.parse(_baseUrlVocabuary + 'write-score/' + userId.toString() + '/' + totalCorrect.toString()),
         headers: {'Content-Type': 'application/json'});
     return response;
   }

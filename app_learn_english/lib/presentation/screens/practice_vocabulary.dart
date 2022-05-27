@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:app_learn_english/blocs/list_vocabulary_bloc.dart';
 import 'package:app_learn_english/resources/vocabulary_service.dart';
+import 'package:app_learn_english/states/current_user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/vocabulary_model.dart';
 
@@ -27,6 +29,7 @@ class _PracticeVocabularyPageState extends State<PracticeVocabularyPage> {
   TextEditingController answerController = TextEditingController();
   List<Color> squareColors = [Colors.grey.shade100, Colors.green, Colors.red];
   bool checkOpenSuggest = false;
+  dynamic userId;
 
   void _countCorrectAnswer() async {
     int count = 0;
@@ -37,7 +40,8 @@ class _PracticeVocabularyPageState extends State<PracticeVocabularyPage> {
         count++;
       }
     });
-    var response = await VocabularyService.writeScore(count);
+    dynamic userId = CurrentUserState.id;
+    var response = await VocabularyService.writeScore(count, userId);
     if (response.statusCode == 200) {
       Alert(
           closeFunction: () {
