@@ -17,10 +17,6 @@ class StatisticalPage extends StatefulWidget {
 }
 
 class _StatisticalPageState extends State<StatisticalPage> {
-  String fullname = "";
-  double process = 0.0;
-  int streak = 0;
-
   List<BarChartModel> data = [
     BarChartModel(
       daysOfTheWeek: "Thứ 2",
@@ -96,13 +92,6 @@ class _StatisticalPageState extends State<StatisticalPage> {
                   );
                 }
                 if (state is StatisticalStateSuccess) {
-                  // if (fullname.isEmpty) {
-                  //   setState(() {
-                  //     fullname = state.statisticalMaster.fullname;
-                  //     streak = state.statisticalMaster.streak;
-                  //     process = state.statisticalMaster.process;
-                  //   });
-                  // }
                   List<BarChartModel> newStatisticalModel = data;
                   List<StatisticalModel> statisticalData =
                       state.statisticalMaster.statisticalDtoList;
@@ -127,7 +116,7 @@ class _StatisticalPageState extends State<StatisticalPage> {
                             UserAccountsDrawerHeader(
                               accountName: Text(state.statisticalMaster.fullname),
                               accountEmail: Text(
-                                streak.toString() + ' STREAK',
+                                state.statisticalMaster.streak.toString() + ' STREAK',
                                 style: const TextStyle(
                                     fontSize: fontSize.medium,
                                     fontWeight: FontWeight.bold,
@@ -161,8 +150,8 @@ class _StatisticalPageState extends State<StatisticalPage> {
                                     animation: true,
                                     lineHeight: 20.0,
                                     animationDuration: 2500,
-                                    percent: process,
-                                    center: Text((process * 100).toString()+ "%"),
+                                    percent: state.statisticalMaster.process,
+                                    center: Text((state.statisticalMaster.process * 100).toString()+ "%"),
                                     linearStrokeCap: LinearStrokeCap.roundAll,
                                     progressColor: Colors.green,
                                   ),
@@ -170,7 +159,7 @@ class _StatisticalPageState extends State<StatisticalPage> {
                                     height: 10,
                                   ),
                                   Text(
-                                    (process * 100).toString()+"/1000",
+                                    (state.statisticalMaster.currentScore).toString()+"/1000",
                                     style: const TextStyle(
                                         fontSize: fontSize.medium,
                                         fontWeight: FontWeight.bold),

@@ -31,68 +31,72 @@ class _ExerciseListPage extends State<ExerciseListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    Future<bool> _onBackPressed() async {
+      Navigator.pushNamed(context, 'home');
+      return true;
+    }
+    return WillPopScope(child: Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: !isSearching
             ? TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, 'home');
-                },
-                child: const Icon(
-                  Icons.arrow_back_ios_rounded,
-                  color: Colors.white,
-                ))
+            onPressed: () {
+              Navigator.pushNamed(context, 'home');
+            },
+            child: const Icon(
+              Icons.arrow_back_ios_rounded,
+              color: Colors.white,
+            ))
             : null,
         title: !isSearching
             ? const Text(
-                "Bài tập",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800),
-              )
+          "Bài tập",
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w800),
+        )
             : TextField(
-                controller: searchController,
-                onChanged: (text) {
-                  setState(() {
-                    keyword = text;
-                  });
+          controller: searchController,
+          onChanged: (text) {
+            setState(() {
+              keyword = text;
+            });
+          },
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+              icon: GestureDetector(
+                onTap: () {
+                  print('OnTap 1');
                 },
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                    icon: GestureDetector(
-                      onTap: () {
-                        print('OnTap 1');
-                      },
-                      child: const Icon(
-                        Icons.search,
-                        color: Colors.white,
-                      ),
-                    ),
-                    hintStyle: TextStyle(color: Colors.white),
-                    hintText: "Tìm kiếm..."),
+                child: const Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
               ),
+              hintStyle: TextStyle(color: Colors.white),
+              hintText: "Tìm kiếm..."),
+        ),
         actions: [
           isSearching
               ? IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isSearching = !isSearching;
-                      setState(() {
-                        keyword = '';
-                      });
-                      searchController.clear();
-                    });
-                  },
-                  icon: const Icon(Icons.cancel))
+              onPressed: () {
+                setState(() {
+                  isSearching = !isSearching;
+                  setState(() {
+                    keyword = '';
+                  });
+                  searchController.clear();
+                });
+              },
+              icon: const Icon(Icons.cancel))
               : IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isSearching = !isSearching;
-                    });
-                  },
-                  icon: const Icon(Icons.search))
+              onPressed: () {
+                setState(() {
+                  isSearching = !isSearching;
+                });
+              },
+              icon: const Icon(Icons.search))
         ],
       ),
       body: SafeArea(
@@ -193,7 +197,7 @@ class _ExerciseListPage extends State<ExerciseListPage> {
                   } else {
                     currentExercises = state.exercises
                         .where((element) =>
-                            StringRenderUtil.searching(element.name, keyword))
+                        StringRenderUtil.searching(element.name, keyword))
                         .toList();
                   }
                   if (currentExercises.length < 1) {
@@ -214,6 +218,6 @@ class _ExerciseListPage extends State<ExerciseListPage> {
           ],
         ),
       ),
-    );
+    ), onWillPop: _onBackPressed);
   }
 }
