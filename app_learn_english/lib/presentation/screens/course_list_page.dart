@@ -22,7 +22,7 @@ class _CourseListPage extends State<CourseListPage> {
   // late CourseBloc _courseBloc;
   bool isSearching = false;
   final searchController = TextEditingController();
-  late String keyword='';
+  late String keyword = '';
 
   @override
   void initState() {
@@ -37,63 +37,63 @@ class _CourseListPage extends State<CourseListPage> {
         automaticallyImplyLeading: false,
         leading: !isSearching
             ? TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, 'home');
-            },
-            child: Icon(
-              Icons.arrow_back_ios_rounded,
-              color: Colors.white,
-            ))
+                onPressed: () {
+                  Navigator.pushNamed(context, 'home');
+                },
+                child: Icon(
+                  Icons.arrow_back_ios_rounded,
+                  color: Colors.white,
+                ))
             : null,
         title: !isSearching
             ? const Text(
-          "Khoá học",
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.w800),
-        )
+                "Khoá học",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800),
+              )
             : TextField(
-          controller: searchController,
-          onChanged: (text) {
-            setState(() {
-              keyword = text;
-            });
-          },
-          style: TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-              icon: GestureDetector(
-                onTap: () {
-                  print('OnTap 1');
+                controller: searchController,
+                onChanged: (text) {
+                  setState(() {
+                    keyword = text;
+                  });
                 },
-                child: Icon(
-                  Icons.search,
-                  color: Colors.white,
-                ),
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                    icon: GestureDetector(
+                      onTap: () {
+                        print('OnTap 1');
+                      },
+                      child: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                    ),
+                    hintStyle: TextStyle(color: Colors.white),
+                    hintText: "Tìm kiếm..."),
               ),
-              hintStyle: TextStyle(color: Colors.white),
-              hintText: "Tìm kiếm..."),
-        ),
         actions: [
           isSearching
               ? IconButton(
-              onPressed: () {
-                setState(() {
-                  this.isSearching = !this.isSearching;
-                  setState(() {
-                    keyword = '';
-                  });
-                  searchController.clear();
-                });
-              },
-              icon: Icon(Icons.cancel))
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = !this.isSearching;
+                      setState(() {
+                        keyword = '';
+                      });
+                      searchController.clear();
+                    });
+                  },
+                  icon: Icon(Icons.cancel))
               : IconButton(
-              onPressed: () {
-                setState(() {
-                  this.isSearching = !this.isSearching;
-                });
-              },
-              icon: Icon(Icons.search))
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = !this.isSearching;
+                    });
+                  },
+                  icon: Icon(Icons.search))
         ],
       ),
       body: SafeArea(
@@ -102,16 +102,24 @@ class _CourseListPage extends State<CourseListPage> {
             const SizedBox(
               height: 10,
             ),
-            const Text("Danh Sách Khoá Học", style: TextStyle(fontSize: fontSize.large, fontWeight: FontWeight.bold),),
-            BlocBuilder<CourseBloc,CourseState>(
-              builder: (context,state) {
+            const Text(
+              "Danh Sách Khoá Học",
+              style: TextStyle(
+                  fontSize: fontSize.large, fontWeight: FontWeight.bold),
+            ),
+            BlocBuilder<CourseBloc, CourseState>(
+              builder: (context, state) {
                 if (state is CourseStateInitial) {
-                  return const Center(child: CircularProgressIndicator(),);
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
                 if (state is CourseStateFailure) {
                   return const Center(
-                    child: Text('Cannot load courses from Server',
-                      style: TextStyle(fontSize: 22, color: Colors.red),),
+                    child: Text(
+                      'Cannot load courses from Server',
+                      style: TextStyle(fontSize: 22, color: Colors.red),
+                    ),
                   );
                 }
                 if (state is CourseStateSuccess) {
@@ -120,51 +128,81 @@ class _CourseListPage extends State<CourseListPage> {
                     if (keyword.isEmpty) {
                       currentCourses = state.courses;
                     } else {
-                      currentCourses = state.courses.where((element) => StringRenderUtil.searching(element.name, keyword)).toList();
+                      currentCourses = state.courses
+                          .where((element) =>
+                              StringRenderUtil.searching(element.name, keyword))
+                          .toList();
                     }
                     if (currentCourses.length < 1) {
                       return const Center(
-                        child: Text('Không tìm thấy kết quả!',
-                          style: TextStyle(fontSize: fontSize.medium, color: Colors.redAccent),),
+                        child: Text(
+                          'Không tìm thấy kết quả!',
+                          style: TextStyle(
+                              fontSize: fontSize.medium,
+                              color: Colors.redAccent),
+                        ),
                       );
                     }
                     return Expanded(
                         child: SizedBox(
-                          height: 400,
-                          child:  ListView.builder(itemExtent: 125, itemBuilder: (BuildContext buildContext,int index) {
-                            return Container(
-                              margin: const EdgeInsets.all(10),
-                              child:  ListTile(
-                                dense: true,
-                                visualDensity: VisualDensity(vertical: 3),
-                                onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) => CourseDetailPage(courseDetail:currentCourses[index]))
-                                  );
-                                },
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                                tileColor: const Color.fromRGBO(
-                                    173, 173, 173, 0.30196078431372547),
-
-                                leading:  Container(
+                      height: 400,
+                      child: ListView.builder(
+                        itemExtent: 125,
+                        itemBuilder: (BuildContext buildContext, int index) {
+                          return Container(
+                            margin: const EdgeInsets.all(10),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.only(top: 10),
+                              dense: true,
+                              visualDensity: const VisualDensity(vertical: 3),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CourseDetailPage(
+                                            courseDetail:
+                                                currentCourses[index])));
+                              },
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              tileColor: const Color.fromRGBO(
+                                  173, 173, 173, 0.30196078431372547),
+                              leading: Container(
+                                width: 100,
+                                height: 100,
+                                child: FadeInImage.assetNetwork(
+                                  placeholder: 'assets/images/loading.gif',
+                                  image: currentCourses[index].image,
+                                  fit: BoxFit.fitHeight,
                                   width: 100,
                                   height: 100,
-                                  child: FadeInImage.assetNetwork(
-                                    placeholder: 'assets/images/loading.gif',
-                                    image: currentCourses[index].image,
-                                    fit: BoxFit.fitHeight,
-                                    width: 100,
-                                    height: 100,),),
-                                title: Text(StringRenderUtil.reduceSentence(currentCourses[index].name,45), style: const TextStyle(fontSize: fontSize.medium, fontWeight: FontWeight.bold, letterSpacing: -0.3, wordSpacing: -0.3 ),),
-                                isThreeLine: true,
-                                subtitle: Text(StringRenderUtil.reduceSentence(currentCourses[index].introduce,70) ,style: const TextStyle(fontSize: fontSize.small, letterSpacing: -0.3, wordSpacing: -0.3, ),),
+                                ),
                               ),
-                            );
-                          },
-                            itemCount: currentCourses.length,
-                          ),
-                        )
-                    );
+                              title: Text(
+                                StringRenderUtil.reduceSentence(
+                                    currentCourses[index].name, 45),
+                                style: const TextStyle(
+                                    fontSize: fontSize.medium,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: -0.3,
+                                    wordSpacing: -0.3),
+                              ),
+                              isThreeLine: true,
+                              subtitle: Text(
+                                StringRenderUtil.reduceSentence(
+                                    currentCourses[index].introduce, 70),
+                                style: const TextStyle(
+                                  fontSize: fontSize.small,
+                                  letterSpacing: -0.3,
+                                  wordSpacing: -0.3,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: currentCourses.length,
+                      ),
+                    ));
                   } else {
                     return const Center(child: Text('Course Empty'));
                   }

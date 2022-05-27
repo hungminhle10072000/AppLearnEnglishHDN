@@ -23,8 +23,12 @@ Future<StatisticalMasterModel> getStatisticalOfWeek(int userId) async {
             dateCreateDate: DateTime.parse(statistical['dateCreateDate']),
             score: statistical['score']);
       }).toList();
-      return StatisticalMasterModel(fullname: responseData['fullname'] ?? '',
-          process: responseData['process'], streak: responseData['streak'], statisticalDtoList: statisticals);
+      return StatisticalMasterModel(
+          fullname: responseData['fullname'] ?? '',
+          process: responseData['process'],
+          streak: responseData['streak'],
+          currentScore: responseData['currentScore'],
+          statisticalDtoList: statisticals);
       // final StatisticalMasterModel statisticalMasterModel = responseData.map((e) {
       //
       //

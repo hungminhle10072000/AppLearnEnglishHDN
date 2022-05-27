@@ -6,6 +6,7 @@ import 'package:app_learn_english/models/result_detail_model.dart';
 import 'package:app_learn_english/presentation/screens/end_exercise_page.dart';
 import 'package:app_learn_english/presentation/screens/exercise_list_page.dart';
 import 'package:app_learn_english/states/current_user_state.dart';
+import 'package:app_learn_english/utils/constants/Cons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -50,9 +51,25 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
   }
   @override
   Widget build(BuildContext context) {
-    Future<bool> _onBackPressed() async {
-      Navigator.pushNamed(context, '/listExercise');
-      return true;
+    Future<bool?> _onBackPressed() async {
+      // Navigator.pushNamed(context, '/listExercise');
+      return showDialog<bool>(
+        context: context,
+        builder: (c) => AlertDialog(
+          title: const Text('Warning'),
+          content: const Text('Bạn có thực sự muốn thoát không?'),
+          actions: [
+            FlatButton(
+              child: const Text('Có'),
+              onPressed: () => Navigator.pushNamed(context, '/listExercise'),
+            ),
+            FlatButton(
+              child: const Text('Không'),
+              onPressed: () => Navigator.pop(c, false),
+            ),
+          ],
+        ),
+      );
     }
     if (questions.length < 1) {
       return Container(
@@ -62,19 +79,22 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
     bool hasImage = questions[questionNumber].imageDescription.isNotEmpty;
     bool hasAudio = questions[questionNumber].audio.isNotEmpty;
     return WillPopScope(
-        onWillPop: _onBackPressed,
+        onWillPop: () async {
+          bool? result = await _onBackPressed();
+          return result == null ? false : result!;
+        },
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
               title: const Text("Quiz"),
-              leading: TextButton(
+             /* leading: TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/listExercise');
                   },
                   child: const Icon(
                     Icons.arrow_back_ios_rounded,
                     color: Colors.white,
-                  )),
+                  )),*/
             ),
             body: SingleChildScrollView(
               child: Container(
@@ -127,6 +147,8 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                     const Padding(padding: EdgeInsets.all(20.0)),
                     questions[questionNumber].option_1.isNotEmpty ?
                     MaterialButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                       onPressed: () {
                         if (questions[questionNumber].option_1 ==
                             questions[questionNumber].correctAnswer) {
@@ -148,6 +170,8 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                     ),
                     questions[questionNumber].option_2.isNotEmpty ?
                     MaterialButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                       onPressed: () {
                         if (questions[questionNumber].option_2 ==
                             questions[questionNumber].correctAnswer) {
@@ -169,6 +193,8 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                     ),
                     questions[questionNumber].option_3.isNotEmpty ?
                     MaterialButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                       onPressed: () {
                         if (questions[questionNumber].option_3 ==
                             questions[questionNumber].correctAnswer) {
@@ -190,6 +216,8 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                     ),
                     questions[questionNumber].option_4.isNotEmpty ?
                     MaterialButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                       onPressed: () {
                         if (questions[questionNumber].option_4 ==
                             questions[questionNumber].correctAnswer) {
@@ -208,6 +236,9 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                         ),),
                     ) : const SizedBox(height: 2,),
                     const Padding(padding: EdgeInsets.all(10.0)),
+                    const SizedBox(
+                      height: 15,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -220,7 +251,7 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                             });
                           },
                           minWidth: 120.0,
-                          color: Colors.grey,
+                          color: Colors.greenAccent,
                           child: const Text("Prev"),
                         ),
                         MaterialButton(
@@ -233,36 +264,24 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
 
                           },
                           minWidth: 120.0,
-                          color: Colors.grey,
+                          color: Colors.greenAccent,
                           child: const Text("Next"),
                         )
                       ],
                     ),
                     const Padding(padding: EdgeInsets.all(10.0)),
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      child: MaterialButton(
-                        onPressed: resetQuiz,
-                        minWidth: 240.0,
-                        height: 30.0,
-                        color: Colors.red,
-                        child: const Text("Thoát ra",
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.white
-                          ),),
-                      ),
-                    ),
                     questions.length - 1 == questionNumber ? Container(
                       alignment: Alignment.bottomCenter,
                       child: MaterialButton(
                         onPressed: submitHandle,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
                         minWidth: 240.0,
-                        height: 30.0,
+                        height: 40.0,
                         color: Colors.blueAccent,
-                        child: const Text("Submit",
+                        child: const Text("Nộp bài",
                           style: TextStyle(
-                              fontSize: 18.0,
+                              fontSize: fontSize.medium,
                               color: Colors.white
                           ),),
                       ),
