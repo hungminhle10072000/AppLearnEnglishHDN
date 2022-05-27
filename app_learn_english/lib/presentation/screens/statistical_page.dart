@@ -17,6 +17,9 @@ class StatisticalPage extends StatefulWidget {
 }
 
 class _StatisticalPageState extends State<StatisticalPage> {
+  String fullname = "";
+  double process = 0.0;
+  int streak = 0;
 
   List<BarChartModel> data = [
     BarChartModel(
@@ -77,98 +80,114 @@ class _StatisticalPageState extends State<StatisticalPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-           Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-                  height: height*0.7,
-                  child: BlocBuilder<StatisticalBloc, StatisticalState>(
-                    builder: (context, state) {
-                      if (state is StatisticalStateInitial) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      if (state is StatisticalStateFailure) {
-                        return const Center(
-                          child: Text(
-                            'Cannot load data from Server',
-                            style: TextStyle(fontSize: 22, color: Colors.red),
-                          ),
-                        );
-                      }
-                      if (state is StatisticalStateSuccess) {
-                        List<BarChartModel> newStatisticalModel = data;
-                        List<StatisticalModel> statisticalData = state.statisticals;
-                        const int numDaysOfWeek = 7;
-                        for (int i =0; i< numDaysOfWeek; i++) {
-                          newStatisticalModel[i].score = statisticalData[i].score;
-                        }
-                        if (newStatisticalModel != data) {
-                          setState(() {
-                            data = newStatisticalModel;
-                          });
-                        }
+            BlocBuilder<StatisticalBloc, StatisticalState>(
+              builder: (context, state) {
+                if (state is StatisticalStateInitial) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (state is StatisticalStateFailure) {
+                  return const Center(
+                    child: Text(
+                      'Cannot load data from Server',
+                      style: TextStyle(fontSize: 22, color: Colors.red),
+                    ),
+                  );
+                }
+                if (state is StatisticalStateSuccess) {
+                  // if (fullname.isEmpty) {
+                  //   setState(() {
+                  //     fullname = state.statisticalMaster.fullname;
+                  //     streak = state.statisticalMaster.streak;
+                  //     process = state.statisticalMaster.process;
+                  //   });
+                  // }
+                  List<BarChartModel> newStatisticalModel = data;
+                  List<StatisticalModel> statisticalData =
+                      state.statisticalMaster.statisticalDtoList;
+                  const int numDaysOfWeek = 7;
+                  for (int i = 0; i < numDaysOfWeek; i++) {
+                    newStatisticalModel[i].score = statisticalData[i].score;
+                  }
+                  if (newStatisticalModel != data) {
+                    setState(() {
+                      data = newStatisticalModel;
+                    });
+                  }
 
-                        return charts.BarChart(
-                          series,
-                          animate: true,
-                        );
-                      }
-                      return const Center(child: Text('Other state'));
-                    },
-                  )),
-               Stack(
-                 children: [
-                   UserAccountsDrawerHeader(
-                     accountName: Text("NghiaITTest"),
-                     accountEmail: Text('3 STREAK', style: TextStyle(
-                         fontSize:fontSize.medium,
-                         fontWeight: FontWeight.bold,
-                       color: Colors.redAccent
-                     ),),
-                     currentAccountPicture: CircleAvatar(
-                       child: ClipOval(
-                         child: Image.network(
-                           'https://oflutter.com/wp-content/uploads/2021/02/girl-profile.png',
-                           fit: BoxFit.cover,
-                           width: 90,
-                           height: height-height*0.7,
-                         ),
-                       ),
-                     ),
+                  return Column(
+                      children: [
+                        Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+                            height: height*0.7,
+                            child: charts.BarChart(series, animate: true)),
+                        Stack(
+                          children: [
+                            UserAccountsDrawerHeader(
+                              accountName: Text(state.statisticalMaster.fullname),
+                              accountEmail: Text(
+                                streak.toString() + ' STREAK',
+                                style: const TextStyle(
+                                    fontSize: fontSize.medium,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.redAccent),
+                              ),
+                              currentAccountPicture: CircleAvatar(
+                                child: ClipOval(
+                                  child: Image.network(
+                                    'https://oflutter.com/wp-content/uploads/2021/02/girl-profile.png',
+                                    fit: BoxFit.cover,
+                                    width: 90,
+                                    height: height - height * 0.7,
+                                  ),
+                                ),
+                              ),
+                              decoration: const BoxDecoration(
+                                  color: Colors.blue,
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          'https://oflutter.com/wp-content/uploads/2021/02/profile-bg3.jpg'),
+                                      fit: BoxFit.cover)),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 130, right: 10, top: 30),
+                              child: Column(
+                                children: [
+                                  LinearPercentIndicator(
+                                    width:
+                                        MediaQuery.of(context).size.width - 150,
+                                    animation: true,
+                                    lineHeight: 20.0,
+                                    animationDuration: 2500,
+                                    percent: process,
+                                    center: Text((process * 100).toString()+ "%"),
+                                    linearStrokeCap: LinearStrokeCap.roundAll,
+                                    progressColor: Colors.green,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    (process * 100).toString()+"/1000",
+                                    style: const TextStyle(
+                                        fontSize: fontSize.medium,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
 
-                     decoration: const BoxDecoration(
-                         color: Colors.blue,
-                         image: DecorationImage(
-                             image: NetworkImage(
-                                 'https://oflutter.com/wp-content/uploads/2021/02/profile-bg3.jpg'),
-                             fit: BoxFit.cover)),
-                   ),
-                   Padding(
-                     padding: EdgeInsets.only(left: 130,right: 10,top: 30),
-                     child: Column(
-                       children: [
-                         LinearPercentIndicator(
-                           width: MediaQuery.of(context).size.width - 150,
-                           animation: true,
-                           lineHeight: 20.0,
-                           animationDuration: 2500,
-                           percent: 0.8,
-                           center: Text("80.0%"),
-                           linearStrokeCap: LinearStrokeCap.roundAll,
-                           progressColor: Colors.green,
-                         ),
-                         const SizedBox(
-                           height: 10,
-                         ),
-                         const Text("800/1000", style: TextStyle(
-                           fontSize:fontSize.medium,
-                           fontWeight: FontWeight.bold
-                         ),)
-                       ],
-                     ),
-                   ),
-                                    ],
-               )
+                  );
+                }
+                return const Center(child: Text('Other state'));
+              },
+            )
+            // ),
           ],
         ),
       ),
