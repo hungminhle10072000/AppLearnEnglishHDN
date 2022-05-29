@@ -34,13 +34,47 @@ import 'package:app_learn_english/resources/forgetpass_service.dart';
 import 'package:app_learn_english/resources/login_service.dart';
 import 'package:app_learn_english/states/forgetpass_state.dart';
 import 'package:app_learn_english/states/login_state.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'blocs/login_bloc.dart';
 
-void main() {
-  runApp(MultiBlocProvider(
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  importance: Importance.high,
+  playSound: true);
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('A bg message just showed up: ${message.messageId}');
+}
+
+
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+  ?.createNotificationChannel(channel);
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true
+  );
+
+
+
+  runApp(
+      MultiBlocProvider(
       providers: [
         BlocProvider(
             create: (context) => LoginBloc(
@@ -80,7 +114,7 @@ void main() {
           'listGrammar': (context) => GrammarListPage(),
           'changepass': (context) => changePassPage(),
           'editinfor': (context) => editinforPage(),
-          '/updateinfomation':(context) => UserInformation(),
+          '/updateinfomation': (context) => UserInformation(),
           'homeTotalPracticeVocabulary': (context) =>
               HomePracticeTotalVocabulary(),
           'practiceVocabulary': (context) => PracticeVocabularyPage(),
