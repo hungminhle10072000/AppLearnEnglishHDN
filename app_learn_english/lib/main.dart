@@ -14,6 +14,7 @@ import 'package:app_learn_english/events/statistical_event.dart';
 import 'package:app_learn_english/models/course_model.dart';
 import 'package:app_learn_english/presentation/screens/admin_page.dart';
 import 'package:app_learn_english/presentation/screens/changePass.dart';
+import 'package:app_learn_english/presentation/screens/chatpage.dart';
 import 'package:app_learn_english/presentation/screens/course_detail_page.dart';
 import 'package:app_learn_english/presentation/screens/course_list_page.dart';
 import 'package:app_learn_english/presentation/screens/edit_infor.dart';
@@ -43,38 +44,41 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'blocs/login_bloc.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'high_importance_channel', // id
-  'High Importance Notifications', // title
-  importance: Importance.high,
-  playSound: true);
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    importance: Importance.high,
+    playSound: true);
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('A bg message just showed up: ${message.messageId}');
 }
 
-
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // await Firebase.initializeApp(
+  //     options: FirebaseOptions(
+  //   apiKey:
+  //       "BL819eba8a-muymF4bvtDM5tWWFaSIxCGuXIDMWhCamtp43dozKCS0YLv10hzlr0H5AeUej0_6LiXhgDrGOxAUk",
+  //   appId: "1:596522897801:android:8a1e3df22b223866449158",
+  //   messagingSenderId: "596522897801",
+  //   projectId: "flutterpushnotification-66a35",
+  // ));
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-  ?.createNotificationChannel(channel);
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true
-  );
+      alert: true, badge: true, sound: true);
 
-
-
-  runApp(
-      MultiBlocProvider(
+  runApp(MultiBlocProvider(
       providers: [
         BlocProvider(
             create: (context) => LoginBloc(

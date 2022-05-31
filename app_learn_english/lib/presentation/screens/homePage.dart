@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
           ),
           actions: [
-            IconButton(onPressed: showNotification, icon: Icon(Icons.notifications_none)),
+            // IconButton(onPressed: showNotification, icon: Icon(Icons.notifications_none)),
           ],
           elevation: 0,
         ),

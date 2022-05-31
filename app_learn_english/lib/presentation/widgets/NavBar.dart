@@ -1,3 +1,5 @@
+import 'package:app_learn_english/presentation/screens/chatpage.dart';
+import 'package:app_learn_english/states/current_user_state.dart';
 import 'package:flutter/material.dart';
 
 class NavBar extends StatelessWidget {
@@ -63,22 +65,29 @@ class NavBar extends StatelessWidget {
             onTap: () => Navigator.pushNamed(context, '/statistical'),
           ),
           ListTile(
-            leading: Icon(Icons.notifications),
-            title: Text('Thông báo'),
-            onTap: () => null,
-            trailing: ClipOval(
-              child: Container(
-                color: Colors.red,
-                width: 20,
-                height: 20,
-                child: Center(
-                  child: Text(
-                    '8',
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                  ),
+            leading: Icon(Icons.chat),
+            title: Text('Nhóm học tập'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => chatpage(email: CurrentUserState.username),
                 ),
-              ),
-            ),
+              );
+            },
+            // trailing: ClipOval(
+            //   child: Container(
+            //     color: Colors.red,
+            //     width: 20,
+            //     height: 20,
+            //     child: Center(
+            //       child: Text(
+            //         '8',
+            //         style: TextStyle(color: Colors.white, fontSize: 12),
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ),
           Divider(),
           ListTile(
