@@ -1,3 +1,4 @@
+import 'package:app_learn_english/states/current_user_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -47,6 +48,7 @@ class _messagesState extends State<messages> {
                     ? CrossAxisAlignment.end
                     : CrossAxisAlignment.start,
                 children: [
+                  qs['type'] == "text" ?
                   SizedBox(
                     width: 300,
                     child: ListTile(
@@ -80,6 +82,37 @@ class _messagesState extends State<messages> {
                           )
                         ],
                       ),
+                    ),
+                  ) : Container(
+                    height: 250,
+                    width: 200,
+                    margin: EdgeInsets.only(right: 5),
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                    ),
+                    alignment: qs['email'] == email ? Alignment.centerRight : Alignment.centerLeft,
+                    child: Container(
+                      height: 250,
+                      width: 200,
+                      alignment: qs['message'] != "" ? null : Alignment.center,
+                      child: qs['message'] != "" ? (
+                          Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(CurrentUserState.username, style: TextStyle(fontSize: 14, color: Colors.grey),),
+                                  Text(d.hour.toString() + ":" + d.minute.toString(), style: TextStyle(color: Colors.grey),)
+                                ],
+                              ),
+                              Image.network(
+                                qs['message'],
+                                height: 232,
+                                fit: BoxFit.cover,
+                              )
+                            ],
+                          )
+                      ) : CircularProgressIndicator(),
                     ),
                   ),
                 ],
