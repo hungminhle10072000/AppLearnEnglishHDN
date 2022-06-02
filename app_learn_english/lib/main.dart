@@ -1,4 +1,5 @@
 import 'package:app_learn_english/blocs/change_password_bloc.dart';
+import 'package:app_learn_english/blocs/comment_bloc.dart';
 import 'package:app_learn_english/blocs/course_bloc.dart';
 import 'package:app_learn_english/blocs/exercise_bloc.dart';
 
@@ -87,7 +88,8 @@ Future<void> main() async {
         BlocProvider(create: (context) => ListGrammarBloc()),
         BlocProvider(create: (context) => UserBloc()),
         BlocProvider(create: (context) => UserUpdateInfoBloc()),
-        BlocProvider(create: (context) => ChangePasswordBloc())
+        BlocProvider(create: (context) => ChangePasswordBloc()),
+        BlocProvider(create: (context) => CommentBloc())
       ],
       child: MaterialApp(
         title: 'Cùng nhau học tiếng anh',

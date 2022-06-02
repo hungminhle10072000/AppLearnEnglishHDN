@@ -1,4 +1,5 @@
 import 'package:app_learn_english/models/chapter_model.dart';
+import 'package:app_learn_english/models/comment_model.dart';
 import 'package:app_learn_english/models/course_model.dart';
 import 'package:app_learn_english/models/lesson_model.dart';
 import 'package:app_learn_english/utils/constants/Cons.dart';
@@ -8,6 +9,7 @@ import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../utils/StringRenderUtil.dart';
+import '../widgets/comment_item.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final CourseModel courseDetail;
@@ -21,6 +23,7 @@ class CourseDetailPage extends StatefulWidget {
 class _CourseDetailPageState extends State<CourseDetailPage> {
   late String lessonName="Initial";
   late List<Item> _data = [];
+  late int lessonCurrentId = -1;
   late ChewieController _chewieController = ChewieController(
     videoPlayerController: VideoPlayerController.network(dataSource),
   );
@@ -28,6 +31,8 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       RegExp(r"^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$");
   late String dataSource="Initial";
   late YoutubePlayerController controller;
+  bool isComment = false;
+  List commentsData = [];
 
   Widget _renderVideo() {
     if (dataSource == "Initial") {
@@ -53,26 +58,68 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           controller: controller,
         ),
         builder: (context, player) => Scaffold(
-              appBar: AppBar(
-                title: const Text("Bài học"),
+          appBar: AppBar(
+            title: const Text("Bài học"),
+          ),
+          body: ListView(
+            children: [
+              player,
+              const SizedBox(
+                height: 10,
               ),
-              body: ListView(
+              Container(
+                margin: EdgeInsets.only(left: 10),
+                child:Text(StringRenderUtil.reduceSentence(lessonName, 45),style: const TextStyle(fontSize: fontSize.large, fontWeight:FontWeight.bold, color: Colors.blue),),
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              Row(
                 children: [
-                  player,
-                  const SizedBox(
-                    height: 10,
+                  SizedBox(
+                    width: 5,
                   ),
-                  Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child:Text(StringRenderUtil.reduceSentence(lessonName, 45),style: const TextStyle(fontSize: fontSize.large, fontWeight:FontWeight.bold, color: Colors.blue),),
+                  MaterialButton(
+                    height: 30.0,
+                    minWidth:  MediaQuery.of(context).size.width/2-10,
+                    color: Colors.blueAccent,
+                    onPressed: () {
+                      setState(() {
+                        isComment = false;
+                      });
+                    },
+                    child:  const Text("Tổng quan", style: TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.white
+                    ),),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  SizedBox(
+                    width: 3,
                   ),
-                  _buildListPanel()
+                  MaterialButton(
+                    height: 30.0,
+                    minWidth: MediaQuery.of(context).size.width/2-10,
+                    color: Colors.blueAccent,
+                    onPressed: () {
+                      setState(() {
+                        isComment = true;
+                      });
+                    },
+                    child:  const Text("Bình luận", style: TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.white
+                    ),),
+                  )
                 ],
               ),
-            ));
+              const SizedBox(
+                height: 2,
+              ),
+
+              isComment ? CommentItem(commentsData, lessonCurrentId) : _buildListPanel()
+            ],
+          ),
+        ));
   }
 
   Widget _buildVideoPlayContainer() {
@@ -137,6 +184,23 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                           contentPadding: const EdgeInsets.only(left: 25),
                           title: Text(StringRenderUtil.reduceSentence(e.name, 80), style: const TextStyle(color: Colors.black87),),
                           onTap: () {
+                            List<CommentModel> commentsModel = e.commentsModel;
+                            List newcommentsData = [];
+                            int newLessonCurrentId = e.id;
+                            if (commentsModel.isNotEmpty) {
+                              newcommentsData = commentsModel.map((e) {
+                                return {
+                                  'name': e.userDto.fullname ?? '',
+                                  'pic': e.userDto.avartar.isNotEmpty
+                                      ? e
+                                      .userDto.avartar
+                                      : 'https://picsum.photos/300/30',
+                                  'message': e.content.isNotEmpty
+                                      ? e.content
+                                      : 'I love code'
+                                };
+                              }).toList();
+                            }
                             if (!utube.hasMatch(dataSource)) {
                               _chewieController.pause();
                             }
@@ -146,17 +210,23 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                   YoutubePlayer.convertUrlToId(e.video) ?? '');
                               setState(() {
                                 lessonName = e.name;
+                                commentsData = newcommentsData;
+                                lessonCurrentId = newLessonCurrentId;
                               });
                             } else if (!utube.hasMatch(e.video) &&
                                 !utube.hasMatch(dataSource)) {
                               _buildVideoPlayContainer();
                               setState(() {
                                 lessonName = e.name;
+                                commentsData = newcommentsData;
+                                lessonCurrentId = newLessonCurrentId;
                               });
                             } else {
                               setState(() {
                                 dataSource = e.video;
                                 lessonName = e.name;
+                                commentsData = newcommentsData;
+                                lessonCurrentId = newLessonCurrentId;
                               });
                             }
                           },
@@ -185,6 +255,17 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         dataSource = "Initial";
       }
       else {
+        List<CommentModel> commentsModel = lessons.first.commentsModel;
+        lessonCurrentId = lessons.first.id;
+        if (commentsModel.isNotEmpty) {
+          commentsData = commentsModel.map((e) {
+            return {
+              'name': e.userDto.fullname ?? '',
+              'pic': e.userDto.avartar.isNotEmpty ? e.userDto.avartar : 'https://picsum.photos/300/30',
+              'message': e.content.isNotEmpty ? e.content : 'I love code'
+            };
+          }).toList();
+        }
         dataSource = lessons.first.video;
         lessonName = lessons.first.name;
         _data = createChapterItems(widget.courseDetail);
