@@ -1,9 +1,12 @@
 import 'package:app_learn_english/models/chapter_model.dart';
 import 'package:app_learn_english/models/course_model.dart';
 import 'package:app_learn_english/models/lesson_model.dart';
+import 'package:app_learn_english/models/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:app_learn_english/utils/constants/Cons.dart';
+
+import '../models/comment_model.dart';
 
 Future<List<CourseModel>> getAllCourses() async {
   const String url = baseUrl + '/api/course/getAll';
@@ -19,6 +22,21 @@ Future<List<CourseModel>> getAllCourses() async {
 
           List<dynamic> lessonsDynamic = chapter['lessons'] ?? [];
           List<LessonModel> lessonsModel = lessonsDynamic.map((lesson){
+            List<dynamic> commentsDynamic = lesson['commentDtos'];
+            List<CommentModel> commentsModel = [];
+            if (commentsDynamic != null) {
+              commentsModel = commentsDynamic.map((comment) {
+                dynamic userDynamic = comment['userDto'];
+                UserModel userModel = UserModel(id: userDynamic['id'] ?? -1,
+                    fullname: userDynamic['fullname'] ?? '', username: userDynamic['username'] ?? '', password: userDynamic['password'] ?? '',
+                    email: userDynamic['email'] ?? '', gender: userDynamic['gender'] ?? '', address: userDynamic['address'] ?? '',
+                    phonenumber: userDynamic['phonenumber'] ?? '', avartar: userDynamic['avatar'] ?? '', role: userDynamic['role'] ?? '', birthday: userDynamic['birthday'] ?? '') ;
+                return CommentModel(comment['id'] ?? -1, comment['content'] ?? '',DateTime.parse(comment['time'].toString()) ?? DateTime.now(), comment['type'] ?? '-1',
+                    comment['parentId'] ?? -1, comment['grammarId'] ?? -1,
+                    comment['lessonId'] ?? -1, comment['vocabularyTopicId'] ?? -1, comment['userId'] ?? -1 , userModel);
+              }).toList();
+            }
+
             return LessonModel(
                 id: lesson['id'],
                 name: lesson['name'],
@@ -28,7 +46,9 @@ Future<List<CourseModel>> getAllCourses() async {
                 chapterName: lesson['chapterName'],
                 numLessonOfChapter: lesson['numLessonOfChapter'],
                 courseName: lesson['courseName'],
-                courseId: lesson['courseId']);
+                courseId: lesson['courseId'],
+                commentsModel: commentsModel
+            );
           }).toList();
           return ChapterModel(
               id: chapter['id'],

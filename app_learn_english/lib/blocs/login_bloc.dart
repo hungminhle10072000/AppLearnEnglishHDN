@@ -52,6 +52,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             CurrentUserState.username = data['user']['username'];
             CurrentUserState.token += data['token']['token'];
             CurrentUserState.id = data['user']['id'];
+            CurrentUserState.fullname = data['user']['fullname'];
+            CurrentUserState.avatar = data['user']['avartar'];
+
             emit(UserLoginSuccessState());
           } else if (data['user']['role'] == "Admin") {
             ref.setString("token", data['token']['token']);

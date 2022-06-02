@@ -3,5 +3,6 @@ class CurrentUserState {
   static String password="";
   static String token="Bearer ";
   static int id = -1;
-
+  static String fullname="";
+  static String avatar ="";
 }

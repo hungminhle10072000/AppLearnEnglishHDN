@@ -1,4 +1,6 @@
 
+import 'package:app_learn_english/models/comment_model.dart';
+
 class LessonModel {
   int id;
   String name;
@@ -9,6 +11,7 @@ class LessonModel {
   int numLessonOfChapter;
   String courseName;
   int courseId;
+  List<CommentModel> commentsModel;
 
   LessonModel({
     required this.id,
@@ -19,6 +22,7 @@ class LessonModel {
     required this.chapterName,
     required this.numLessonOfChapter,
     required this.courseName,
-    required this.courseId
+    required this.courseId,
+    required this.commentsModel
   });
 }
