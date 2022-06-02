@@ -108,7 +108,7 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.info_outline),
             title: Text('Thông tin tác giả'),
-            onTap: () => null,
+            onTap: () => Navigator.pushNamed(context, 'authorInformatin'),
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
