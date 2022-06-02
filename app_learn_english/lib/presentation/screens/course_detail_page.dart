@@ -158,7 +158,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               margin: EdgeInsets.only(left: 10),
               child:Text(StringRenderUtil.reduceSentence(lessonName, 45),style: const TextStyle(fontSize: fontSize.large, fontWeight:FontWeight.bold, color: Colors.blue),),
             ),
-            _buildListPanel()
+            isComment ? CommentItem(commentsData, lessonCurrentId) : _buildListPanel()
           ],
         ));
   }

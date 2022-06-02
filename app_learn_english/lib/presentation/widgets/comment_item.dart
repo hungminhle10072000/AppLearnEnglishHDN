@@ -71,9 +71,9 @@ class _CommentItemState extends State<CommentItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.width * 9 / 16 - 190,
+      height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.width * 9 / 16 - 200,
       child: CommentBox(
-      userImage:
+      userImage: CurrentUserState.avatar.isNotEmpty ? CurrentUserState.avatar :
       "https://lh3.googleusercontent.com/a-/AOh14GjRHcaendrf6gU5fPIVd8GIl1OgblrMMvGUoCBj4g=s400",
       child: commentChild(commentCache.containsKey(widget.lessonId.toString()) ? commentCache[widget.lessonId.toString()] : widget.commentsData),
       labelText: 'Write a comment...',
