@@ -244,6 +244,7 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                       children: [
                         MaterialButton(
                           onPressed: () {
+                            widget.audioPlayer.pause();
                             setState(() {
                               if (questionNumber > 0) {
                                 questionNumber --;
@@ -256,6 +257,7 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                         ),
                         MaterialButton(
                           onPressed: () {
+                            widget.audioPlayer.pause();
                             setState(() {
                               if (questionNumber < questions.length-1) {
                                 questionNumber ++;

@@ -22,7 +22,7 @@ Future<List<CourseModel>> getAllCourses() async {
 
           List<dynamic> lessonsDynamic = chapter['lessons'] ?? [];
           List<LessonModel> lessonsModel = lessonsDynamic.map((lesson){
-            List<dynamic> commentsDynamic = lesson['commentDtos'];
+            List<dynamic> commentsDynamic = lesson['commentDtos'] ?? [];
             List<CommentModel> commentsModel = [];
             if (commentsDynamic != null) {
               commentsModel = commentsDynamic.map((comment) {
