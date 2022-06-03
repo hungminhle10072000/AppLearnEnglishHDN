@@ -121,7 +121,7 @@ Future<void> main() async {
           'listGrammar': (context) => GrammarListPage(),
           'changepass': (context) => changePassPage(),
           'editinfor': (context) => editinforPage(),
-          '/authorInformatin': (context) => authorInformatinPage(),
+          'authorInformatin': (context) => authorInformatinPage(),
           '/updateinfomation': (context) => UserInformation(),
           'homeTotalPracticeVocabulary': (context) =>
               HomePracticeTotalVocabulary(),

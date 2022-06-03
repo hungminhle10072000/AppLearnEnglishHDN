@@ -34,6 +34,7 @@ class _authorInformatinPageState extends State<authorInformatinPage> {
             appBar: AppBar(
                 elevation: null,
                 backgroundColor: Colors.transparent,
+                title: Text('Thông tin tác giả',style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),),
                 leading: TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, 'home');
@@ -48,19 +49,23 @@ class _authorInformatinPageState extends State<authorInformatinPage> {
               children: [
                 SizedBox(height: 100.0),
                 ExpansionTile(
-                  title: Text('Giáo viên hướng dẫn'),
+                  title: Text('Giáo viên hướng dẫn',style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),),
                   children: <Widget>[
-                    ListTile(title: Text('Cô: Nguyễn Thủy An')),
+                    ListTile(title: Text('       Cô: Nguyễn Thủy An',style: TextStyle(fontSize: 19),)),
                   ],
+                  initiallyExpanded: true,
                 ),
                 ExpansionTile(
-                  title: Text('Nhóm sinh viên thực hiện'),
+                  title: Text('Nhóm sinh viên thực hiện',style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),),
                   children: <Widget>[
-                    ListTile(title: Text('1 - Từ Hữu Hà Đức')),
-                    ListTile(title: Text('2 - Bùi Văn Nghĩa')),
-                    ListTile(title: Text('3 - Hoàng Dương Hùng')),
+                    ListTile(title: Text('       1 - Từ Hữu Hà Đức',style: TextStyle(fontSize: 19),)),
+                    ListTile(title: Text('       2 - Bùi Văn Nghĩa',style: TextStyle(fontSize: 19),)),
+                    ListTile(title: Text('       3 - Hoàng Dương Hùng',style: TextStyle(fontSize: 19),))
                   ],
+                  initiallyExpanded: true,
                 ),
+                SizedBox(height: 60.0),
+                Text('    Liên hệ: 09998889999',style: TextStyle(fontSize: 17)),
               ],
             ),
           ),
