@@ -10,9 +10,9 @@ class StatisticalState extends  Equatable {
   List<Object?> get props => [];
 }
 
-class StatisticalStateInitial extends StatisticalState {}
-class StatisticalStateFailure extends StatisticalState {}
-class StatisticalStateSuccess extends StatisticalState {
+class StatisticalStateInitial extends StatisticalState {}// trang thai ban dau
+class StatisticalStateFailure extends StatisticalState {}// trang thai neu bi loi
+class StatisticalStateSuccess extends StatisticalState {// trang thai thanh cong
   // final List<StatisticalModel> statisticals;
   // StatisticalStateSuccess({required this.statisticals});
   final StatisticalMasterModel statisticalMaster;
