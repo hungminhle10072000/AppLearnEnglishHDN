@@ -11,8 +11,7 @@ Future<StatisticalMasterModel> getStatisticalOfWeek(int userId) async {
   final http.Client httpClient = http.Client();
   try {
     final response = await httpClient.get(Uri.parse(url), headers: {
-      'Content-Type': 'application/json',
-      'Authorization': CurrentUserState.token} );
+      'Content-Type': 'application/json'} );
     if (response.statusCode == 200) {
       final responseData = json.decode(utf8.decode(response.bodyBytes));
 

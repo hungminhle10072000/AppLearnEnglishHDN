@@ -14,8 +14,7 @@ Future<bool> addResultDetail(List<ResultDetailModel> answers) async {
   try {
     final response = await httpClient.post(
         Uri.parse(url),
-        headers: {'Content-Type': 'application/json',
-          'Authorization': CurrentUserState.token},
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode(answers)
     );
     if (response.statusCode == 200) {
@@ -34,8 +33,7 @@ Future<List<ResultDetailModel>> findResultDetailsByUserIdAndExerciseId(int userI
   try {
     final response = await httpClient.get(
         Uri.parse(url),
-        headers: {'Content-Type': 'application/json',
-          'Authorization': CurrentUserState.token}
+        headers: {'Content-Type': 'application/json'}
     );
 
     if (response.statusCode == 200) {

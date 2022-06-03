@@ -96,8 +96,14 @@ class _StatisticalPageState extends State<StatisticalPage> {
                   List<StatisticalModel> statisticalData =
                       state.statisticalMaster.statisticalDtoList;
                   const int numDaysOfWeek = 7;
-                  for (int i = 0; i < numDaysOfWeek; i++) {
-                    newStatisticalModel[i].score = statisticalData[i].score;
+                  if (statisticalData.length == numDaysOfWeek) {
+                    for (int i = 0; i < numDaysOfWeek; i++) {
+                      newStatisticalModel[i].score = statisticalData[i].score;
+                    }
+                  } else {
+                    for (int i = 0; i < numDaysOfWeek; i++) {
+                      newStatisticalModel[i].score = 0;
+                    }
                   }
                   if (newStatisticalModel != data) {
                     setState(() {

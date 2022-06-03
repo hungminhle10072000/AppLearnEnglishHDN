@@ -13,8 +13,7 @@ Future<bool> addComment(CommentModel commentModel) async {
   try {
     final response = await httpClient.post(
         Uri.parse(url),
-        headers: {'Content-Type': 'application/json',
-          'Authorization': CurrentUserState.token},
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode(commentModel)
     );
     if (response.statusCode == 200) {
