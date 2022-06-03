@@ -14,6 +14,7 @@ import 'package:app_learn_english/events/exercise_event.dart';
 import 'package:app_learn_english/events/statistical_event.dart';
 import 'package:app_learn_english/models/course_model.dart';
 import 'package:app_learn_english/presentation/screens/admin_page.dart';
+import 'package:app_learn_english/presentation/screens/author_information.dart';
 import 'package:app_learn_english/presentation/screens/changePass.dart';
 import 'package:app_learn_english/presentation/screens/chatpage.dart';
 import 'package:app_learn_english/presentation/screens/course_detail_page.dart';
@@ -120,6 +121,7 @@ Future<void> main() async {
           'listGrammar': (context) => GrammarListPage(),
           'changepass': (context) => changePassPage(),
           'editinfor': (context) => editinforPage(),
+          'authorInformatin': (context) => authorInformatinPage(),
           '/updateinfomation': (context) => UserInformation(),
           'homeTotalPracticeVocabulary': (context) =>
               HomePracticeTotalVocabulary(),
