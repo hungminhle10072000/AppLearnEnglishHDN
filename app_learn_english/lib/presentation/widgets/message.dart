@@ -105,10 +105,12 @@ class _messagesState extends State<messages> {
                                   Text(d.hour.toString() + ":" + d.minute.toString(), style: TextStyle(color: Colors.grey),)
                                 ],
                               ),
-                              Image.network(
+                              Padding(padding: EdgeInsets.only(left: 8, right: 8),
+                              child: Image.network(
                                 qs['message'],
                                 height: 232,
-                                fit: BoxFit.cover,
+                                fit: BoxFit.contain,
+                              ),
                               )
                             ],
                           )
