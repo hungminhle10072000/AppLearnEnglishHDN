@@ -1,11 +1,12 @@
 import 'package:app_learn_english/blocs/statistical_bloc.dart';
 import 'package:app_learn_english/models/statistical_model.dart';
+import 'package:app_learn_english/states/current_user_state.dart';
 import 'package:app_learn_english/utils/constants/Cons.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import '../../events/statistical_event.dart';
 import '../../models/bar_chart_model.dart';
 import '../../states/statistical_state.dart';
 
@@ -17,6 +18,7 @@ class StatisticalPage extends StatefulWidget {
 }
 
 class _StatisticalPageState extends State<StatisticalPage> {
+  late StatisticalBloc _statisticalBloc = StatisticalBloc();
   List<BarChartModel> data = [
     BarChartModel(
       daysOfTheWeek: "Thứ 2",
@@ -54,6 +56,12 @@ class _StatisticalPageState extends State<StatisticalPage> {
       color: charts.ColorUtil.fromDartColor(Colors.purple),
     ),
   ];
+
+  @override
+  void initState() {
+    _statisticalBloc = BlocProvider.of<StatisticalBloc>(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +121,86 @@ class _StatisticalPageState extends State<StatisticalPage> {
 
                   return Column(
                       children: [
+                        Row(
+                           children: [
+                             MaterialButton(
+                                 height: 50.0,
+                                 color: Colors.deepPurpleAccent,
+                                 textColor: Colors.white,
+                                 padding: EdgeInsets.zero,
+                                 child: const Text("Tuần này",
+                                 style: TextStyle(fontSize: 14),),
+                                 minWidth: MediaQuery.of(context).size.width/4,
+                                 shape: const RoundedRectangleBorder(side: BorderSide(
+                                     color: Colors.deepPurple,
+                                     width: 1,
+                                     style: BorderStyle.solid
+                                 ),),
+                                 onPressed: () {
+                                   CurrentUserState.WeekAgo = 0;
+                                   Navigator.pushNamed(context, '/statistical');
+                                 }
+                             ),
+                             MaterialButton(
+                                 height: 50.0,
+                                 color: Colors.deepPurpleAccent,
+                                 textColor: Colors.white,
+                                 padding: EdgeInsets.zero,
+                                 child: const Text("Tuần trước",
+                                   style: TextStyle(fontSize: 14),
+                                 ),
+                                 minWidth: MediaQuery.of(context).size.width/4,
+                                 shape: const RoundedRectangleBorder(side: BorderSide(
+                                     color: Colors.deepPurple,
+                                     width: 1,
+                                     style: BorderStyle.solid
+                                 ),),
+                                 onPressed: () {
+                                   CurrentUserState.WeekAgo = 1;
+                                   Navigator.pushNamed(context, '/statistical');
+                                   // final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(1);
+                                   // _statisticalBloc.add(event);
+                                 }
+                             ),
+                             MaterialButton(
+                                 height: 50.0,
+                                 color: Colors.deepPurpleAccent,
+                                 textColor: Colors.white,
+                                 padding: EdgeInsets.zero,
+                                 child: const Text("2 tuần trước",
+                                   style: TextStyle(fontSize: 14),
+                                 ),
+                                 minWidth: MediaQuery.of(context).size.width/4,
+                                 shape: const RoundedRectangleBorder(side: BorderSide(
+                                     color: Colors.deepPurple,
+                                     width: 1,
+                                     style: BorderStyle.solid
+                                 ),),
+                                 onPressed: () {
+                                   final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(2);
+                                   _statisticalBloc.add(event);
+                                 }
+                             ),
+                             MaterialButton(
+                                 height: 50.0,
+                                 color: Colors.deepPurpleAccent,
+                                 padding: EdgeInsets.zero,
+                                 textColor: Colors.white,
+                                 child: const Text("3 tuần trước",
+                                 style: TextStyle(fontSize: 14),),
+                                 minWidth: MediaQuery.of(context).size.width/4,
+                                 shape: const RoundedRectangleBorder(side: BorderSide(
+                                     color: Colors.deepPurple,
+                                     width: 1,
+                                     style: BorderStyle.solid
+                                 ),),
+                                 onPressed: () {
+                                   final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(3);
+                                   _statisticalBloc.add(event);
+                                 }
+                             ),
+                           ],
+                        ),
                         Container(
                             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
                             height: height*0.7,

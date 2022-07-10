@@ -16,11 +16,12 @@ class StatisticalStateSuccess extends StatisticalState {// trang thai thanh cong
   // final List<StatisticalModel> statisticals;
   // StatisticalStateSuccess({required this.statisticals});
   final StatisticalMasterModel statisticalMaster;
-  StatisticalStateSuccess({required this.statisticalMaster});
+  final id;
+  StatisticalStateSuccess({required this.statisticalMaster, required this.id});
 
   @override
   // TODO: implement props
-  List<Object?> get props => [statisticalMaster];
+  List<Object?> get props => [statisticalMaster,id];
 
 
 }

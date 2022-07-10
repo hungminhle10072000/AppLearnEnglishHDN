@@ -35,6 +35,7 @@ import 'package:app_learn_english/presentation/screens/user_information.dart';
 import 'package:app_learn_english/presentation/screens/vocabulary_detail_topic_page.dart';
 import 'package:app_learn_english/resources/forgetpass_service.dart';
 import 'package:app_learn_english/resources/login_service.dart';
+import 'package:app_learn_english/states/current_user_state.dart';
 import 'package:app_learn_english/states/forgetpass_state.dart';
 import 'package:app_learn_english/states/login_state.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -109,7 +110,6 @@ Future<void> main() async {
                 return _exerciseBloc;
               },
               child: ExerciseListPage()),
-          // 'startExercisePage': (context) => const StartExercisePage(),
           'home': (context) => HomePage(),
           'admin': (context) => adminPage(),
           'login': (context) => loginPage(),
@@ -129,7 +129,7 @@ Future<void> main() async {
           '/statistical': (context) => BlocProvider(
                 create: (context) {
                   final _statisticalBloc = StatisticalBloc();
-                  final _statisticalEvent = StatisticalFetchedEvent();
+                  final _statisticalEvent = StatisticalFetchedAgoEvent(CurrentUserState.WeekAgo);
                   _statisticalBloc.add(_statisticalEvent);
                   return _statisticalBloc;
                 },

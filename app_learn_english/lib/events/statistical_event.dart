@@ -10,3 +10,7 @@ abstract class StatisticalEvent extends Equatable {
 class StatisticalFetchedEvent extends StatisticalEvent {
 
 }
+class StatisticalFetchedAgoEvent extends StatisticalEvent {
+  int weekAgo;
+  StatisticalFetchedAgoEvent(this.weekAgo);
+}

@@ -13,18 +13,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     to = DateTime(to.year, to.month, to.day);
     return (to.difference(from).inHours / 24).round();
   }
-
-  // AuthRepository repo;
-  //
-  // AuthBloc(AuthState initialStatem, this.repo);
   LoginRepository repo;
-
   LoginBloc({required LoginState initialStatem, required this.repo})
       : super(initialStatem) {
-    // When User Presses the SignIn Button, we will send the SignInRequested Event to the AuthBloc to handle it and emit the Authenticated State if the user is authenticated
-
-    //var ref = await SharedPreferences.getInstance();
-
     on<StartEvent>(
       (event, emit) => emit(
         LoginInitState(),
@@ -101,7 +92,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
   }
-
   @override
   // TODO: implement initialState
   LoginState get initialState => throw UnimplementedError();

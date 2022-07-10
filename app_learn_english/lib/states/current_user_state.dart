@@ -5,4 +5,5 @@ class CurrentUserState {
   static int id = -1;
   static String fullname="";
   static String avatar ="";
+  static int WeekAgo = 0;
 }

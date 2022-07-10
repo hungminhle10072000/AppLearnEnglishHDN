@@ -44,16 +44,15 @@ class _authorInformatinPageState extends State<authorInformatinPage> {
                 ExpansionTile(
                   title: Text('Giáo viên hướng dẫn',style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),),
                   children: <Widget>[
-                    ListTile(title: Text('       Cô: Nguyễn Thủy An',style: TextStyle(fontSize: 19),)),
+                    ListTile(title: Text('       ThS. Mai Anh Thơ',style: TextStyle(fontSize: 19),)),
                   ],
                   initiallyExpanded: true,
                 ),
                 ExpansionTile(
                   title: Text('Nhóm sinh viên thực hiện',style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),),
                   children: <Widget>[
-                    ListTile(title: Text('       1 - Từ Hữu Hà Đức',style: TextStyle(fontSize: 19),)),
-                    ListTile(title: Text('       2 - Bùi Văn Nghĩa',style: TextStyle(fontSize: 19),)),
-                    ListTile(title: Text('       3 - Hoàng Dương Hùng',style: TextStyle(fontSize: 19),))
+                    ListTile(title: Text('       1 - Bùi Văn Nghĩa',style: TextStyle(fontSize: 19),)),
+                    ListTile(title: Text('       2 - Hoàng Dương Hùng',style: TextStyle(fontSize: 19),))
                   ],
                   initiallyExpanded: true,
                 ),
