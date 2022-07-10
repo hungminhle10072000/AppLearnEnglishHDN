@@ -11,17 +11,19 @@ import '../widgets/message.dart';
 
 class chatpage extends StatefulWidget {
   String email;
+  String avatar;
 
-  chatpage({required this.email});
+  chatpage({required this.email, required this.avatar});
 
   @override
-  _chatpageState createState() => _chatpageState(email: email);
+  _chatpageState createState() => _chatpageState(email: email, avatar: avatar);
 }
 
 class _chatpageState extends State<chatpage> {
   String email;
+  String avatar;
 
-  _chatpageState({required this.email});
+  _chatpageState({required this.email, required this.avatar});
 
   final fs = FirebaseFirestore.instance;
   final TextEditingController message = new TextEditingController();
@@ -51,6 +53,7 @@ class _chatpageState extends State<chatpage> {
       'time': DateTime.now(),
       "type": "img",
       'email': email,
+      'avatar': avatar
     });
     message.clear();
 
@@ -67,6 +70,7 @@ class _chatpageState extends State<chatpage> {
         'time': DateTime.now(),
         "type": "img",
         'email': email,
+        'avatar': avatar
       });
     }
   }
@@ -131,6 +135,7 @@ class _chatpageState extends State<chatpage> {
                         'time': DateTime.now(),
                         "type": "text",
                         'email': email,
+                        'avatar': avatar
                       });
 
                       message.clear();

@@ -71,7 +71,7 @@ class NavBar extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => chatpage(email: CurrentUserState.username),
+                  builder: (context) => chatpage(email: CurrentUserState.username, avatar: CurrentUserState.avatar),
                 ),
               );
             },
