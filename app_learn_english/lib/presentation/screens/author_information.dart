@@ -42,9 +42,11 @@ class _authorInformatinPageState extends State<authorInformatinPage> {
               children: [
                 SizedBox(height: 100.0),
                 ExpansionTile(
-                  title: Text('Giáo viên hướng dẫn',style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),),
+                  title: Text('Thông tin website',style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),),
                   children: <Widget>[
-                    ListTile(title: Text('       ThS. Mai Anh Thơ',style: TextStyle(fontSize: 19),)),
+                    ListTile(title: Text('Địa chỉ: Linh Trung - Thủ Đức - TP.HCM',style: TextStyle(fontSize: 19),)),
+                    ListTile(title: Text('Nếu bạn thích ứng dụng của mình, có thể donate để giúp mình có kinh phí duy trì ứng dụng tại đây nhé.',style: TextStyle(fontSize: 19),)),
+                    ListTile(title: Text('Momo: 0869122458 - Bùi Văn Nghĩa.',style: TextStyle(fontSize: 19),)),
                   ],
                   initiallyExpanded: true,
                 ),
