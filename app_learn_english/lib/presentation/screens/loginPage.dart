@@ -65,11 +65,10 @@ class _loginPageState extends State<loginPage> {
             ),
             child: BlocListener<LoginBloc, LoginState>(
               listener: (context, state) {
-                //state = LoginInitState;
                 try {
                   if (state is UserLoginSuccessState) {
-                    final snackBar = SnackBar(
-                      content: const Text('Đăng nhập thành công!'),
+                    const snackBar = SnackBar(
+                      content: Text('Đăng nhập thành công!'),
                     );
                     ScaffoldMessenger.of(context)
                       ..removeCurrentSnackBar()
@@ -78,9 +77,9 @@ class _loginPageState extends State<loginPage> {
                   } else if (state is AdminLoginSuccessState) {
                     Navigator.pushNamed(context, 'admin');
                   } else if (state is LoginErrorState) {
-                    final snackBar = SnackBar(
+                    const snackBar = SnackBar(
                       content:
-                          const Text('Tên đăng nhập hoặc mật khẩu không đúng!'),
+                          Text('Tên đăng nhập hoặc mật khẩu không đúng!'),
                     );
                     ScaffoldMessenger.of(context)
                       ..removeCurrentSnackBar()
@@ -187,17 +186,10 @@ class _loginPageState extends State<loginPage> {
                                         shape: StadiumBorder(),
                                       ),
                                       onPressed: validate,
-                                      //     () {
-                                      //
-                                      //   // print(usernameController.text);
-                                      //   // loginBloc.add(LoginButtonPressed(
-                                      //   //     username: usernameController.text,
-                                      //   //     password: passwordController.text));
-                                      // },
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                        children: [
+                                        children: const [
                                           Text(
                                             'Đăng nhập',
                                             style: TextStyle(
@@ -219,7 +211,7 @@ class _loginPageState extends State<loginPage> {
                                     onPressed: () {
                                       Navigator.pushNamed(context, 'forget');
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       'Quên mật khẩu ?',
                                       style: TextStyle(color: Colors.blueGrey),
                                     ),

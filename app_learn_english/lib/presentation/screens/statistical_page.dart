@@ -77,9 +77,13 @@ class _StatisticalPageState extends State<StatisticalPage> {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Thống kê"),
+        title: const Text("Thống kê hàng tuần"),
         centerTitle: true,
         backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pushNamed(context, 'home'),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -177,8 +181,10 @@ class _StatisticalPageState extends State<StatisticalPage> {
                                      style: BorderStyle.solid
                                  ),),
                                  onPressed: () {
-                                   final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(2);
-                                   _statisticalBloc.add(event);
+                                   // final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(2);
+                                   // _statisticalBloc.add(event);
+                                   CurrentUserState.WeekAgo = 2;
+                                   Navigator.pushNamed(context, '/statistical');
                                  }
                              ),
                              MaterialButton(
@@ -195,15 +201,17 @@ class _StatisticalPageState extends State<StatisticalPage> {
                                      style: BorderStyle.solid
                                  ),),
                                  onPressed: () {
-                                   final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(3);
-                                   _statisticalBloc.add(event);
+                                   // final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(3);
+                                   // _statisticalBloc.add(event);
+                                   CurrentUserState.WeekAgo = 3;
+                                   Navigator.pushNamed(context, '/statistical');
                                  }
                              ),
                            ],
                         ),
                         Container(
                             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-                            height: height*0.7,
+                            height: height*0.65,
                             child: charts.BarChart(series, animate: true)),
                         Stack(
                           children: [
