@@ -75,7 +75,11 @@ class _StatisticalPageState extends State<StatisticalPage> {
       ),
     ];
     double height = MediaQuery.of(context).size.height;
-    return Scaffold(
+    Future<bool> _onBackPressed() async {
+      Navigator.pushNamed(context, 'home');
+      return true;
+    }
+    return WillPopScope(child:Scaffold(
       appBar: AppBar(
         title: const Text("Thống kê hàng tuần"),
         centerTitle: true,
@@ -124,154 +128,154 @@ class _StatisticalPageState extends State<StatisticalPage> {
                   }
 
                   return Column(
-                      children: [
-                        Row(
-                           children: [
-                             MaterialButton(
-                                 height: 50.0,
-                                 color: Colors.deepPurpleAccent,
-                                 textColor: Colors.white,
-                                 padding: EdgeInsets.zero,
-                                 child: const Text("Tuần này",
-                                 style: TextStyle(fontSize: 14),),
-                                 minWidth: MediaQuery.of(context).size.width/4,
-                                 shape: const RoundedRectangleBorder(side: BorderSide(
-                                     color: Colors.deepPurple,
-                                     width: 1,
-                                     style: BorderStyle.solid
-                                 ),),
-                                 onPressed: () {
-                                   CurrentUserState.WeekAgo = 0;
-                                   Navigator.pushNamed(context, '/statistical');
-                                 }
-                             ),
-                             MaterialButton(
-                                 height: 50.0,
-                                 color: Colors.deepPurpleAccent,
-                                 textColor: Colors.white,
-                                 padding: EdgeInsets.zero,
-                                 child: const Text("Tuần trước",
-                                   style: TextStyle(fontSize: 14),
-                                 ),
-                                 minWidth: MediaQuery.of(context).size.width/4,
-                                 shape: const RoundedRectangleBorder(side: BorderSide(
-                                     color: Colors.deepPurple,
-                                     width: 1,
-                                     style: BorderStyle.solid
-                                 ),),
-                                 onPressed: () {
-                                   CurrentUserState.WeekAgo = 1;
-                                   Navigator.pushNamed(context, '/statistical');
-                                   // final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(1);
-                                   // _statisticalBloc.add(event);
-                                 }
-                             ),
-                             MaterialButton(
-                                 height: 50.0,
-                                 color: Colors.deepPurpleAccent,
-                                 textColor: Colors.white,
-                                 padding: EdgeInsets.zero,
-                                 child: const Text("2 tuần trước",
-                                   style: TextStyle(fontSize: 14),
-                                 ),
-                                 minWidth: MediaQuery.of(context).size.width/4,
-                                 shape: const RoundedRectangleBorder(side: BorderSide(
-                                     color: Colors.deepPurple,
-                                     width: 1,
-                                     style: BorderStyle.solid
-                                 ),),
-                                 onPressed: () {
-                                   // final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(2);
-                                   // _statisticalBloc.add(event);
-                                   CurrentUserState.WeekAgo = 2;
-                                   Navigator.pushNamed(context, '/statistical');
-                                 }
-                             ),
-                             MaterialButton(
-                                 height: 50.0,
-                                 color: Colors.deepPurpleAccent,
-                                 padding: EdgeInsets.zero,
-                                 textColor: Colors.white,
-                                 child: const Text("3 tuần trước",
-                                 style: TextStyle(fontSize: 14),),
-                                 minWidth: MediaQuery.of(context).size.width/4,
-                                 shape: const RoundedRectangleBorder(side: BorderSide(
-                                     color: Colors.deepPurple,
-                                     width: 1,
-                                     style: BorderStyle.solid
-                                 ),),
-                                 onPressed: () {
-                                   // final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(3);
-                                   // _statisticalBloc.add(event);
-                                   CurrentUserState.WeekAgo = 3;
-                                   Navigator.pushNamed(context, '/statistical');
-                                 }
-                             ),
-                           ],
-                        ),
-                        Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-                            height: height*0.65,
-                            child: charts.BarChart(series, animate: true)),
-                        Stack(
-                          children: [
-                            UserAccountsDrawerHeader(
-                              accountName: Text(state.statisticalMaster.fullname),
-                              accountEmail: Text(
-                                state.statisticalMaster.streak.toString() + ' STREAK',
-                                style: const TextStyle(
-                                    fontSize: fontSize.medium,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.redAccent),
+                    children: [
+                      Row(
+                        children: [
+                          MaterialButton(
+                              height: 50.0,
+                              color: Colors.deepPurpleAccent,
+                              textColor: Colors.white,
+                              padding: EdgeInsets.zero,
+                              child: const Text("Tuần này",
+                                style: TextStyle(fontSize: 14),),
+                              minWidth: MediaQuery.of(context).size.width/4,
+                              shape: const RoundedRectangleBorder(side: BorderSide(
+                                  color: Colors.deepPurple,
+                                  width: 1,
+                                  style: BorderStyle.solid
+                              ),),
+                              onPressed: () {
+                                CurrentUserState.WeekAgo = 0;
+                                Navigator.pushNamed(context, '/statistical');
+                              }
+                          ),
+                          MaterialButton(
+                              height: 50.0,
+                              color: Colors.deepPurpleAccent,
+                              textColor: Colors.white,
+                              padding: EdgeInsets.zero,
+                              child: const Text("Tuần trước",
+                                style: TextStyle(fontSize: 14),
                               ),
-                              currentAccountPicture: CircleAvatar(
-                                child: ClipOval(
-                                  child: Image.network(
-                                    'https://oflutter.com/wp-content/uploads/2021/02/girl-profile.png',
-                                    fit: BoxFit.cover,
-                                    width: 90,
-                                    height: height - height * 0.7,
-                                  ),
+                              minWidth: MediaQuery.of(context).size.width/4,
+                              shape: const RoundedRectangleBorder(side: BorderSide(
+                                  color: Colors.deepPurple,
+                                  width: 1,
+                                  style: BorderStyle.solid
+                              ),),
+                              onPressed: () {
+                                CurrentUserState.WeekAgo = 1;
+                                Navigator.pushNamed(context, '/statistical');
+                                // final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(1);
+                                // _statisticalBloc.add(event);
+                              }
+                          ),
+                          MaterialButton(
+                              height: 50.0,
+                              color: Colors.deepPurpleAccent,
+                              textColor: Colors.white,
+                              padding: EdgeInsets.zero,
+                              child: const Text("2 tuần trước",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              minWidth: MediaQuery.of(context).size.width/4,
+                              shape: const RoundedRectangleBorder(side: BorderSide(
+                                  color: Colors.deepPurple,
+                                  width: 1,
+                                  style: BorderStyle.solid
+                              ),),
+                              onPressed: () {
+                                // final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(2);
+                                // _statisticalBloc.add(event);
+                                CurrentUserState.WeekAgo = 2;
+                                Navigator.pushNamed(context, '/statistical');
+                              }
+                          ),
+                          MaterialButton(
+                              height: 50.0,
+                              color: Colors.deepPurpleAccent,
+                              padding: EdgeInsets.zero,
+                              textColor: Colors.white,
+                              child: const Text("3 tuần trước",
+                                style: TextStyle(fontSize: 14),),
+                              minWidth: MediaQuery.of(context).size.width/4,
+                              shape: const RoundedRectangleBorder(side: BorderSide(
+                                  color: Colors.deepPurple,
+                                  width: 1,
+                                  style: BorderStyle.solid
+                              ),),
+                              onPressed: () {
+                                // final StatisticalFetchedAgoEvent event = StatisticalFetchedAgoEvent(3);
+                                // _statisticalBloc.add(event);
+                                CurrentUserState.WeekAgo = 3;
+                                Navigator.pushNamed(context, '/statistical');
+                              }
+                          ),
+                        ],
+                      ),
+                      Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+                          height: height*0.65,
+                          child: charts.BarChart(series, animate: true)),
+                      Stack(
+                        children: [
+                          UserAccountsDrawerHeader(
+                            accountName: Text(state.statisticalMaster.fullname),
+                            accountEmail: Text(
+                              state.statisticalMaster.streak.toString() + ' STREAK',
+                              style: const TextStyle(
+                                  fontSize: fontSize.medium,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.redAccent),
+                            ),
+                            currentAccountPicture: CircleAvatar(
+                              child: ClipOval(
+                                child: Image.network(
+                                  'https://oflutter.com/wp-content/uploads/2021/02/girl-profile.png',
+                                  fit: BoxFit.cover,
+                                  width: 90,
+                                  height: height - height * 0.7,
                                 ),
                               ),
-                              decoration: const BoxDecoration(
-                                  color: Colors.blue,
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          'https://oflutter.com/wp-content/uploads/2021/02/profile-bg3.jpg'),
-                                      fit: BoxFit.cover)),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 130, right: 10, top: 30),
-                              child: Column(
-                                children: [
-                                  LinearPercentIndicator(
-                                    width:
-                                        MediaQuery.of(context).size.width - 150,
-                                    animation: true,
-                                    lineHeight: 20.0,
-                                    animationDuration: 2500,
-                                    percent: state.statisticalMaster.process,
-                                    center: Text((state.statisticalMaster.process * 100).toString()+ "%"),
-                                    linearStrokeCap: LinearStrokeCap.roundAll,
-                                    progressColor: Colors.green,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    (state.statisticalMaster.currentScore).toString()+"/1000",
-                                    style: const TextStyle(
-                                        fontSize: fontSize.medium,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
+                            decoration: const BoxDecoration(
+                                color: Colors.blue,
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        'https://oflutter.com/wp-content/uploads/2021/02/profile-bg3.jpg'),
+                                    fit: BoxFit.cover)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 130, right: 10, top: 30),
+                            child: Column(
+                              children: [
+                                LinearPercentIndicator(
+                                  width:
+                                  MediaQuery.of(context).size.width - 150,
+                                  animation: true,
+                                  lineHeight: 20.0,
+                                  animationDuration: 2500,
+                                  percent: state.statisticalMaster.process,
+                                  center: Text(((state.statisticalMaster.process * 100).toInt()).toString()+ "%"),
+                                  linearStrokeCap: LinearStrokeCap.roundAll,
+                                  progressColor: Colors.green,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  (state.statisticalMaster.currentScore).toString()+"/1000",
+                                  style: const TextStyle(
+                                      fontSize: fontSize.medium,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
                             ),
-                          ],
-                        )
-                      ],
+                          ),
+                        ],
+                      )
+                    ],
 
                   );
                 }
@@ -282,6 +286,6 @@ class _StatisticalPageState extends State<StatisticalPage> {
           ],
         ),
       ),
-    );
+    ),onWillPop: _onBackPressed);
   }
 }

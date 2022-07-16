@@ -112,10 +112,10 @@ class _QuestionsExercisePageState extends State<QuestionsExercisePage> {
                             style: const TextStyle(
                                 fontSize: 22.0
                             ),),
-                          Text("Score $finalScore",
-                            style: const TextStyle(
-                                fontSize: 22.0
-                            ),),
+                          // Text("Score $finalScore",
+                          //   style: const TextStyle(
+                          //       fontSize: 22.0
+                          //   ),),
                         ],
                       ),
                     ),

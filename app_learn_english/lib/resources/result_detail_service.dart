@@ -44,7 +44,7 @@ Future<List<ResultDetailModel>> findResultDetailsByUserIdAndExerciseId(int userI
           questionId: resultDetail['questionId'],
           exerciseId: resultDetail['exerciseId'],
           contentQuestion: resultDetail['q'],
-          userAnswer: resultDetail['userAnswer'],
+          userAnswer: resultDetail['userAnswer'] ?? '',
           correctAnswer: resultDetail['correctAnswer']
         )).toList();
       return resultDetails;
